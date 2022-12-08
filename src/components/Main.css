@@ -1,0 +1,21 @@
+.input-group > :last-child {
+  border-radius: var(--rounded-btn, 0.5rem);
+}
+
+.w-70 {
+  width: 69%;
+}
+
+.w-30 {
+  width: 30%;
+}
+
+.input-group :where(span) {
+  background-color: transparent !important;
+}
+
+.input-group > *,
+.input-group > .input,
+.input-group > .select {
+  border-radius: 10px;
+}
