@@ -1,16 +1,37 @@
 import React from "react";
 import logowhite from "../assets/logo-white.png";
+import quickbooks from "../assets/quickbooks.png";
 
 function Footer() {
   return (
     <div className="w-full bg-[#1E0607] p-5 text-white">
-      <div className="grid grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-4 place-items-center md:place-items-start py-5 md:py-10 ">
         <div>
           <img src={logowhite}></img>
         </div>
-        <div>Select Links</div>
-        <div>Membership</div>
-        <div>Support</div>
+        <div className="flex flex-col gap-4">
+          <p className="font-bold">Select Links</p>
+          <ul>
+            <li>Home</li>
+            <li>Services</li>
+            <li>Featured Clients</li>
+            <li>About</li>
+            <li>Our Team</li>
+            <li>Blog</li>
+          </ul>
+        </div>
+        <div className="flex flex-col gap-4">
+          <p className="font-bold">Membership</p>
+          <img src={quickbooks}></img>
+        </div>
+        <div className="flex flex-col gap-4">
+          <p className="font-bold">Support</p>
+          <ul>
+            <li>Client Login</li>
+            <li>SecureSend</li>
+            <li>Contact Us</li>
+          </ul>
+        </div>
       </div>
     </div>
   );

@@ -44,6 +44,8 @@ const InputRow = ({
               type="number"
               placeholder=""
               className="input w-full input-bordered"
+              onChange={(event) => handleChange(event, index)}
+              value={item.amount}
             />
             <span onClick={handleRemove} className="cursor-pointer">
               <BsTrash className="text-[#A0161B]"></BsTrash>
@@ -67,17 +69,14 @@ function Main() {
   const [story, setStory] = useState({});
   const [inputFields, setInputFields] = useState([
     {
-      title: "",
-      image: "",
-      description: "",
-      location: "",
+      InputRow,
     },
   ]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await setStory({ trips: [...inputFields], name });
-    console.log("jennie", story);
+    console.log([...inputFields]);
   };
 
   const handleChange = (event, index) => {
@@ -133,56 +132,69 @@ function Main() {
         </button>
       </div>
 
-      <div className="flex  flex-col flex-wrap justify-center items-center px-20 ">
-        <div class="form-control flex flex-wrap w-full flex-row gap-5">
-          <div>
-            <label class="label">
-              <span class="label-text">First name</span>
-            </label>
-            <label class="input-group">
-              <input type="text" placeholder="" class="input input-bordered" />
-            </label>
-          </div>
-          <div>
-            <label class="label">
-              <span class="label-text">Last name</span>
-            </label>
-            <label class="input-group">
-              <input type="text" placeholder="" class="input input-bordered" />
-            </label>
-          </div>
-          <div>
-            <label class="label">
-              <span class="label-text">Age</span>
-            </label>
-            <label class="input-group">
-              <input
-                type="number"
-                placeholder=""
-                class="input input-bordered"
-              />
-            </label>
-          </div>
-        </div>
-
-        {inputFields.map((item, index) => (
-          <div key={index} className="px-0 w-full">
-            <InputRow
-              inputFields={inputFields}
-              index={index}
-              item={item}
-              handleAdd={handleAdd}
-              handleRemove={handleRemove}
-            />
-          </div>
-        ))}
-      </div>
-      <button
-        className="py-3 px-20 rounded-3xl bg-[#A0161B] text-white"
-        onClick={calculateGoal}
+      <form
+        className="flex flex-col items-center gap-4"
+        onSubmit={handleSubmit}
       >
-        Calculate
-      </button>
+        <div className="flex flex-col flex-wrap justify-center items-center px-20 ">
+          <div class="form-control flex flex-wrap w-full flex-row gap-5">
+            <div>
+              <label class="label">
+                <span class="label-text">First name</span>
+              </label>
+              <label class="input-group">
+                <input
+                  type="text"
+                  placeholder=""
+                  class="input input-bordered"
+                />
+              </label>
+            </div>
+            <div>
+              <label class="label">
+                <span class="label-text">Last name</span>
+              </label>
+              <label class="input-group">
+                <input
+                  type="text"
+                  placeholder=""
+                  class="input input-bordered"
+                />
+              </label>
+            </div>
+            <div>
+              <label class="label">
+                <span class="label-text">Age</span>
+              </label>
+              <label class="input-group">
+                <input
+                  type="number"
+                  placeholder=""
+                  class="input input-bordered"
+                />
+              </label>
+            </div>
+          </div>
+
+          {inputFields.map((item, index) => (
+            <div key={index} className="px-0 w-full">
+              <InputRow
+                inputFields={inputFields}
+                index={index}
+                item={item}
+                handleAdd={handleAdd}
+                handleRemove={handleRemove}
+              />
+            </div>
+          ))}
+        </div>
+        <button
+          className="py-3 px-20 rounded-3xl bg-[#A0161B] text-white w-1/4"
+          onClick={handleSubmit}
+        >
+          Calculate
+        </button>
+      </form>
     </div>
   );
 }
