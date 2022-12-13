@@ -21,12 +21,12 @@ const InputRow = ({
       <div class="form-control flex flex-wrap w-full flex-row ">
         <div className="w-3/5 pr-5">
           <label class="label">
-            <span class="label-text">Goals</span>
+            <span class="label-text">Asset</span>
           </label>
           <label class="input-group">
             <select className="input w-full input-bordered">
               <option disabled selected>
-                Choose a Goal
+                Choose an Asset
               </option>
               <option>House</option>
               <option>Car</option>
@@ -213,66 +213,162 @@ function Main() {
 
   return (
     <div className="flex-col h-auto w-full flex justify-center items-center gap-12 py-5 md:py-52 ">
-      <div className="flex flex-wrap flex-col justify-center items-center px:10 md:px-24 gap-3">
-        <h2 className="text-3xl md:text-6xl text-center">
-          Take the first step to<br></br>achieving your dreams.
-        </h2>
-        <p className="text-center">
-          Achieving your dreams is a process that starts with taking the first
-          step. Understanding your goal and outlining the steps to get there are
-          crucial to becoming successful. DreamWalk is guided by the philosophy
-          of getting into a business mindset. You tell us your dreams, then we
-          quantify them and
-        </p>
-        <button className="py-3 px-3 rounded-3xl bg-[#A0161B] text-white">
-          Calculate Your Dream
-        </button>
+      <div className="flex flex-wrap flex-col justify-start items-start px:10 md:px-0 gap-3  w-5/6">
+        <h2 className="text-3xl md:text-lg font-bold ">Assets</h2>
+        <div className="w-full grid grid-cols-11">
+          <div className="flex flex-col">
+            <br />
+            <p>Income</p>
+            <p>Home</p>
+            <p>Investments</p>
+            <p>Business Value</p>
+          </div>
+          <div className="flex flex-col">
+            <p>1st Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
+          <div className="flex flex-col">
+            <p>2nd Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
+          <div className="flex flex-col">
+            <p>3rd Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
+          <div className="flex flex-col">
+            <p>4th Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
+          <div className="flex flex-col">
+            <p>5th Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
+
+          <div className="flex flex-col">
+            <p>6th Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
+          <div className="flex flex-col">
+            <p>7th Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
+          <div className="flex flex-col">
+            <p>8th Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
+          <div className="flex flex-col">
+            <p>9th Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
+          <div className="flex flex-col">
+            <p>10 Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
+        </div>
       </div>
 
-      <form
-        className="flex flex-col items-center gap-10"
-        onSubmit={handleSubmit}
-      >
-        <div className="flex flex-col flex-wrap justify-center items-center px-0 w-full">
-          {inputNameFields.map((item, index) => (
-            <div key={index} className="px-0 w-full">
-              <InputNames
-                inputNameFields={inputNameFields}
-                index={index}
-                item={item}
-                handleChangeName={handleChangeName}
-                handleAddName={handleAddName}
-                handleRemoveName={handleRemoveName}
-              />
-            </div>
-          ))}
+      <div className="flex flex-wrap flex-col justify-start items-start px:10 md:px-0 gap-3  w-5/6">
+        <h2 className="text-3xl md:text-lg font-bold ">Liabilities</h2>
+        <div className="w-full grid grid-cols-11">
+          <div className="flex flex-col">
+            <br />
+            <p>Mortgage</p>
+            <p>Credit Card</p>
+            <p>Student Loan</p>
+          </div>
+          <div className="flex flex-col">
+            <p>1st Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
+          <div className="flex flex-col">
+            <p>2nd Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
+          <div className="flex flex-col">
+            <p>3rd Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
+          <div className="flex flex-col">
+            <p>4th Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
+          <div className="flex flex-col">
+            <p>5th Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
+
+          <div className="flex flex-col">
+            <p>6th Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
+          <div className="flex flex-col">
+            <p>7th Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
+          <div className="flex flex-col">
+            <p>8th Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
+          <div className="flex flex-col">
+            <p>9th Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
+          <div className="flex flex-col">
+            <p>10 Year</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+            <p>7,000,000</p>
+          </div>
         </div>
-
-        <div className="flex flex-col flex-wrap justify-center items-center px-0 w-full">
-          {inputFields.map((item, index) => (
-            <div key={index} className="px-0 w-full">
-              <InputRow
-                inputFields={inputFields}
-                index={index}
-                item={item}
-                handleAdd={handleAdd}
-                handleRemove={handleRemove}
-              />
-            </div>
-          ))}
-        </div>
-
-        {/* <button className="py-3 px-12 rounded-3xl bg-[#A0161B] text-white" onClick={handleSubmit}>
-          Calculate
-        </button> */}
-
-        <a
-          className="py-3 px-12 rounded-3xl bg-[#A0161B] text-white"
-          href="/assets"
-        >
-          Calculate
-        </a>
-      </form>
+      </div>
     </div>
   );
 }

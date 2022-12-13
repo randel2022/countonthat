@@ -64,7 +64,6 @@ const InputRow = ({
   );
 };
 
-
 const InputNames = ({
   index,
   item,
@@ -77,56 +76,53 @@ const InputNames = ({
   return (
     <>
       <div class="form-control flex flex-wrap w-full flex-row gap-5">
-            <div>
-              <label class="label">
-                <span class="label-text">First name</span>
-              </label>
-              <label class="input-group">
-                <input
-                  type="text"
-                  placeholder=""
-                  class="input input-bordered"
-                  name="firstname" handleChangeName={handleChangeName}
-                />
-              </label>
-            </div>
-            <div>
-              <label class="label">
-                <span class="label-text">Last name</span>
-              </label>
-              <label class="input-group">
-                <input
-                  type="text"
-                  placeholder=""
-                  class="input input-bordered"
-                />
-              </label>
-            </div>
-            <div className="flex flex-col items-center">
-                <label className="label self-start">
-                  <span class="label-text">Age</span>
-                </label>
-              <div className="flex items-center gap-2">
-                <label class="input-group">
-                  <input
-                    type="number"
-                    placeholder=""
-                    class="input input-bordered"
-                  />
-                </label>
-                <span onClick={handleRemoveName} className="cursor-pointer">
-                <BsTrash className="text-[#A0161B]"></BsTrash>
-              </span>
-            </div>  
+        <div>
+          <label class="label">
+            <span class="label-text">First name</span>
+          </label>
+          <label class="input-group">
+            <input
+              type="text"
+              placeholder=""
+              class="input input-bordered"
+              name="firstname"
+              handleChangeName={handleChangeName}
+            />
+          </label>
+        </div>
+        <div>
+          <label class="label">
+            <span class="label-text">Last name</span>
+          </label>
+          <label class="input-group">
+            <input type="text" placeholder="" class="input input-bordered" />
+          </label>
+        </div>
+        <div className="flex flex-col items-center">
+          <label className="label self-start">
+            <span class="label-text">Age</span>
+          </label>
+          <div className="flex items-center gap-2">
+            <label class="input-group">
+              <input
+                type="number"
+                placeholder=""
+                class="input input-bordered"
+              />
+            </label>
+            <span onClick={handleRemoveName} className="cursor-pointer">
+              <BsTrash className="text-[#A0161B]"></BsTrash>
+            </span>
           </div>
+        </div>
       </div>
 
       <div
-          className="flex items-center gap-2 cursor-pointer"
-          onClick={handleAddName}
-        >
-          <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
-          <p className="text-sm my-2 text-[#A0161B]">Add Another Person</p>
+        className="flex items-center gap-2 cursor-pointer"
+        onClick={handleAddName}
+      >
+        <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
+        <p className="text-sm my-2 text-[#A0161B]">Add Another Person</p>
       </div>
     </>
   );
@@ -166,8 +162,6 @@ function Main() {
     values[index][event.target.name] = event.target.value;
     setNamefields(values);
   };
-
-
 
   /*For Goals input*/
   const [inputFields, setInputFields] = useState([
@@ -220,18 +214,14 @@ function Main() {
   return (
     <div className="flex-col h-auto w-full flex justify-center items-center gap-12 py-5 md:py-52 ">
       <div className="flex flex-wrap flex-col justify-start items-start px:10 md:px-24 gap-3">
-        <h2 className="text-3xl md:text-lg font-bold ">
-          Assets Assement Page
-        </h2>
+        <h2 className="text-3xl md:text-lg font-bold ">Assets Assement Page</h2>
       </div>
-      
+
       <form
         className="flex flex-col items-center gap-10"
         onSubmit={handleSubmit}
       >
-        
-
-        <div className="flex flex-col flex-wrap justify-center items-center px-0 w-full">   
+        <div className="flex flex-col flex-wrap justify-center items-center px-0 w-full">
           {inputFields.map((item, index) => (
             <div key={index} className="px-0 w-full">
               <InputRow
@@ -245,10 +235,15 @@ function Main() {
           ))}
         </div>
 
-        <button className="py-3 px-12 rounded-3xl bg-[#A0161B] text-white" onClick={handleSubmit}>
+        {/* <button className="py-3 px-12 rounded-3xl bg-[#A0161B] text-white" onClick={handleSubmit}>
           Calculate
-        </button>
-
+        </button> */}
+        <a
+          className="py-3 px-12 rounded-3xl bg-[#A0161B] text-white"
+          href="/liabilities"
+        >
+          Calculate
+        </a>
       </form>
     </div>
   );
