@@ -19,6 +19,15 @@ function App() {
             path="/"
             element={
               <>
+                <Main />
+                {/* <Calculate /> */}
+              </>
+            }
+          ></Route>
+          <Route
+            path="/calculate"
+            element={
+              <>
                 {/* <Main /> */}
                 <Calculate />
               </>

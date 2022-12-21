@@ -24,13 +24,10 @@ const InputRow = ({
             <span class="label-text">Goals</span>
           </label>
           <label class="input-group">
-            <select className="input w-full input-bordered">
-              <option disabled selected>
+            <select className="input w-full input-bordered" disabled>
+              {/* <option disabled selected>
                 Choose a Goal
-              </option>
-              <option>House</option>
-              <option>Car</option>
-              <option>Savings</option>
+              </option> */}
             </select>
           </label>
         </div>
@@ -46,6 +43,7 @@ const InputRow = ({
               className="input w-full input-bordered"
               onChange={(event) => handleChange(event, index)}
               value={item.amount}
+              disabled
             />
             <span onClick={handleRemove} className="cursor-pointer">
               <BsTrash className="text-[#A0161B]"></BsTrash>
@@ -54,7 +52,7 @@ const InputRow = ({
         </div>
         <div
           className="flex items-center gap-2 cursor-pointer"
-          onClick={handleAdd}
+          // onClick={handleAdd}
         >
           <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
           <p className="text-sm my-2 text-[#A0161B]">Add Another Goal</p>
@@ -87,6 +85,7 @@ const InputNames = ({
               class="input input-bordered"
               name="firstname"
               handleChangeName={handleChangeName}
+              disabled
             />
           </label>
         </div>
@@ -95,7 +94,7 @@ const InputNames = ({
             <span class="label-text">Last name</span>
           </label>
           <label class="input-group">
-            <input type="text" placeholder="" class="input input-bordered" />
+            <input type="text" placeholder="" class="input input-bordered"  disabled/>
           </label>
         </div>
         <div className="flex flex-col items-center">
@@ -108,6 +107,7 @@ const InputNames = ({
                 type="number"
                 placeholder=""
                 class="input input-bordered"
+                disabled
               />
             </label>
             <span onClick={handleRemoveName} className="cursor-pointer">
@@ -117,13 +117,13 @@ const InputNames = ({
         </div>
       </div>
 
-      <div
+      {/* <div
         className="flex items-center gap-2 cursor-pointer"
         onClick={handleAddName}
       >
         <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
         <p className="text-sm my-2 text-[#A0161B]">Add Another Person</p>
-      </div>
+      </div> */}
     </>
   );
 };
@@ -224,13 +224,13 @@ function Main() {
           of getting into a business mindset. You tell us your dreams, then we
           quantify them and
         </p>
-        <button className="py-3 px-3 rounded-3xl bg-[#A0161B] text-white">
+        <a href="/calculate" className="py-3 px-3 rounded-3xl bg-[#A0161B] text-white">
           Calculate Your Dream
-        </button>
+        </a>
       </div>
 
       <form
-        className="flex flex-col items-center gap-10"
+        className="flex flex-col items-center gap-10 rounded-md  py-5 px-5 border-gray-300 drop-shadow-2xl"
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col flex-wrap justify-center items-center px-0 w-full">
@@ -243,6 +243,7 @@ function Main() {
                 handleChangeName={handleChangeName}
                 handleAddName={handleAddName}
                 handleRemoveName={handleRemoveName}
+               
               />
             </div>
           ))}
@@ -266,12 +267,12 @@ function Main() {
           Calculate
         </button> */}
 
-        <a
-          className="py-3 px-12 rounded-3xl bg-[#A0161B] text-white"
-          href="/assets"
+        <button
+          className="py-3 px-12 rounded-3xl bg-[#A0161B] text-white cursor-default"
+          // href="/assets"
         >
           Calculate
-        </a>
+        </button>
       </form>
     </div>
   );
