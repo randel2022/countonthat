@@ -38,7 +38,7 @@ function Calculate() {
     <div className="flex-col relative h-auto w-full flex justify-center items-center gap-12 py-5 md:py-52 ">
       {selectedTab <= 2 ? (
         <>
-          <ul className="steps steps-horizontal lg:steps-horizontal absolute top-16">
+          <ul className="steps steps-horizontal lg:steps-horizontal relative md:absolute md:top-16">
             <li className={liStyle(0)}>Personal</li>
             <li className={liStyle(1)}>Assets</li>
             <li className={liStyle(2)}>Liabilities</li>
@@ -127,8 +127,8 @@ const InputNames = ({
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex w-full gap-10 items-center">
-          <div className="w-1/2">
+        <div className="flex flex-col md:flex-row w-full gap-10 items-center">
+          <div className="w-full md:w-1/2">
             <label>First Name</label>
             <input
               className="input input-bordered w-full border-slate-400"
@@ -142,10 +142,11 @@ const InputNames = ({
                   agenew: item.agenew,
                 })
               }
+              required
             />
           </div>
 
-          <div className="w-1/2">
+          <div className="w-full md:w-1/2">
             <label>Last Name</label>
             <input
               className="input input-bordered w-full border-slate-400"
@@ -159,10 +160,11 @@ const InputNames = ({
                   agenew: item.agenew,
                 })
               }
+              required
             />
           </div>
 
-          <div className="w-1/2">
+          <div className="w-full md:w-1/2">
             <label>Age</label>
             <input
               name="agenew"
@@ -175,9 +177,10 @@ const InputNames = ({
                   agenew: e.target.value,
                 })
               }
+              required
             />
           </div>
-          <span className="cursor-pointer mt-5" onClick={handleRemoveName}>
+          <span className="cursor-pointer -mt-6 md:mt-5" onClick={handleRemoveName}>
             <BsTrash className="text-[#A0161B]"></BsTrash>
           </span>
         </div>
@@ -199,8 +202,8 @@ const InputGoals = ({ isLast, item, onChangeValues, addNewGoal }) => {
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex w-full gap-10 items-center">
-          <div className="w-1/2">
+        <div className="flex flex-col md:flex-row w-full gap-10 items-center">
+          <div className="w-full md:w-1/2">
             <label>Goal</label>
             <select
               className="input input-bordered w-full border-slate-400"
@@ -208,6 +211,7 @@ const InputGoals = ({ isLast, item, onChangeValues, addNewGoal }) => {
               onChange={(e) =>
                 onChangeValues({ goal: e.target.value, amount: item.amount })
               }
+              required
             >
               <option disabled selected>
                 {" "}
@@ -219,7 +223,7 @@ const InputGoals = ({ isLast, item, onChangeValues, addNewGoal }) => {
             </select>
           </div>
 
-          <div className="w-1/2">
+          <div className="w-full md:w-1/2">
             <label>Amount</label>
             <div className="flex items-center border-slate-400">
               <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
@@ -233,11 +237,12 @@ const InputGoals = ({ isLast, item, onChangeValues, addNewGoal }) => {
                 onChange={(e) =>
                   onChangeValues({ goal: item.goal, amount: e.target.value })
                 }
+                required
               />
             </div>
           </div>
 
-          <span className="cursor-pointer mt-5">
+          <span className="cursor-pointer -mt-6 md:mt-5">
             <BsTrash className="text-[#A0161B]"></BsTrash>
           </span>
         </div>
@@ -259,8 +264,8 @@ const InputAssets = ({ isLast, item, onChangeValues, addNewAsset }) => {
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex w-full gap-10">
-          <div className="w-1/2">
+        <div className="flex flex-col md:flex-row w-full gap-10">
+          <div className="w-full md:w-1/2">
             <label>Asset</label>
             <select
               className="input input-bordered w-full border-slate-400"
@@ -268,6 +273,7 @@ const InputAssets = ({ isLast, item, onChangeValues, addNewAsset }) => {
               onChange={(e) =>
                 onChangeValues({ asset: e.target.value, amount: item.amount })
               }
+              required
             >
               <option disabled selected>
                 Choose an Asset
@@ -278,7 +284,7 @@ const InputAssets = ({ isLast, item, onChangeValues, addNewAsset }) => {
             </select>
           </div>
 
-          <div className="w-1/2">
+          <div className="w-full md:w-1/2">
             <label>Amount</label>
             <div className="flex items-center border-slate-400">
               <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
@@ -292,6 +298,7 @@ const InputAssets = ({ isLast, item, onChangeValues, addNewAsset }) => {
                 onChange={(e) =>
                   onChangeValues({ asset: item.asset, amount: e.target.value })
                 }
+                required
               />
             </div>
           </div>
@@ -319,8 +326,8 @@ const InputLiabilities = ({
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex w-full gap-10">
-          <div className="w-1/2">
+        <div className="flex flex-col md:flex-row w-full gap-10">
+          <div className="w-full md:w-1/2">
             <label>Liability</label>
             <select
               className="input input-bordered w-full border-slate-400"
@@ -331,6 +338,7 @@ const InputLiabilities = ({
                   amount: item.amount,
                 })
               }
+              required
             >
               <option disabled selected>
                 Select a Liability
@@ -341,7 +349,7 @@ const InputLiabilities = ({
             </select>
           </div>
 
-          <div className="w-1/2">
+          <div className="w-full md:w-1/2">
             <label>Amount</label>
             <div className="flex items-center border-slate-400">
               <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
@@ -358,6 +366,7 @@ const InputLiabilities = ({
                     amount: e.target.value,
                   })
                 }
+                required
               />
             </div>
           </div>
@@ -444,7 +453,7 @@ function PersonalForm({ setData }) {
         onSubmit={(e) => {
           handleSubmit(e);
         }}
-        className="gap-10 flex flex-col w-1/2"
+        className="gap-10 flex flex-col w-5/6	md:w-1/2"
       >
         {/* <div className="flex justify-between w-full gap-5">
           <div>
@@ -565,7 +574,7 @@ function AssetsForm({ setData }) {
         onSubmit={(e) => {
           handleSubmit(e);
         }}
-        className="flex flex-col gap-10 w-1/2"
+        className="flex flex-col gap-10 w-5/6 md:w-1/2"
       >
         {/* <div className="flex gap-10">
           <div className="w-full">
@@ -665,7 +674,7 @@ function LiabilitiesForm({ setData }) {
         onSubmit={(e) => {
           handleSubmit(e);
         }}
-        className=" flex flex-col w-1/2 gap-10"
+        className="flex flex-col w-5/6 md:w-1/2 gap-10"
       >
         {/* <div className="w-full flex flex-row gap-10">
           <div className="w-1/2">
@@ -789,7 +798,7 @@ function Output({ goalData, setData }) {
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
-      <div className="flex flex-col gap-5 w-1/2">
+      <div className="flex flex-col gap-5 w-5/6 md:w-1/2">
         {/* {goalsData.map((goals) => (
           <label>
             Goals: {goals.goal} ({goals.amount}*5)
@@ -812,9 +821,9 @@ function Output({ goalData, setData }) {
           </div>
         </div>
 
-        <div className="px-8">
+        <div className="px-8 flex flex-col ">
           <h2 className="font-bold">You need to save</h2>
-          <div className="flex gap-5 items-center">
+          <div className="flex flex-col md:flex-row gap-5 items-center">
             <h2 className="font-bold text-6xl">$10,000</h2>
             <h2 className="font-bold">Monthly</h2>
           </div>

@@ -6,9 +6,9 @@ function Footer() {
   return (
     <div className="w-full bg-[#1E0607] p-5 text-white">
       <div className="grid grid-cols-1 gap-10 md:gap-3  md:grid-cols-4 place-items-center md:place-items-start py-5 md:py-10 ">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 w-full">
           <img src={logowhite} className="w-64"></img>
-          <div className="flex flex-col gap-4 pl-3">
+          <div className="flex flex-col gap-4 pl-0 md:pl-3">
             <p className="text-xs">
               1455 NW Leary Way Ste.400 Seattle, WA 98107
             </p>
@@ -17,7 +17,7 @@ function Footer() {
             <p className="text-xs">jeff@countonthat.com</p>
           </div>
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 w-full">
           <p className="font-bold">Select Links</p>
           <ul>
             <li>Home</li>
@@ -28,11 +28,11 @@ function Footer() {
             <li>Blog</li>
           </ul>
         </div>
-        <div className="flex flex-col gap-4 ">
+        <div className="flex flex-col gap-4 w-full">
           <p className="font-bold">Membership</p>
-          <img src={quickbooks}></img>
+          <img src={quickbooks} className="w-14"></img>
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 w-full">
           <p className="font-bold">Support</p>
           <ul>
             <li>Client Login</li>

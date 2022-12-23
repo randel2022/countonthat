@@ -20,8 +20,8 @@ const InputRow = ({
 }) => {
   return (
     <div className="w-full ">
-      <div class="form-control flex flex-wrap w-full flex-row items-center">
-        <div className="w-3/5 pr-5">
+      <div class="form-control flex flex-wrap w-full flex-col md:flex-row items-center">
+        <div className="w-full md:w-3/5 pr-5">
           <label class="label">
             <span class="label-text">Goals</span>
           </label>
@@ -36,11 +36,11 @@ const InputRow = ({
             </select>
           </label>
         </div>
-        <div className="w-2/5 flex flex-col">
+        <div className="w-full md:w-2/5 flex flex-col">
           <label class="label">
             <span class="label-text">Amount</span>
           </label>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-col md:flex-row">
             <div className="flex items-center border-slate-400">
               <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
                 <p className="text-center">USD</p>
@@ -85,11 +85,11 @@ const InputNames = ({
         <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
       </div>
       <div class="form-control flex flex-wrap w-full flex-row gap-5">
-        <div>
+        <div className="w-full md:w-auto">
           <label class="label">
             <span class="label-text">First name</span>
           </label>
-          <label class="input-group">
+          <label class="input-group ">
             <input
               className="input input-bordered w-full border-slate-400 input-custom"
               name="firstname"
@@ -98,29 +98,29 @@ const InputNames = ({
             />
           </label>
         </div>
-        <div>
+        <div className="w-full md:w-auto">
           <label class="label">
             <span class="label-text">Last name</span>
           </label>
-          <label class="input-group">
+          <label class="input-group ">
             <input
               type="text"
               placeholder=""
-              class="input input-bordered input-custom"
+              class="input input-bordered input-custom w-full md:w-auto"
               disabled
             />
           </label>
         </div>
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center w-full md:w-auto">
           <label className="label self-start">
             <span class="label-text">Age</span>
           </label>
-          <div className="flex items-center gap-2">
-            <label class="input-group">
+          <div className="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto">
+            <label class="input-group w-full md:w-auto">
               <input
                 type="number"
                 placeholder=""
-                class="input input-bordered input-custom"
+                class="input input-bordered input-custom w-full md:w-auto"
                 disabled
               />
             </label>
