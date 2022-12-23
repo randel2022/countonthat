@@ -7,6 +7,8 @@ import { BsTrash } from "react-icons/bs";
 
 import { useState } from "react";
 
+import { IoMdInformationCircle } from "react-icons/io";
+
 const InputRow = ({
   index,
   item,
@@ -18,40 +20,46 @@ const InputRow = ({
 }) => {
   return (
     <div className="w-full ">
-      <div class="form-control flex flex-wrap w-full flex-row ">
+      <div class="form-control flex flex-wrap w-full flex-row items-center">
         <div className="w-3/5 pr-5">
           <label class="label">
             <span class="label-text">Goals</span>
           </label>
-          <label class="input-group">
-            <select className="input w-full input-bordered" disabled>
+          <label class="input-group input-custom ">
+            <select
+              className="input w-full input-bordered input-custom"
+              disabled
+            >
               {/* <option disabled selected>
                 Choose a Goal
               </option> */}
             </select>
           </label>
         </div>
-        <div className="w-2/5">
+        <div className="w-2/5 flex flex-col">
           <label class="label">
             <span class="label-text">Amount</span>
           </label>
-          <label class="input-group">
-            <span>USD</span>
-            <input
-              type="number"
-              placeholder=""
-              className="input w-full input-bordered"
-              onChange={(event) => handleChange(event, index)}
-              value={item.amount}
-              disabled
-            />
-            <span onClick={handleRemove} className="cursor-pointer">
+          <div className="flex items-center gap-2">
+            <div className="flex items-center border-slate-400">
+              <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
+                <p className="text-center">USD</p>
+              </div>
+              <input
+                name="amount"
+                type="number"
+                className="input input-bordered w-3/4 rounded-l-none border-slate-400 input-custom"
+                disabled
+              />
+            </div>
+
+            <span onClick={handleRemove} className="cursor-default">
               <BsTrash className="text-[#A0161B]"></BsTrash>
             </span>
-          </label>
+          </div>
         </div>
         <div
-          className="flex items-center gap-2 cursor-pointer"
+          className="flex items-center gap-2 cursor-default"
           // onClick={handleAdd}
         >
           <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
@@ -72,7 +80,10 @@ const InputNames = ({
   inputFieldsName,
 }) => {
   return (
-    <>
+    <div className="">
+      <div className="flex justify-end px-5">
+        <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
+      </div>
       <div class="form-control flex flex-wrap w-full flex-row gap-5">
         <div>
           <label class="label">
@@ -80,11 +91,9 @@ const InputNames = ({
           </label>
           <label class="input-group">
             <input
-              type="text"
-              placeholder=""
-              class="input input-bordered"
+              className="input input-bordered w-full border-slate-400 input-custom"
               name="firstname"
-              handleChangeName={handleChangeName}
+              type="text"
               disabled
             />
           </label>
@@ -94,7 +103,12 @@ const InputNames = ({
             <span class="label-text">Last name</span>
           </label>
           <label class="input-group">
-            <input type="text" placeholder="" class="input input-bordered"  disabled/>
+            <input
+              type="text"
+              placeholder=""
+              class="input input-bordered input-custom"
+              disabled
+            />
           </label>
         </div>
         <div className="flex flex-col items-center">
@@ -106,25 +120,17 @@ const InputNames = ({
               <input
                 type="number"
                 placeholder=""
-                class="input input-bordered"
+                class="input input-bordered input-custom"
                 disabled
               />
             </label>
-            <span onClick={handleRemoveName} className="cursor-pointer">
+            <span onClick={handleRemoveName} className="cursor-default">
               <BsTrash className="text-[#A0161B]"></BsTrash>
             </span>
           </div>
         </div>
       </div>
-
-      {/* <div
-        className="flex items-center gap-2 cursor-pointer"
-        onClick={handleAddName}
-      >
-        <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
-        <p className="text-sm my-2 text-[#A0161B]">Add Another Person</p>
-      </div> */}
-    </>
+    </div>
   );
 };
 
@@ -212,9 +218,9 @@ function Main() {
   };
 
   return (
-    <div className="flex-col h-auto w-full flex justify-center items-center gap-12 py-5 md:py-52 ">
+    <div className="flex-col h-auto w-full flex justify-center items-center gap-12 py-5 md:py-32 ">
       <div className="flex flex-wrap flex-col justify-center items-center px:10 md:px-24 gap-3">
-        <h2 className="text-3xl md:text-6xl text-center">
+        <h2 className="text-3xl md:text-6xl text-center font-bold">
           Take the first step to<br></br>achieving your dreams.
         </h2>
         <p className="text-center">
@@ -224,13 +230,16 @@ function Main() {
           of getting into a business mindset. You tell us your dreams, then we
           quantify them and
         </p>
-        <a href="/calculate" className="py-3 px-3 rounded-3xl bg-[#A0161B] text-white">
+        <a
+          href="/calculate"
+          className="py-3 px-3 rounded-3xl bg-[#A0161B] text-white"
+        >
           Calculate Your Dream
         </a>
       </div>
 
       <form
-        className="flex flex-col items-center gap-10 rounded-md  py-5 px-5 border-gray-300 drop-shadow-2xl"
+        className="flex flex-col items-center gap-10 rounded-md py-5 px-5 shadow-lg mainbox fadeInDown "
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col flex-wrap justify-center items-center px-0 w-full">
@@ -243,7 +252,6 @@ function Main() {
                 handleChangeName={handleChangeName}
                 handleAddName={handleAddName}
                 handleRemoveName={handleRemoveName}
-               
               />
             </div>
           ))}
@@ -263,15 +271,11 @@ function Main() {
           ))}
         </div>
 
-        {/* <button className="py-3 px-12 rounded-3xl bg-[#A0161B] text-white" onClick={handleSubmit}>
-          Calculate
-        </button> */}
-
         <button
-          className="py-3 px-12 rounded-3xl bg-[#A0161B] text-white cursor-default"
+          className="py-3 px-12 self-start rounded-md bg-[#A0161B] text-white cursor-default"
           // href="/assets"
         >
-          Calculate
+          Next Step
         </button>
       </form>
     </div>

@@ -19,3 +19,26 @@
 .input-group > .select {
   border-radius: 10px;
 }
+
+.mainbox {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.input-custom {
+  border-color: #8a8a8e !important;
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fadeInDown {
+  -webkit-animation-name: fadeInDown !important;
+  animation-name: fadeInDown !important;
+}
