@@ -239,7 +239,7 @@ function Main() {
       </div>
 
       <form
-        className="flex flex-col items-center gap-10 rounded-md py-5 px-5 shadow-lg mainbox fadeInDown "
+        className="flex flex-col items-center gap-10 rounded-md py-5 px-5 shadow-lg mainbox fadeInDown"
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col flex-wrap justify-center items-center px-0 w-full">

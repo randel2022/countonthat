@@ -42,12 +42,14 @@ function Footer() {
         </div>
       </div>
 
-      <div className="flex justify-between mb-4">
-        <p>Copyright © 2021 CountonThat LLC, All rights reserved. </p>
+      <div className="flex justify-between px-2 mb-4">
+        <p className="text-xs">
+          Copyright © 2021 CountonThat LLC, All rights reserved.{" "}
+        </p>
         <ul className="flex gap-6">
-          <li>Term of Use</li>
-          <li>Privacy Policy</li>
-          <li>Cookie Policy</li>
+          <li className="text-xs">Term of Use</li>
+          <li className="text-xs">Privacy Policy</li>
+          <li className="text-xs">Cookie Policy</li>
         </ul>
       </div>
     </div>

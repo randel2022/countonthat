@@ -930,7 +930,7 @@ function AnnualForm({ goalData }) {
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
-      <div className="flex flex-col gap-5 bg-green-400 w-10/12">
+      <div className="flex flex-col gap-10 w-10/12">
         <div className="flex flex-wrap flex-col justify-start items-start px:10 md:px-0 gap-3  w-full">
           <h2 className="text-3xl md:text-lg font-bold ">Assets</h2>
           <div className="w-full grid grid-cols-11">
@@ -942,90 +942,213 @@ function AnnualForm({ goalData }) {
               <p>Business Value</p>
             </div>
             <div className="flex flex-col">
-              <p>1st Year</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
-              <p>{sumFunc("investment", assets)}</p>
-              <p>7,000,000</p>
+              <ul className="text-center">
+                <li>1st Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>{sumFunc("investment", assets)}</li>
+                <li>7,000,000</li>
+              </ul>
             </div>
             <div className="flex flex-col">
-              <p>2nd Year</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
+              <ul className="text-center">
+                <li>2nd Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>{sumFunc("investment", assets)}</li>
+                <li>7,000,000</li>
+              </ul>
             </div>
             <div className="flex flex-col">
-              <p>3rd Year</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
+              <ul className="text-center">
+                <li>3rd Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>{sumFunc("investment", assets)}</li>
+                <li>7,000,000</li>
+              </ul>
             </div>
             <div className="flex flex-col">
-              <p>4th Year</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
+              <ul className="text-center">
+                <li>4th Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>{sumFunc("investment", assets)}</li>
+                <li>7,000,000</li>
+              </ul>
             </div>
             <div className="flex flex-col">
-              <p>5th Year</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
+              <ul className="text-center">
+                <li>5th Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+              </ul>
             </div>
 
             <div className="flex flex-col">
-              <p>6th Year</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
+              <ul className="text-center">
+                <li>6th Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+              </ul>
             </div>
             <div className="flex flex-col">
-              <p>7th Year</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
+              <ul className="text-center">
+                <li>7th Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+              </ul>
             </div>
             <div className="flex flex-col">
-              <p>8th Year</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
+              <ul className="text-center">
+                <li>8th Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+              </ul>
             </div>
             <div className="flex flex-col">
-              <p>9th Year</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
+              <ul className="text-center">
+                <li>9th Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+              </ul>
             </div>
             <div className="flex flex-col">
-              <p>10 Year</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
-              <p>7,000,000</p>
+              <ul className="text-center">
+                <li>10th Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+              </ul>
             </div>
           </div>
         </div>
 
-        <div>
+        <div className="flex flex-wrap flex-col justify-start items-start px:10 md:px-0 gap-3  w-full">
+          <h2 className="text-3xl md:text-lg font-bold ">Liabilities</h2>
+          <div className="w-full grid grid-cols-11">
+            <div className="flex flex-col">
+              <br />
+              <p>Mortgage</p>
+              <p>Credit Card</p>
+              <p>Student Debt</p>
+              <p>Loans</p>
+            </div>
+            <div className="flex flex-col">
+              <ul className="text-center">
+                <li>1st Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>{sumFunc("investment", assets)}</li>
+                <li>7,000,000</li>
+              </ul>
+            </div>
+            <div className="flex flex-col">
+              <ul className="text-center">
+                <li>2nd Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>{sumFunc("investment", assets)}</li>
+                <li>7,000,000</li>
+              </ul>
+            </div>
+            <div className="flex flex-col">
+              <ul className="text-center">
+                <li>3rd Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>{sumFunc("investment", assets)}</li>
+                <li>7,000,000</li>
+              </ul>
+            </div>
+            <div className="flex flex-col">
+              <ul className="text-center">
+                <li>4th Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>{sumFunc("investment", assets)}</li>
+                <li>7,000,000</li>
+              </ul>
+            </div>
+            <div className="flex flex-col">
+              <ul className="text-center">
+                <li>5th Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+              </ul>
+            </div>
+
+            <div className="flex flex-col">
+              <ul className="text-center">
+                <li>6th Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+              </ul>
+            </div>
+            <div className="flex flex-col">
+              <ul className="text-center">
+                <li>7th Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+              </ul>
+            </div>
+            <div className="flex flex-col">
+              <ul className="text-center">
+                <li>8th Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+              </ul>
+            </div>
+            <div className="flex flex-col">
+              <ul className="text-center">
+                <li>9th Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+              </ul>
+            </div>
+            <div className="flex flex-col">
+              <ul className="text-center">
+                <li>10th Year</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+                <li>7,000,000</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* <div>
           <p>Year 3</p>
           <p>investment: {investmentYearly}</p>
         </div>
-
         <div>
           <p>Year 3</p>
           <p>Home: {homeYearly}</p>
-        </div>
+        </div> */}
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center mt-7">
         <a href="/calculate" className="flex text-center items-center gap-2">
           <img src={refresh} className="w-4 h-4"></img>
           <p className="text-[#8A8A8E]">Back to start</p>
