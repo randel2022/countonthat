@@ -47,7 +47,7 @@ function Footer() {
           Copyright © 2021 CountonThat LLC, All rights reserved.{" "}
         </p>
         <ul className="flex gap-6">
-          <li className="text-xs">Term of Use</li>
+          <li className="text-xs">Terms of Use</li>
           <li className="text-xs">Privacy Policy</li>
           <li className="text-xs">Cookie Policy</li>
         </ul>
