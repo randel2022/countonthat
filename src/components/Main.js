@@ -21,7 +21,7 @@ const InputRow = ({
   return (
     <div className="w-full ">
       <div class="form-control flex flex-wrap w-full flex-col md:flex-row items-center">
-        <div className="w-full md:w-3/5 pr-5">
+        <div className="w-full md:w-3/5 pr-0 md:pr-5">
           <label class="label">
             <span class="label-text">Goals</span>
           </label>
