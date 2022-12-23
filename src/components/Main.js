@@ -218,7 +218,7 @@ function Main() {
   };
 
   return (
-    <div className="flex-col h-auto w-full flex justify-center items-center gap-12 py-5 md:py-32 ">
+    <div className="flex-col h-auto w-full flex justify-center items-center gap-12 py-5 md:py-32 px-8">
       <div className="flex flex-wrap flex-col justify-center items-center px:10 md:px-24 gap-3">
         <h2 className="text-3xl md:text-6xl text-center font-bold">
           Take the first step to<br></br>achieving your dreams.
@@ -278,6 +278,16 @@ function Main() {
           Next Step
         </button>
       </form>
+
+      <div className="bg-[#1E0607] flex flex-col justify-center items-center py-28 px-12 w-full md:w-1/2 rounded-md gap-3">
+        <h2 className="text-xl text-center md:text-3xl text-white font-bold">
+          Medium length heading goes here
+        </h2>
+        <p className="text-white text-center text-xs">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+          varius enim in eros elementum tristique.
+        </p>
+      </div>
     </div>
   );
 }

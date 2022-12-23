@@ -5,7 +5,7 @@ import quickbooks from "../assets/quickbooks.png";
 function Footer() {
   return (
     <div className="w-full bg-[#1E0607] p-5 text-white">
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-4 place-items-center md:place-items-start py-5 md:py-10 ">
+      <div className="grid grid-cols-1 gap-10 md:gap-3  md:grid-cols-4 place-items-center md:place-items-start py-5 md:py-10 ">
         <div className="flex flex-col gap-4">
           <img src={logowhite} className="w-64"></img>
           <div className="flex flex-col gap-4 pl-3">
@@ -28,7 +28,7 @@ function Footer() {
             <li>Blog</li>
           </ul>
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 ">
           <p className="font-bold">Membership</p>
           <img src={quickbooks}></img>
         </div>
@@ -42,7 +42,7 @@ function Footer() {
         </div>
       </div>
 
-      <div className="flex justify-between px-2 mb-4">
+      <div className="flex flex-col md:flex-row items-center gap-3 md:gap-0 md:justify-between px-2 mb-4">
         <p className="text-xs">
           Copyright © 2021 CountonThat LLC, All rights reserved.{" "}
         </p>

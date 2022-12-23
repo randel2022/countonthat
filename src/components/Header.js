@@ -9,7 +9,7 @@ function Header() {
       </a>
       <a
         href="/calculate"
-        className="py-3 px-3 rounded-3xl bg-[#A0161B] text-white"
+        className="py-3 hidden md:block px-3 rounded-3xl bg-[#A0161B] text-white"
       >
         Calculate Your Dream
       </a>
