@@ -198,7 +198,7 @@ const InputNames = ({
   );
 };
 
-const InputGoals = ({ isLast, item, onChangeValues, addNewGoal }) => {
+const InputGoals = ({ isLast, item, onChangeValues, addNewGoal, handleRemoveGoal, }) => {
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
@@ -242,7 +242,7 @@ const InputGoals = ({ isLast, item, onChangeValues, addNewGoal }) => {
             </div>
           </div>
 
-          <span className="cursor-pointer -mt-6 md:mt-5">
+          <span className="cursor-pointer -mt-6 md:mt-5" onClick={handleRemoveGoal}>
             <BsTrash className="text-[#A0161B]"></BsTrash>
           </span>
         </div>
@@ -260,11 +260,11 @@ const InputGoals = ({ isLast, item, onChangeValues, addNewGoal }) => {
   );
 };
 
-const InputAssets = ({ isLast, item, onChangeValues, addNewAsset }) => {
+const InputAssets = ({ isLast, item, onChangeValues, addNewAsset, handleRemoveAsset }) => {
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col md:flex-row w-full gap-10">
+        <div className="flex flex-col md:flex-row w-full gap-10 items-center">
           <div className="w-full md:w-1/2">
             <label>Asset</label>
             <select
@@ -285,23 +285,27 @@ const InputAssets = ({ isLast, item, onChangeValues, addNewAsset }) => {
           </div>
 
           <div className="w-full md:w-1/2">
-            <label>Amount</label>
-            <div className="flex items-center border-slate-400">
-              <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                <p className="text-center">USD</p>
-              </div>
-              <input
-                name="amount"
-                type="number"
-                className="input input-bordered w-3/4 rounded-l-none border-slate-400"
-                value={item.amount}
-                onChange={(e) =>
-                  onChangeValues({ asset: item.asset, amount: e.target.value })
-                }
-                required
-              />
-            </div>
+            <label>Amount</label>           
+              <div className="flex items-center border-slate-400 w-full">
+                <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
+                  <p className="text-center">USD</p>
+                </div>
+                <input
+                  name="amount"
+                  type="number"
+                  className="input input-bordered w-3/4 rounded-l-none border-slate-400"
+                  value={item.amount}
+                  onChange={(e) =>
+                    onChangeValues({ asset: item.asset, amount: e.target.value })
+                  }
+                  required
+                />
+              </div>          
           </div>
+
+          <span className="cursor-pointer -mt-6 md:mt-5" onClick={handleRemoveAsset}>
+            <BsTrash className="text-[#A0161B]"></BsTrash>
+          </span>
         </div>
         {isLast && (
           <div
@@ -322,11 +326,12 @@ const InputLiabilities = ({
   item,
   onChangeValues,
   addNewLiability,
+  handleRemoveLiability
 }) => {
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col md:flex-row w-full gap-10">
+        <div className="flex flex-col md:flex-row w-full gap-10 items-center">
           <div className="w-full md:w-1/2">
             <label>Liability</label>
             <select
@@ -370,6 +375,10 @@ const InputLiabilities = ({
               />
             </div>
           </div>
+
+          <span className="cursor-pointer -mt-6 md:mt-5" onClick={handleRemoveLiability}>
+            <BsTrash className="text-[#A0161B]"></BsTrash>
+          </span>
         </div>
         {isLast && (
           <div
@@ -431,6 +440,14 @@ function PersonalForm({ setData }) {
       const values = [...names];
       values.splice(index, 1);
       setNames(values);
+    }
+  };
+
+  const handleRemoveGoal = (index) => {
+    if (goals.length !== 1) {
+      const values = [...goals];
+      values.splice(index, 1);
+      setGoals(values);
     }
   };
 
@@ -516,6 +533,7 @@ function PersonalForm({ setData }) {
                 setGoals(goalsTemporary);
               }}
               addNewGoal={addNewGoal}
+              handleRemoveGoal={handleRemoveGoal}
               isLast={goals.length - 1 === index}
             />
           </div>
@@ -563,6 +581,14 @@ function AssetsForm({ setData }) {
         amount: 0.0,
       },
     ]);
+  };
+
+  const handleRemoveAsset = (index) => {
+    if (assets.length !== 1) {
+      const values = [...assets];
+      values.splice(index, 1);
+      setAssets(values);
+    }
   };
 
   return (
@@ -616,6 +642,7 @@ function AssetsForm({ setData }) {
                 setAssets(assetsTemporary);
               }}
               addNewAsset={addNewAsset}
+              handleRemoveAsset={handleRemoveAsset}
               isLast={assets.length - 1 === index}
             />
           </div>
@@ -663,6 +690,14 @@ function LiabilitiesForm({ setData }) {
         amount: 0.0,
       },
     ]);
+  };
+
+  const handleRemoveLiability = (index) => {
+    if (liabilities.length !== 1) {
+      const values = [...liabilities];
+      values.splice(index, 1);
+      setLiability(values);
+    }
   };
 
   return (
@@ -716,6 +751,7 @@ function LiabilitiesForm({ setData }) {
                 setLiability(liabilityTemporary);
               }}
               addNewLiability={addNewLiability}
+              handleRemoveLiability={handleRemoveLiability}
               isLast={liabilities.length - 1 === index}
             />
           </div>
