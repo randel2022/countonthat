@@ -41,6 +41,15 @@ function Footer() {
           </ul>
         </div>
       </div>
+
+      <div className="flex justify-between mb-4">
+        <p>Copyright © 2021 CountonThat LLC, All rights reserved. </p>
+        <ul className="flex gap-6">
+          <li>Term of Use</li>
+          <li>Privacy Policy</li>
+          <li>Cookie Policy</li>
+        </ul>
+      </div>
     </div>
   );
 }
