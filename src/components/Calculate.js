@@ -463,8 +463,8 @@ function PersonalForm({ setData }) {
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
-      <div className="w-1/2">
-        <p className="font-bold text-left">Personal Info</p>
+      <div className="w-1/2 ">
+        <p className="font-bold text-center md:text-left">Personal Info</p>
       </div>
       <form
         onSubmit={(e) => {
@@ -541,7 +541,7 @@ function PersonalForm({ setData }) {
 
         <input
           type="submit"
-          className="py-3 w-52 rounded-md bg-[#A0161B] text-white"
+          className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer"
           value="Next Step"
         />
       </form>
@@ -594,7 +594,7 @@ function AssetsForm({ setData }) {
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
       <div className="w-1/2">
-        <p className="font-bold text-left">Assement Management</p>
+        <p className="font-bold text-center md:text-left">Assement Management</p>
       </div>
       <form
         onSubmit={(e) => {
@@ -650,7 +650,7 @@ function AssetsForm({ setData }) {
 
         <input
           type="submit"
-          className="py-3 w-52 rounded-md bg-[#A0161B] text-white"
+          className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer"
           value="Next Step"
         />
       </form>
@@ -703,7 +703,7 @@ function LiabilitiesForm({ setData }) {
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
       <div className="w-1/2 ">
-        <p className="font-bold text-left">Liability Management</p>
+        <p className="font-bold text-center md:text-left">Liability Management</p>
       </div>
       <form
         onSubmit={(e) => {
@@ -759,7 +759,7 @@ function LiabilitiesForm({ setData }) {
 
         <input
           type="submit"
-          className="py-3 w-52 rounded-md bg-[#A0161B] text-white "
+          className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer"
           value="Next Step"
         />
       </form>
@@ -889,7 +889,7 @@ function Output({ goalData, setData }) {
         >
           <input
             type="submit"
-            className="py-3 w-52 rounded-md bg-[#A0161B] text-white"
+            className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer"
             value="Next Step"
           />
         </form>
