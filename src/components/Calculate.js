@@ -973,21 +973,21 @@ function CalculateForm({ goalData }) {
 
   return (
     <div>
-      <div className="grid grid-cols-11 bg-red-400">
-          <div className="text-left"></div>
-          <div className="">Year 1</div>
-          <div className="">Year 2</div>
-          <div className="">Year 3</div>
-          <div className="">Year 4</div>
-          <div className="">Year 5</div>
-          <div className="">Year 6</div>
-          <div className="">Year 7</div>
-          <div className="">Year 8</div>
-          <div className="">Year 9</div>
-          <div className="">Year 10</div>
+      <div className="grid grid-cols-11 my-4">
+        <div className="text-left"></div>
+        <div className="">Year 1</div>
+        <div className="">Year 2</div>
+        <div className="">Year 3</div>
+        <div className="">Year 4</div>
+        <div className="">Year 5</div>
+        <div className="">Year 6</div>
+        <div className="">Year 7</div>
+        <div className="">Year 8</div>
+        <div className="">Year 9</div>
+        <div className="">Year 10</div>
       </div>
       {newAssetsData.map((assetItem) => (
-        <div className="grid grid-cols-11 bg-red-400">
+        <div className="grid grid-cols-11">
           <div className="text-left">{assetItem.asset}</div>
           <div className="">{assetItem.year_one}</div>
           <div className="">{assetItem.year_two}</div>
@@ -1023,54 +1023,54 @@ function CalculateLiabilityForm({ goalData }) {
   const [newLiabilityData, setLiabilityData] = useState([]);
 
   useEffect(() => {
-    const temporaryAssetsData = [];
-    goalData.liabilities.map((assetItem) => {
-      temporaryAssetsData.push({
-        ...assetItem,
-        year_one: assetItem.amount * 1,
-        year_two: assetItem.amount * 2,
-        year_three: assetItem.amount * 3,
-        year_four: assetItem.amount * 4,
-        year_five: assetItem.amount * 5,
-        year_six: assetItem.amount * 6,
-        year_seven: assetItem.amount * 7,
-        year_eight: assetItem.amount * 8,
-        year_nine: assetItem.amount * 9,
-        year_ten: assetItem.amount * 10,
+    const temporaryLiabilitiesData = [];
+    goalData.liabilities.map((liabilityItem) => {
+      temporaryLiabilitiesData.push({
+        ...liabilityItem,
+        year_one: liabilityItem.amount * 1,
+        year_two: liabilityItem.amount * 2,
+        year_three: liabilityItem.amount * 3,
+        year_four: liabilityItem.amount * 4,
+        year_five: liabilityItem.amount * 5,
+        year_six: liabilityItem.amount * 6,
+        year_seven: liabilityItem.amount * 7,
+        year_eight: liabilityItem.amount * 8,
+        year_nine: liabilityItem.amount * 9,
+        year_ten: liabilityItem.amount * 10,
       });
     });
-   
-    setLiabilityData(temporaryAssetsData);
+
+    setLiabilityData(temporaryLiabilitiesData);
   }, []);
 
   return (
-    <div>
-      <div className="grid grid-cols-11 bg-red-400">
-          <div className="text-left"></div>
-          <div className="">Year 1</div>
-          <div className="">Year 2</div>
-          <div className="">Year 3</div>
-          <div className="">Year 4</div>
-          <div className="">Year 5</div>
-          <div className="">Year 6</div>
-          <div className="">Year 7</div>
-          <div className="">Year 8</div>
-          <div className="">Year 9</div>
-          <div className="">Year 10</div>
+    <div className="">
+      <div className="grid grid-cols-11 my-4">
+        <div className="text-left"></div>
+        <div className="">Year 1</div>
+        <div className="">Year 2</div>
+        <div className="">Year 3</div>
+        <div className="">Year 4</div>
+        <div className="">Year 5</div>
+        <div className="">Year 6</div>
+        <div className="">Year 7</div>
+        <div className="">Year 8</div>
+        <div className="">Year 9</div>
+        <div className="">Year 10</div>
       </div>
-      {newLiabilityData.map((assetItem) => (
-        <div className="grid grid-cols-11 bg-red-400">
-          <div className="text-left">{assetItem.asset}</div>
-          <div className="">{assetItem.year_one}</div>
-          <div className="">{assetItem.year_two}</div>
-          <div className="">{assetItem.year_three}</div>
-          <div className="">{assetItem.year_four}</div>
-          <div className="">{assetItem.year_five}</div>
-          <div className="">{assetItem.year_six}</div>
-          <div className="">{assetItem.year_seven}</div>
-          <div className="">{assetItem.year_eight}</div>
-          <div className="">{assetItem.year_nine}</div>
-          <div className="">{assetItem.year_ten}</div>
+      {newLiabilityData.map((liabilityItem) => (
+        <div className="grid grid-cols-11">
+          <div className="text-left">{liabilityItem.liability}</div>
+          <div className="">{liabilityItem.year_one}</div>
+          <div className="">{liabilityItem.year_two}</div>
+          <div className="">{liabilityItem.year_three}</div>
+          <div className="">{liabilityItem.year_four}</div>
+          <div className="">{liabilityItem.year_five}</div>
+          <div className="">{liabilityItem.year_six}</div>
+          <div className="">{liabilityItem.year_seven}</div>
+          <div className="">{liabilityItem.year_eight}</div>
+          <div className="">{liabilityItem.year_nine}</div>
+          <div className="">{liabilityItem.year_ten}</div>
         </div>
       ))}
     </div>
@@ -1097,39 +1097,29 @@ function AnnualForm({ goalData }) {
   }, 1);
 
   return (
-    <div className="w-full justify-center items-center flex flex-col gap-3">
-      <div className="flex flex-col gap-10 w-10/12">
+    <div className="w-full justify-center items-center flex flex-col gap-8 ">
+      <div className="flex flex-col gap-20 w-10/12">
         <div className="flex flex-wrap flex-col justify-start items-start px:10 md:px-0 gap-3  w-full">
           <h2 className="text-3xl md:text-lg font-bold ">Assets</h2>
           <div className="w-full grid ">
-            {/* <div className="flex flex-col">
-              <br />
-              <p>Income</p>
-              <p>Home</p>
-              <p>Investments</p>
-              <p>Business Value</p>
-            </div> */}
             <div className="flex flex-col">
-              <ul className="text-center">
-                {/* <li>1st Year</li> */}
+              <div className="text-center">
                 <CalculateForm goalData={goalData}></CalculateForm>
-              </ul>
+              </div>
             </div>
-           
           </div>
         </div>
 
         <div className="flex flex-wrap flex-col justify-start items-start px:10 md:px-0 gap-3  w-full">
           <h2 className="text-3xl md:text-lg font-bold ">Liabilities</h2>
           <div className="w-full grid ">
-           
             <div className="flex flex-col">
-              <ul className="text-center">
-                {/* <li>1st Year</li> */}
-                <CalculateLiabilityForm goalData={goalData}></CalculateLiabilityForm>
-              </ul>
+              <div className="text-center">
+                <CalculateLiabilityForm
+                  goalData={goalData}
+                ></CalculateLiabilityForm>
+              </div>
             </div>
-           
           </div>
         </div>
 
@@ -1142,7 +1132,7 @@ function AnnualForm({ goalData }) {
           <p>Home: {homeYearly}</p>
         </div> */}
       </div>
-      <div className="flex justify-center mt-7">
+      <div className="flex justify-center">
         <a href="/calculate" className="flex text-center items-center gap-2">
           <img src={refresh} className="w-4 h-4"></img>
           <p className="text-[#8A8A8E]">Back to start</p>
