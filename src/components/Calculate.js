@@ -957,6 +957,14 @@ function CalculateForm({ goalData }) {
         ...assetItem,
         year_one: assetItem.amount * 1,
         year_two: assetItem.amount * 2,
+        year_three: assetItem.amount * 3,
+        year_four: assetItem.amount * 4,
+        year_five: assetItem.amount * 5,
+        year_six: assetItem.amount * 6,
+        year_seven: assetItem.amount * 7,
+        year_eight: assetItem.amount * 8,
+        year_nine: assetItem.amount * 9,
+        year_ten: assetItem.amount * 10,
       });
     });
     console.log(temporaryAssetsData);
@@ -965,11 +973,104 @@ function CalculateForm({ goalData }) {
 
   return (
     <div>
+      <div className="grid grid-cols-11 bg-red-400">
+          <div className="text-left"></div>
+          <div className="">Year 1</div>
+          <div className="">Year 2</div>
+          <div className="">Year 3</div>
+          <div className="">Year 4</div>
+          <div className="">Year 5</div>
+          <div className="">Year 6</div>
+          <div className="">Year 7</div>
+          <div className="">Year 8</div>
+          <div className="">Year 9</div>
+          <div className="">Year 10</div>
+      </div>
       {newAssetsData.map((assetItem) => (
-        <div className="grid grid-cols-3">
-          <div className="">{assetItem.asset}</div>
-          <p>{assetItem.year_one}</p>
-          <p>{assetItem.year_two}</p>
+        <div className="grid grid-cols-11 bg-red-400">
+          <div className="text-left">{assetItem.asset}</div>
+          <div className="">{assetItem.year_one}</div>
+          <div className="">{assetItem.year_two}</div>
+          <div className="">{assetItem.year_three}</div>
+          <div className="">{assetItem.year_four}</div>
+          <div className="">{assetItem.year_five}</div>
+          <div className="">{assetItem.year_six}</div>
+          <div className="">{assetItem.year_seven}</div>
+          <div className="">{assetItem.year_eight}</div>
+          <div className="">{assetItem.year_nine}</div>
+          <div className="">{assetItem.year_ten}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function CalculateLiabilityForm({ goalData }) {
+  const {
+    firstName,
+    lastName,
+    age,
+    names,
+    goalsData,
+    assets,
+    assetName,
+    assetAmount,
+    liabilityName,
+    liabilities,
+    liabilityAmount,
+  } = goalData;
+
+  const [newLiabilityData, setLiabilityData] = useState([]);
+
+  useEffect(() => {
+    const temporaryAssetsData = [];
+    goalData.liabilities.map((assetItem) => {
+      temporaryAssetsData.push({
+        ...assetItem,
+        year_one: assetItem.amount * 1,
+        year_two: assetItem.amount * 2,
+        year_three: assetItem.amount * 3,
+        year_four: assetItem.amount * 4,
+        year_five: assetItem.amount * 5,
+        year_six: assetItem.amount * 6,
+        year_seven: assetItem.amount * 7,
+        year_eight: assetItem.amount * 8,
+        year_nine: assetItem.amount * 9,
+        year_ten: assetItem.amount * 10,
+      });
+    });
+   
+    setLiabilityData(temporaryAssetsData);
+  }, []);
+
+  return (
+    <div>
+      <div className="grid grid-cols-11 bg-red-400">
+          <div className="text-left"></div>
+          <div className="">Year 1</div>
+          <div className="">Year 2</div>
+          <div className="">Year 3</div>
+          <div className="">Year 4</div>
+          <div className="">Year 5</div>
+          <div className="">Year 6</div>
+          <div className="">Year 7</div>
+          <div className="">Year 8</div>
+          <div className="">Year 9</div>
+          <div className="">Year 10</div>
+      </div>
+      {newLiabilityData.map((assetItem) => (
+        <div className="grid grid-cols-11 bg-red-400">
+          <div className="text-left">{assetItem.asset}</div>
+          <div className="">{assetItem.year_one}</div>
+          <div className="">{assetItem.year_two}</div>
+          <div className="">{assetItem.year_three}</div>
+          <div className="">{assetItem.year_four}</div>
+          <div className="">{assetItem.year_five}</div>
+          <div className="">{assetItem.year_six}</div>
+          <div className="">{assetItem.year_seven}</div>
+          <div className="">{assetItem.year_eight}</div>
+          <div className="">{assetItem.year_nine}</div>
+          <div className="">{assetItem.year_ten}</div>
         </div>
       ))}
     </div>
@@ -1000,206 +1101,35 @@ function AnnualForm({ goalData }) {
       <div className="flex flex-col gap-10 w-10/12">
         <div className="flex flex-wrap flex-col justify-start items-start px:10 md:px-0 gap-3  w-full">
           <h2 className="text-3xl md:text-lg font-bold ">Assets</h2>
-          <div className="w-full grid grid-cols-11">
-            <div className="flex flex-col">
+          <div className="w-full grid ">
+            {/* <div className="flex flex-col">
               <br />
               <p>Income</p>
               <p>Home</p>
               <p>Investments</p>
               <p>Business Value</p>
-            </div>
+            </div> */}
             <div className="flex flex-col">
               <ul className="text-center">
-                <li>1st Year</li>
+                {/* <li>1st Year</li> */}
                 <CalculateForm goalData={goalData}></CalculateForm>
               </ul>
             </div>
-            {/* <div className="flex flex-col">
-              <ul className="text-center">
-                <li>2nd Year</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-              </ul>
-            </div>
-            <div className="flex flex-col">
-              <ul className="text-center">
-                <li>3rd Year</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-              </ul>
-            </div>
-            <div className="flex flex-col">
-              <ul className="text-center">
-                <li>4th Year</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-              </ul>
-            </div>
-            <div className="flex flex-col">
-              <ul className="text-center">
-                <li>5th Year</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-              </ul>
-            </div> */}
-
-            {/* <div className="flex flex-col">
-              <ul className="text-center">
-                <li>6th Year</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-              </ul>
-            </div>
-            <div className="flex flex-col">
-              <ul className="text-center">
-                <li>7th Year</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-              </ul>
-            </div>
-            <div className="flex flex-col">
-              <ul className="text-center">
-                <li>8th Year</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-              </ul>
-            </div>
-            <div className="flex flex-col">
-              <ul className="text-center">
-                <li>9th Year</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-              </ul>
-            </div>
-            <div className="flex flex-col">
-              <ul className="text-center">
-                <li>10th Year</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-              </ul>
-            </div> */}
+           
           </div>
         </div>
 
         <div className="flex flex-wrap flex-col justify-start items-start px:10 md:px-0 gap-3  w-full">
           <h2 className="text-3xl md:text-lg font-bold ">Liabilities</h2>
-          <div className="w-full grid grid-cols-11">
-            <div className="flex flex-col">
-              <br />
-              <p>Mortgage</p>
-              <p>Credit Card</p>
-              <p>Student Debt</p>
-              <p>Loans</p>
-            </div>
+          <div className="w-full grid ">
+           
             <div className="flex flex-col">
               <ul className="text-center">
-                <li>1st Year</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
+                {/* <li>1st Year</li> */}
+                <CalculateLiabilityForm goalData={goalData}></CalculateLiabilityForm>
               </ul>
             </div>
-            <div className="flex flex-col">
-              <ul className="text-center">
-                <li>2nd Year</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-              </ul>
-            </div>
-            <div className="flex flex-col">
-              <ul className="text-center">
-                <li>3rd Year</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-              </ul>
-            </div>
-            <div className="flex flex-col">
-              <ul className="text-center">
-                <li>4th Year</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-              </ul>
-            </div>
-            <div className="flex flex-col">
-              <ul className="text-center">
-                <li>5th Year</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-              </ul>
-            </div>
-
-            <div className="flex flex-col">
-              <ul className="text-center">
-                <li>6th Year</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-              </ul>
-            </div>
-            <div className="flex flex-col">
-              <ul className="text-center">
-                <li>7th Year</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-              </ul>
-            </div>
-            <div className="flex flex-col">
-              <ul className="text-center">
-                <li>8th Year</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-              </ul>
-            </div>
-            <div className="flex flex-col">
-              <ul className="text-center">
-                <li>9th Year</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-              </ul>
-            </div>
-            <div className="flex flex-col">
-              <ul className="text-center">
-                <li>10th Year</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-              </ul>
-            </div>
+           
           </div>
         </div>
 
