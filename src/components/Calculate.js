@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import React from "react";
 import API from "./mockAPI";
@@ -8,6 +8,8 @@ import dollar from "../assets/dollar.png";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { IconButton, Stack, TextField } from "@mui/material";
 import { BsTrash } from "react-icons/bs";
+
+
 
 import { IoMdInformationCircle } from "react-icons/io";
 
@@ -905,6 +907,34 @@ function Output({ goalData, setData }) {
   );
 }
 
+function CalculateForm({ goalData }) {
+  const {
+    firstName,
+    lastName,
+    age,
+    names,
+    goalsData,
+    assets,
+    assetName,
+    assetAmount,
+    liabilityName,
+    liabilities,
+    liabilityAmount,
+  } = goalData;
+
+const [assetTotal, setassetTotal] = assets([]);
+
+useEffect(() => {
+  const assetItems = goalData.assets.map((assetItem) =>  
+    <>{assetItem}</>  
+  ); 
+  },[]);
+}
+
+
+
+
+
 function AnnualForm({ goalData }) {
   const {
     firstName,
@@ -920,58 +950,16 @@ function AnnualForm({ goalData }) {
     liabilityAmount,
   } = goalData;
 
-  const sumFunc = (assetType, assets) => {
-    return assets.reduce((accumulator, object) => {
-      if (object.asset === assetType) {
-        accumulator += Number(object.amount);
-      }
-      return accumulator;
-    }, 0);
-  };
+ 
 
-  const assetAnnual = assets.reduce((object) => {
-    return Number(object.amount);
-  }, 0);
 
-  var arrayOfNumbers = [1, 2, 3, 4, 5];
+  const assetsAnuallytotal = goalData.assets.reduce((accumulator, goalData) => {
+    return accumulator * goalData.amount;
+  }, 1);
 
-  const squareValue = arrayOfNumbers.map((number) => {
-    return number * number;
-  });
+  const newAssets = assetsAnuallytotal;
+ 
 
-  /**/
-  const investmentYearly = assets.reduce((accumulator, object) => {
-    if (object.asset === "investment") {
-      accumulator += Number(object.amount) * 1;
-    }
-    return accumulator;
-  }, 0);
-
-  const homeYearly = assets.reduce((accumulator, object) => {
-    if (object.asset === "home") {
-      accumulator += Number(object.amount) * 3;
-    }
-    return accumulator;
-  }, 0);
-
-  const businessYearly = assets.reduce((accumulator, object) => {
-    if (object.asset === "business") {
-      accumulator += Number(object.amount) * 3;
-    }
-    return accumulator;
-  }, 0);
-
-  const assetSum = assets.reduce((accumulator, object) => {
-    return accumulator + Number(object.amount);
-  }, 0);
-
-  const liabilitySum = liabilities.reduce((accumulator, object) => {
-    return accumulator + Number(object.amount);
-  }, 0);
-
-  const businessSum = liabilities.reduce((accumulator, object) => {
-    return accumulator + Number(object.amount);
-  }, 0);
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
@@ -989,9 +977,9 @@ function AnnualForm({ goalData }) {
             <div className="flex flex-col">
               <ul className="text-center">
                 <li>1st Year</li>
+                <li>{assetsAnuallytotal}</li>
                 <li>7,000,000</li>
                 <li>7,000,000</li>
-                <li>{sumFunc("investment", assets)}</li>
                 <li>7,000,000</li>
               </ul>
             </div>
@@ -1000,7 +988,7 @@ function AnnualForm({ goalData }) {
                 <li>2nd Year</li>
                 <li>7,000,000</li>
                 <li>7,000,000</li>
-                <li>{sumFunc("investment", assets)}</li>
+                <li>7,000,000</li>
                 <li>7,000,000</li>
               </ul>
             </div>
@@ -1009,7 +997,7 @@ function AnnualForm({ goalData }) {
                 <li>3rd Year</li>
                 <li>7,000,000</li>
                 <li>7,000,000</li>
-                <li>{sumFunc("investment", assets)}</li>
+                <li>7,000,000</li>
                 <li>7,000,000</li>
               </ul>
             </div>
@@ -1018,7 +1006,7 @@ function AnnualForm({ goalData }) {
                 <li>4th Year</li>
                 <li>7,000,000</li>
                 <li>7,000,000</li>
-                <li>{sumFunc("investment", assets)}</li>
+                <li>7,000,000</li>
                 <li>7,000,000</li>
               </ul>
             </div>
@@ -1095,7 +1083,7 @@ function AnnualForm({ goalData }) {
                 <li>1st Year</li>
                 <li>7,000,000</li>
                 <li>7,000,000</li>
-                <li>{sumFunc("investment", assets)}</li>
+                <li>7,000,000</li>
                 <li>7,000,000</li>
               </ul>
             </div>
@@ -1104,7 +1092,7 @@ function AnnualForm({ goalData }) {
                 <li>2nd Year</li>
                 <li>7,000,000</li>
                 <li>7,000,000</li>
-                <li>{sumFunc("investment", assets)}</li>
+                <li>7,000,000</li>
                 <li>7,000,000</li>
               </ul>
             </div>
@@ -1113,7 +1101,7 @@ function AnnualForm({ goalData }) {
                 <li>3rd Year</li>
                 <li>7,000,000</li>
                 <li>7,000,000</li>
-                <li>{sumFunc("investment", assets)}</li>
+                <li>7,000,000</li>
                 <li>7,000,000</li>
               </ul>
             </div>
@@ -1122,7 +1110,7 @@ function AnnualForm({ goalData }) {
                 <li>4th Year</li>
                 <li>7,000,000</li>
                 <li>7,000,000</li>
-                <li>{sumFunc("investment", assets)}</li>
+                <li>7,000,000</li>
                 <li>7,000,000</li>
               </ul>
             </div>
