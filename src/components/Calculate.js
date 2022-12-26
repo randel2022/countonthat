@@ -922,15 +922,24 @@ function CalculateForm({ goalData }) {
     liabilityAmount,
   } = goalData;
 
-const [assetTotal, setassetTotal] = assets([]);
+const [newAssetsData, setNewAssetsData] = useState([]);
+
 
 useEffect(() => {
-  const assetItems = goalData.assets.map((assetItem) =>  
-    <>{assetItem}</>  
-  ); 
+const temporaryAssetsData = [];
+  goalData.assets.map((assetItem) => {
+    temporaryAssetsData.push(
+    {
+      ...assetItem,
+        year_one: assetItem.amount * 1,
+        year_two: assetItem.amount * 2,
+      }
+    )
+    }); 
+console.log(temporaryAssetsData); 
+setNewAssetsData(temporaryAssetsData)
   },[]);
 }
-
 
 function AnnualForm({ goalData }) {
   const {
@@ -951,6 +960,8 @@ function AnnualForm({ goalData }) {
     return accumulator * goalData.amount;
   }, 1);
 
+  
+
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
       <div className="flex flex-col gap-10 w-10/12">
@@ -967,10 +978,7 @@ function AnnualForm({ goalData }) {
             <div className="flex flex-col">
               <ul className="text-center">
                 <li>1st Year</li>
-                <li>{assetsAnuallytotal}</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
-                <li>7,000,000</li>
+                <></>
               </ul>
             </div>
             <div className="flex flex-col">
