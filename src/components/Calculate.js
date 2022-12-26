@@ -932,9 +932,6 @@ useEffect(() => {
 }
 
 
-
-
-
 function AnnualForm({ goalData }) {
   const {
     firstName,
@@ -950,16 +947,9 @@ function AnnualForm({ goalData }) {
     liabilityAmount,
   } = goalData;
 
- 
-
-
   const assetsAnuallytotal = goalData.assets.reduce((accumulator, goalData) => {
     return accumulator * goalData.amount;
   }, 1);
-
-  const newAssets = assetsAnuallytotal;
- 
-
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
