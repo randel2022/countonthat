@@ -9,8 +9,6 @@ import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { IconButton, Stack, TextField } from "@mui/material";
 import { BsTrash } from "react-icons/bs";
 
-
-
 import { IoMdInformationCircle } from "react-icons/io";
 
 import "./Calculate.css";
@@ -182,7 +180,10 @@ const InputNames = ({
               required
             />
           </div>
-          <span className="cursor-pointer -mt-6 md:mt-5" onClick={handleRemoveName}>
+          <span
+            className="cursor-pointer -mt-6 md:mt-5"
+            onClick={handleRemoveName}
+          >
             <BsTrash className="text-[#A0161B]"></BsTrash>
           </span>
         </div>
@@ -200,7 +201,13 @@ const InputNames = ({
   );
 };
 
-const InputGoals = ({ isLast, item, onChangeValues, addNewGoal, handleRemoveGoal, }) => {
+const InputGoals = ({
+  isLast,
+  item,
+  onChangeValues,
+  addNewGoal,
+  handleRemoveGoal,
+}) => {
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
@@ -244,7 +251,10 @@ const InputGoals = ({ isLast, item, onChangeValues, addNewGoal, handleRemoveGoal
             </div>
           </div>
 
-          <span className="cursor-pointer -mt-6 md:mt-5" onClick={handleRemoveGoal}>
+          <span
+            className="cursor-pointer -mt-6 md:mt-5"
+            onClick={handleRemoveGoal}
+          >
             <BsTrash className="text-[#A0161B]"></BsTrash>
           </span>
         </div>
@@ -262,7 +272,13 @@ const InputGoals = ({ isLast, item, onChangeValues, addNewGoal, handleRemoveGoal
   );
 };
 
-const InputAssets = ({ isLast, item, onChangeValues, addNewAsset, handleRemoveAsset }) => {
+const InputAssets = ({
+  isLast,
+  item,
+  onChangeValues,
+  addNewAsset,
+  handleRemoveAsset,
+}) => {
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
@@ -287,25 +303,28 @@ const InputAssets = ({ isLast, item, onChangeValues, addNewAsset, handleRemoveAs
           </div>
 
           <div className="w-full md:w-1/2">
-            <label>Amount</label>           
-              <div className="flex items-center border-slate-400 w-full">
-                <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                  <p className="text-center">USD</p>
-                </div>
-                <input
-                  name="amount"
-                  type="number"
-                  className="input input-bordered w-3/4 rounded-l-none border-slate-400"
-                  value={item.amount}
-                  onChange={(e) =>
-                    onChangeValues({ asset: item.asset, amount: e.target.value })
-                  }
-                  required
-                />
-              </div>          
+            <label>Amount</label>
+            <div className="flex items-center border-slate-400 w-full">
+              <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
+                <p className="text-center">USD</p>
+              </div>
+              <input
+                name="amount"
+                type="number"
+                className="input input-bordered w-3/4 rounded-l-none border-slate-400"
+                value={item.amount}
+                onChange={(e) =>
+                  onChangeValues({ asset: item.asset, amount: e.target.value })
+                }
+                required
+              />
+            </div>
           </div>
 
-          <span className="cursor-pointer -mt-6 md:mt-5" onClick={handleRemoveAsset}>
+          <span
+            className="cursor-pointer -mt-6 md:mt-5"
+            onClick={handleRemoveAsset}
+          >
             <BsTrash className="text-[#A0161B]"></BsTrash>
           </span>
         </div>
@@ -328,7 +347,7 @@ const InputLiabilities = ({
   item,
   onChangeValues,
   addNewLiability,
-  handleRemoveLiability
+  handleRemoveLiability,
 }) => {
   return (
     <>
@@ -378,7 +397,10 @@ const InputLiabilities = ({
             </div>
           </div>
 
-          <span className="cursor-pointer -mt-6 md:mt-5" onClick={handleRemoveLiability}>
+          <span
+            className="cursor-pointer -mt-6 md:mt-5"
+            onClick={handleRemoveLiability}
+          >
             <BsTrash className="text-[#A0161B]"></BsTrash>
           </span>
         </div>
@@ -596,7 +618,9 @@ function AssetsForm({ setData }) {
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
       <div className="w-1/2">
-        <p className="font-bold text-center md:text-left">Assement Management</p>
+        <p className="font-bold text-center md:text-left">
+          Assement Management
+        </p>
       </div>
       <form
         onSubmit={(e) => {
@@ -705,7 +729,9 @@ function LiabilitiesForm({ setData }) {
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
       <div className="w-1/2 ">
-        <p className="font-bold text-center md:text-left">Liability Management</p>
+        <p className="font-bold text-center md:text-left">
+          Liability Management
+        </p>
       </div>
       <form
         onSubmit={(e) => {
@@ -922,23 +948,32 @@ function CalculateForm({ goalData }) {
     liabilityAmount,
   } = goalData;
 
-const [newAssetsData, setNewAssetsData] = useState([]);
+  const [newAssetsData, setNewAssetsData] = useState([]);
 
-
-useEffect(() => {
-const temporaryAssetsData = [];
-  goalData.assets.map((assetItem) => {
-    temporaryAssetsData.push(
-    {
-      ...assetItem,
+  useEffect(() => {
+    const temporaryAssetsData = [];
+    goalData.assets.map((assetItem) => {
+      temporaryAssetsData.push({
+        ...assetItem,
         year_one: assetItem.amount * 1,
         year_two: assetItem.amount * 2,
-      }
-    )
-    }); 
-console.log(temporaryAssetsData); 
-setNewAssetsData(temporaryAssetsData)
-  },[]);
+      });
+    });
+    console.log(temporaryAssetsData);
+    setNewAssetsData(temporaryAssetsData);
+  }, []);
+
+  return (
+    <div>
+      {newAssetsData.map((assetItem) => (
+        <div className="grid grid-cols-3">
+          <div className="">{assetItem.asset}</div>
+          <p>{assetItem.year_one}</p>
+          <p>{assetItem.year_two}</p>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 function AnnualForm({ goalData }) {
@@ -960,8 +995,6 @@ function AnnualForm({ goalData }) {
     return accumulator * goalData.amount;
   }, 1);
 
-  
-
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
       <div className="flex flex-col gap-10 w-10/12">
@@ -978,10 +1011,10 @@ function AnnualForm({ goalData }) {
             <div className="flex flex-col">
               <ul className="text-center">
                 <li>1st Year</li>
-                <></>
+                <CalculateForm goalData={goalData}></CalculateForm>
               </ul>
             </div>
-            <div className="flex flex-col">
+            {/* <div className="flex flex-col">
               <ul className="text-center">
                 <li>2nd Year</li>
                 <li>7,000,000</li>
@@ -1016,9 +1049,9 @@ function AnnualForm({ goalData }) {
                 <li>7,000,000</li>
                 <li>7,000,000</li>
               </ul>
-            </div>
+            </div> */}
 
-            <div className="flex flex-col">
+            {/* <div className="flex flex-col">
               <ul className="text-center">
                 <li>6th Year</li>
                 <li>7,000,000</li>
@@ -1062,7 +1095,7 @@ function AnnualForm({ goalData }) {
                 <li>7,000,000</li>
                 <li>7,000,000</li>
               </ul>
-            </div>
+            </div> */}
           </div>
         </div>
 
