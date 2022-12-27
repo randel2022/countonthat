@@ -35,7 +35,7 @@ function Calculate() {
 
   console.log(goalData);
   return (
-    <div className="flex-col relative h-auto w-full flex justify-center items-center gap-12 py-5 md:py-52 ">
+    <div className="flex-col relative h-auto w-full flex justify-center items-center gap-12 py-5 md:py-36">
       {selectedTab <= 2 ? (
         <>
           <ul className="steps steps-horizontal lg:steps-horizontal relative md:absolute md:top-16">
