@@ -58,7 +58,8 @@ function Calculate() {
               // value.lastName &&
               // value.age &&
               value.names &&
-              value.goalsData
+              value.goalsData &&
+              value.revexp
             ) {
               /// if all values have data then go to next Tabs
               setselectedTab(selectedTab + 1);
@@ -193,9 +194,80 @@ const InputNames = ({
             onClick={addNewName}
           >
             <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
-            <p className="text-sm my-2 text-[#A0161B]">Add New Name</p>
+            <p className="text-sm my-2 text-[#A0161B]">Add Dependent</p>
           </div>
         )}
+      </div>
+    </>
+  );
+};
+
+const InputRevExp = ({
+  isLast,
+  item,
+  onChangeValues,
+  addNewRevExp,
+  handleRemoveRevExp,
+}) => {
+  return (
+    <>
+      <div className="flex flex-col justify-between w-full gap-4">
+        <div className="flex flex-col md:flex-row w-full gap-10 items-center">
+          <div className="w-full md:w-1/2">
+            <label>Monthly Revenue</label>
+            <div className="flex items-center border-slate-400">
+              <input
+                name="revenue"
+                type="number"
+                className="input input-bordered w-full border-slate-400"
+                placeholder="Revenue"
+                value={item.revenue}
+                onChange={(e) =>
+                  onChangeValues({
+                    expenses: item.expenses,
+                    revenue: e.target.value,
+                  })
+                }
+                required
+              />
+            </div>
+          </div>
+
+          <div className="w-full md:w-1/2">
+            <label>Monthly Expenses</label>
+            <div className="flex items-center border-slate-400">
+              <input
+                name="expenses"
+                type="number"
+                className="input input-bordered w-full border-slate-400"
+                value={item.expenses}
+                onChange={(e) =>
+                  onChangeValues({
+                    revenue: item.revenue,
+                    expenses: e.target.value,
+                  })
+                }
+                required
+              />
+            </div>
+          </div>
+
+          {/* <span
+            className="cursor-pointer -mt-6 md:mt-5"
+            onClick={handleRemoveRevExp}
+          >
+            <BsTrash className="text-[#A0161B]"></BsTrash>
+          </span> */}
+        </div>
+        {/* {isLast && (
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={addNewRevExp}
+          >
+            <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
+            <p className="text-sm my-2 text-[#A0161B]">Add Another Goal</p>
+          </div>
+        )} */}
       </div>
     </>
   );
@@ -431,8 +503,16 @@ function PersonalForm({ setData }) {
       // age: age,
       names: names,
       goalsData: goals,
+      revexp: revexp,
     });
   };
+
+  const [revexp, setRevexp] = useState([
+    {
+      revenue: 0.0,
+      expenses: 0.0,
+    },
+  ]);
 
   const [names, setNames] = useState([
     {
@@ -547,6 +627,22 @@ function PersonalForm({ setData }) {
           </div>
         ))}
 
+        {revexp.map((item, index) => (
+          <div key={index} className="px-0 w-full">
+            <InputRevExp
+              item={item}
+              onChangeValues={(data) => {
+                var namesTemporary = [...revexp];
+                namesTemporary[index] = data;
+                setRevexp(namesTemporary);
+              }}
+              // addNewRevExp={addNewRevExp}
+              // handleRemoveRevExp={handleRemoveRevExp}
+              isLast={revexp.length - 1 === index}
+            />
+          </div>
+        ))}
+
         {goals.map((item, index) => (
           <div key={index} className="px-0 w-full">
             <InputGoals
@@ -565,7 +661,7 @@ function PersonalForm({ setData }) {
 
         <input
           type="submit"
-          className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer"
+          className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
           value="Next Step"
         />
       </form>
@@ -808,6 +904,7 @@ function Output({ goalData, setData }) {
     names,
     goalsData,
     assets,
+    revexp,
     assetName,
     assetAmount,
     liabilityName,
@@ -815,33 +912,9 @@ function Output({ goalData, setData }) {
     liabilityAmount,
   } = goalData;
 
-  // const Forms = () => {
-  //   assets.map((object) => {
-  //     const Total = object.map((x) => x * 2);
-  //     return <div>{Total}</div>;
-  //   });
-  // };
-
-  const map1 = assets.map((x) => x * 2);
-  console.log(typeof map1);
-
-  const assetAnnual = assets.reduce((object) => {
-    return Number(object.amount);
-  }, 0);
-
-  const investmentYearly = assets.reduce((accumulator, object) => {
-    if (object.asset === "investment") {
-      accumulator += Number(object.amount) * 3;
-    }
-    return accumulator;
-  }, 0);
-
-  const homeYearly = assets.reduce((accumulator, object) => {
-    if (object.asset === "home") {
-      accumulator += Number(object.amount) * 3;
-    }
-    return accumulator;
-  }, 0);
+  const revexpSum = revexp.map((object) => {
+    return Number(object.revenue) - Number(object.expenses);
+  });
 
   const assetSum = assets.reduce((accumulator, object) => {
     return accumulator + Number(object.amount);
@@ -854,8 +927,6 @@ function Output({ goalData, setData }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setData({
-      // liabilityName: liabilityName,
-      // liabilityAmount: liabilityAmount,
       liabilities: liabilities,
     });
   };
@@ -863,11 +934,6 @@ function Output({ goalData, setData }) {
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
       <div className="flex flex-col gap-5 w-5/6 md:w-1/2">
-        {/* {goalsData.map((goals) => (
-          <label>
-            Goals: {goals.goal} ({goals.amount}*5)
-          </label>
-        ))} */}
         <div className="flex justify-between items-center">
           <h2 className="font-bold ">Calculated Dreams</h2>
           <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
@@ -888,7 +954,7 @@ function Output({ goalData, setData }) {
         <div className="px-8 flex flex-col ">
           <h2 className="font-bold">You need to save</h2>
           <div className="flex flex-col md:flex-row gap-5 items-center">
-            <h2 className="font-bold text-6xl">$10,000</h2>
+            <h2 className="font-bold text-6xl">${revexpSum}</h2>
             <h2 className="font-bold">Monthly</h2>
           </div>
         </div>

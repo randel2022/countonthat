@@ -1,3 +1,7 @@
 .step-primary:after {
-    background-color: #A0161B !important;
+  background-color: #a0161b !important;
+}
+
+.steps .step:after {
+  border: 1px solid #a0161b !important;
 }
