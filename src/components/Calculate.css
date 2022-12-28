@@ -5,3 +5,14 @@
 .steps .step:after {
   border: 1px solid #a0161b !important;
 }
+
+.CircularProgressbar .CircularProgressbar-path {
+  stroke: #d35055;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s ease 0s;
+}
+
+.CircularProgressbar .CircularProgressbar-text {
+  fill: #011013;
+  font-size: 18px !important;
+}

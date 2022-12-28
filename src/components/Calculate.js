@@ -9,6 +9,11 @@ import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { IconButton, Stack, TextField } from "@mui/material";
 import { BsTrash } from "react-icons/bs";
 
+import ProgressBar from "bootstrap-progress-bar";
+
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+
 import { IoMdInformationCircle } from "react-icons/io";
 
 import "./Calculate.css";
@@ -896,6 +901,10 @@ function LiabilitiesForm({ setData }) {
   );
 }
 
+function BasicExample() {
+  return <ProgressBar now={60} />;
+}
+
 function Output({ goalData, setData }) {
   const {
     firstName,
@@ -931,14 +940,16 @@ function Output({ goalData, setData }) {
     });
   };
 
+  const percentage = 66;
+
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
       <div className="flex flex-col gap-5 w-5/6 md:w-1/2">
-        <div className="flex justify-between items-center">
+        {/* <div className="flex justify-between items-center">
           <h2 className="font-bold ">Calculated Dreams</h2>
           <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
-        </div>
-        <div className="flex space-between">
+        </div> */}
+        {/* <div className="flex space-between bg-red-400">
           <div className="w-1/2">
             <p>
               Lorem ipsum dolor sit amet consectetur. At sed mauris vestibulum
@@ -946,47 +957,63 @@ function Output({ goalData, setData }) {
               Molestie scelerisque dictumst tristique suspendisse massa.
             </p>
           </div>
-          <div className="w-1/2 flex items-center justify-end">
+          <div className="w-1/2 flex items-center justify-end bg-green-400">
             <img src={dollar} className="w-12"></img>
           </div>
-        </div>
+        </div> */}
 
-        <div className="px-8 flex flex-col ">
-          <h2 className="font-bold">You need to save</h2>
-          <div className="flex flex-col md:flex-row gap-5 items-center">
-            <h2 className="font-bold text-6xl">${revexpSum}</h2>
-            <h2 className="font-bold">Monthly</h2>
+        <div className="flex gap-10">
+          <div className="px-0 flex flex-col w-2/5">
+            <div className="flex justify-between">
+              <h2 className="font-bold">Realistically Towards Dream</h2>
+              <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
+            </div>
+
+            <div className="p-10 ">
+              <CircularProgressbar value={percentage} text={`${percentage}%`} />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-7 w-3/5">
+            <div className="flex flex-row gap-2 justify-between">
+              <p className="font-bold">Total Calculations</p>
+              <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
+            </div>
+
+            <div>
+              <ProgressBar now={60} />
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <div className="flex justify-between flex-row gap-2">
+                <p>You need to save monthly:</p>
+                <p className="py-0 my-0"> ${revexpSum}</p>
+              </div>
+
+              <div className="flex justify-between flex-row gap-2">
+                <p>Total Assets:</p>
+                <p className="py-0 my-0"> ${assetSum}</p>
+              </div>
+
+              <div className="flex justify-between flex-row gap-2">
+                <p>Total Liabilities:</p>
+                <p className="py-0 my-0"> ${liabilitySum}</p>
+              </div>
+            </div>
+            <form
+              onSubmit={(e) => {
+                handleSubmit(e);
+              }}
+              className="flex bg-green-400 bg-green-400 w-full gap-10 "
+            >
+              <input
+                type="submit"
+                className="py-3 w-full rounded-md bg-[#A0161B] text-white cursor-pointer"
+                value="See Details"
+              />
+            </form>
           </div>
         </div>
-
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-row gap-2">
-            <p className="font-bold">Total Calculations</p>
-          </div>
-
-          <div className="flex justify-between flex-row gap-2">
-            <p>Total Assets:</p>
-            <p className="py-0 my-0"> ${assetSum}</p>
-          </div>
-
-          <div className="flex justify-between flex-row gap-2">
-            <p>Total Liabilities:</p>
-            <p className="py-0 my-0"> ${liabilitySum}</p>
-          </div>
-        </div>
-
-        <form
-          onSubmit={(e) => {
-            handleSubmit(e);
-          }}
-          className="flex flex-col w-full gap-10"
-        >
-          <input
-            type="submit"
-            className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer"
-            value="Next Step"
-          />
-        </form>
 
         <div className="flex justify-center">
           <a href="/calculate" className="flex text-center items-center gap-2">
