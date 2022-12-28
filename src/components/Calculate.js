@@ -9,7 +9,7 @@ import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { IconButton, Stack, TextField } from "@mui/material";
 import { BsTrash } from "react-icons/bs";
 
-import ProgressBar from "bootstrap-progress-bar";
+import ProgressBar from "@ramonak/react-progress-bar";
 
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -940,11 +940,11 @@ function Output({ goalData, setData }) {
     });
   };
 
-  const percentage = 66;
+  const percentage = 60;
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
-      <div className="flex flex-col gap-5 w-5/6 md:w-1/2">
+      <div className="flex flex-col gap-5 w-5/6 md:w-3/5	">
         {/* <div className="flex justify-between items-center">
           <h2 className="font-bold ">Calculated Dreams</h2>
           <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
@@ -964,8 +964,8 @@ function Output({ goalData, setData }) {
 
         <div className="flex gap-10">
           <div className="px-0 flex flex-col w-2/5">
-            <div className="flex justify-between">
-              <h2 className="font-bold">Realistically Towards Dream</h2>
+            <div className="flex justify-between items-center">
+              <h2 className="font-bold text-xl">Realistically Towards Dream</h2>
               <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
             </div>
 
@@ -975,16 +975,25 @@ function Output({ goalData, setData }) {
           </div>
 
           <div className="flex flex-col gap-7 w-3/5">
-            <div className="flex flex-row gap-2 justify-between">
-              <p className="font-bold">Total Calculations</p>
-              <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
-            </div>
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-row gap-2 justify-between">
+                <p className="font-bold">Financially Towards Dream 40%</p>
+                <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
+              </div>
 
-            <div>
-              <ProgressBar now={60} />
+              <div>
+                <ProgressBar
+                  completed={40}
+                  bgColor={"#D35055"}
+                  baseBgColor={"#CACACA"}
+                  isLabelVisible={false}
+                  borderRadius={10}
+                />
+              </div>
             </div>
 
             <div className="flex flex-col gap-3">
+              <p className="font-bold">Total Calculation</p>
               <div className="flex justify-between flex-row gap-2">
                 <p>You need to save monthly:</p>
                 <p className="py-0 my-0"> ${revexpSum}</p>
