@@ -1,9 +1,15 @@
-.step-primary:after {
+.step-dark-red:before,
+.step-dark-red:after {
   background-color: #a0161b !important;
+  color: #fff !important;
 }
 
 .steps .step:after {
   border: 1px solid #a0161b !important;
+}
+
+.step-success::after {
+  content: "✓" !important;
 }
 
 .CircularProgressbar .CircularProgressbar-path {

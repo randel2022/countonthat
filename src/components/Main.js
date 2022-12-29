@@ -7,6 +7,11 @@ import { BsTrash } from "react-icons/bs";
 
 import { useState } from "react";
 
+import step1 from "../assets/step1.png";
+import step2 from "../assets/step2.png";
+import step3 from "../assets/step3.png";
+import step4 from "../assets/step4.png";
+
 import { IoMdInformationCircle } from "react-icons/io";
 
 const InputRow = ({
@@ -279,14 +284,96 @@ function Main() {
         </button>
       </form>
 
-      <div className="bg-[#1E0607] flex flex-col justify-center items-center py-28 px-12 w-full md:w-1/2 rounded-md gap-3">
-        <h2 className="text-xl text-center md:text-3xl text-white font-bold">
-          Medium length heading goes here
-        </h2>
-        <p className="text-white text-center text-xs">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          varius enim in eros elementum tristique.
-        </p>
+      <div className="grid grid-cols-2 w-3/4">
+        <div className="flex flex-col justify-center px-5 gap-4">
+          <div>
+            <h2 className="text-3xl font-bold">Step 1:</h2>
+            <h2 className="text-3xl font-bold">
+              Personal Information <br></br>Assessment
+            </h2>
+          </div>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+            varius enim in eros elementum tristique. Duis cursus, mi quis
+            viverra ornare, eros dolor interdum nulla, ut commodo diam libero
+            vitae erat.
+          </p>
+          <div className="flex gap-2">
+            <button class="btn btn-outline rounded-none">Button</button>
+            <button class="btn btn-outline rounded-none">Button</button>
+          </div>
+        </div>
+        <div className="bg-green-400">
+          <img src={step1}></img>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 w-3/4">
+        <div className="flex flex-col justify-center px-5 gap-4">
+          <div>
+            <h2 className="text-3xl font-bold">Step 2:</h2>
+            <h2 className="text-3xl font-bold">Asset Information Assessment</h2>
+          </div>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+            varius enim in eros elementum tristique. Duis cursus, mi quis
+            viverra ornare, eros dolor interdum nulla, ut commodo diam libero
+            vitae erat.
+          </p>
+          <div className="flex gap-2">
+            <button class="btn btn-outline rounded-none">Button</button>
+            <button class="btn btn-outline rounded-none">Button</button>
+          </div>
+        </div>
+        <div className="bg-green-400">
+          <img src={step2}></img>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 w-3/4">
+        <div className="flex flex-col justify-center px-5 gap-4">
+          <div>
+            <h2 className="text-3xl font-bold">Step 3:</h2>
+            <h2 className="text-3xl font-bold">
+              Liabilities Information Assessment
+            </h2>
+          </div>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+            varius enim in eros elementum tristique. Duis cursus, mi quis
+            viverra ornare, eros dolor interdum nulla, ut commodo diam libero
+            vitae erat.
+          </p>
+          <div className="flex gap-2">
+            <button class="btn btn-outline rounded-none">Button</button>
+            <button class="btn btn-outline rounded-none">Button</button>
+          </div>
+        </div>
+        <div className="bg-green-400">
+          <img src={step3}></img>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 w-3/4">
+        <div className="flex flex-col justify-center px-5 gap-4">
+          <div>
+            <h2 className="text-3xl font-bold">Step 4:</h2>
+            <h2 className="text-3xl font-bold">
+              Our system will calculate your dream base on the information you
+              input
+            </h2>
+          </div>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+            varius enim in eros elementum tristique. Duis cursus, mi quis
+            viverra ornare, eros dolor interdum nulla, ut commodo diam libero
+            vitae erat.
+          </p>
+          <div className="flex gap-2">
+            <button class="btn btn-outline rounded-none">Button</button>
+            <button class="btn btn-outline rounded-none">Button</button>
+          </div>
+        </div>
+        <div className="bg-green-400">
+          <img src={step4}></img>
+        </div>
       </div>
     </div>
   );

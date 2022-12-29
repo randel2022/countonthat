@@ -35,7 +35,13 @@ function Calculate() {
   const [goalData, setgoalData] = useState({});
 
   const liStyle = (curIdx) => {
-    return curIdx === selectedTab ? "step step-primary" : "step";
+    var style = "";
+    style = curIdx === selectedTab ? "step step-dark-red" : "step";
+    style = `${style} ${
+      curIdx < selectedTab ? "step-dark-red step-success" : ""
+    }`;
+    console.log(style);
+    return style;
   };
 
   console.log(goalData);
@@ -43,7 +49,7 @@ function Calculate() {
     <div className="flex-col relative h-auto w-full flex justify-center items-center gap-12 py-5 md:py-36">
       {selectedTab <= 2 ? (
         <>
-          <ul className="steps steps-horizontal lg:steps-horizontal relative md:absolute md:top-16">
+          <ul className="steps steps-horizontal w-2/5 lg:steps-horizontal relative md:absolute md:top-7">
             <li className={liStyle(0)}>Personal</li>
             <li className={liStyle(1)}>Assets</li>
             <li className={liStyle(2)}>Liabilities</li>
@@ -58,14 +64,7 @@ function Calculate() {
         <PersonalForm
           setData={(value) => {
             console.log(value);
-            if (
-              // value.firstName &&
-              // value.lastName &&
-              // value.age &&
-              value.names &&
-              value.goalsData &&
-              value.revexp
-            ) {
+            if (value.names && value.goalsData && value.revexp) {
               /// if all values have data then go to next Tabs
               setselectedTab(selectedTab + 1);
               setgoalData({ ...value });
@@ -128,6 +127,7 @@ const InputNames = ({
   item,
   onChangeValues,
   addNewName,
+  isDeletedButtonVisible,
   handleRemoveName,
 }) => {
   return (
@@ -186,12 +186,14 @@ const InputNames = ({
               required
             />
           </div>
-          <span
-            className="cursor-pointer -mt-6 md:mt-5"
-            onClick={handleRemoveName}
-          >
-            <BsTrash className="text-[#A0161B]"></BsTrash>
-          </span>
+          {isDeletedButtonVisible && (
+            <span
+              className="cursor-pointer -mt-6 md:mt-5"
+              onClick={handleRemoveName}
+            >
+              <BsTrash className="text-[#A0161B]"></BsTrash>
+            </span>
+          )}
         </div>
         {isLast && (
           <div
@@ -217,8 +219,8 @@ const InputRevExp = ({
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col md:flex-row w-full gap-10 items-center">
-          <div className="w-full md:w-1/2">
+        <div className="flex flex-col items-start md:flex-row w-full gap-10 items-center">
+          <div className="w-full md:w-2/6">
             <label>Monthly Revenue</label>
             <div className="flex items-center border-slate-400">
               <input
@@ -238,7 +240,7 @@ const InputRevExp = ({
             </div>
           </div>
 
-          <div className="w-full md:w-1/2">
+          <div className="w-full md:w-2/6">
             <label>Monthly Expenses</label>
             <div className="flex items-center border-slate-400">
               <input
@@ -256,23 +258,7 @@ const InputRevExp = ({
               />
             </div>
           </div>
-
-          {/* <span
-            className="cursor-pointer -mt-6 md:mt-5"
-            onClick={handleRemoveRevExp}
-          >
-            <BsTrash className="text-[#A0161B]"></BsTrash>
-          </span> */}
         </div>
-        {/* {isLast && (
-          <div
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={addNewRevExp}
-          >
-            <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
-            <p className="text-sm my-2 text-[#A0161B]">Add Another Goal</p>
-          </div>
-        )} */}
       </div>
     </>
   );
@@ -496,10 +482,6 @@ const InputLiabilities = ({
 };
 
 function PersonalForm({ setData }) {
-  // const [firstName, setFirstName] = useState();
-  // const [lastName, setLastName] = useState();
-  // const [age, setAge] = useState();
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setData({
@@ -581,41 +563,6 @@ function PersonalForm({ setData }) {
         }}
         className="gap-10 flex flex-col w-5/6	md:w-1/2"
       >
-        {/* <div className="flex justify-between w-full gap-5">
-          <div>
-            <label>First Name</label>
-            <input
-              name="firstName"
-              type="text"
-              value={firstName}
-              className="input input-bordered w-full"
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label>Last Name</label>
-            <input
-              name="lastName"
-              type="text"
-              value={lastName}
-              className="input input-bordered w-full"
-              onChange={(e) => setLastName(e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label>Age</label>
-            <input
-              name="age"
-              type="number"
-              value={age}
-              className="input input-bordered w-full"
-              onChange={(e) => setAge(e.target.value)}
-            />
-          </div>
-        </div> */}
-
         {names.map((item, index) => (
           <div key={index} className="px-0 w-full">
             <InputNames
@@ -627,6 +574,7 @@ function PersonalForm({ setData }) {
               }}
               addNewName={addNewName}
               handleRemoveName={handleRemoveName}
+              isDeletedButtonVisible={names.length - 1 > 0}
               isLast={names.length - 1 === index}
             />
           </div>
@@ -679,14 +627,9 @@ function PersonalForm({ setData }) {
 }
 
 function AssetsForm({ setData }) {
-  // const [assetName, setAssetName] = useState();
-  // const [assetAmount, setAmount] = useState();
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setData({
-      // assetName: assetName,
-      // assetAmount: assetAmount,
       assets: assets,
     });
   };
@@ -729,36 +672,6 @@ function AssetsForm({ setData }) {
         }}
         className="flex flex-col gap-10 w-5/6 md:w-1/2"
       >
-        {/* <div className="flex gap-10">
-          <div className="w-full">
-            <label>Asset:</label>
-            <select
-              value={assetName}
-              className="input input-bordered w-full"
-              onChange={(e) => setAssetName(e.target.value)}
-            >
-              <option disabled selected>
-                {" "}
-                Select an Asset{" "}
-              </option>
-              <option value="home">Home</option>
-              <option value="investment">Investments</option>
-              <option value="business">Busines Value</option>
-            </select>
-          </div>
-
-          <div className="w-full">
-            <label>Asset Amount:</label>
-            <input
-              name="assetAmount"
-              type="number"
-              value={assetAmount}
-              className="input input-bordered w-full"
-              onChange={(e) => setAmount(e.target.value)}
-            />
-          </div>
-        </div> */}
-
         {assets.map((item, index) => (
           <div key={index} className="px-0 w-full">
             <InputAssets
@@ -777,7 +690,7 @@ function AssetsForm({ setData }) {
 
         <input
           type="submit"
-          className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer"
+          className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
           value="Next Step"
         />
       </form>
@@ -790,14 +703,9 @@ function AssetsForm({ setData }) {
 }
 
 function LiabilitiesForm({ setData }) {
-  // const [liabilityName, setLiabilityName] = useState();
-  // const [liabilityAmount, setLiabilityAmount] = useState();
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setData({
-      // liabilityName: liabilityName,
-      // liabilityAmount: liabilityAmount,
       liabilities: liabilities,
     });
   };
@@ -840,36 +748,6 @@ function LiabilitiesForm({ setData }) {
         }}
         className="flex flex-col w-5/6 md:w-1/2 gap-10"
       >
-        {/* <div className="w-full flex flex-row gap-10">
-          <div className="w-1/2">
-            <label>Liability:</label>
-            <select
-              className="input input-bordered w-full"
-              value={liabilityName}
-              onChange={(e) => setLiabilityName(e.target.value)}
-            >
-              <option disabled selected>
-                {" "}
-                Select a Liability{" "}
-              </option>
-              <option value="mortgage">Mortgage</option>
-              <option value="creditcard">Credit Card</option>
-              <option value="studentdebt">Student Debt</option>
-            </select>
-          </div>
-
-          <div className="w-1/2">
-            <label>Liability Amount:</label>
-            <input
-              name="liabilityAmount"
-              type="number"
-              value={liabilityAmount}
-              onChange={(e) => setLiabilityAmount(e.target.value)}
-              className="input input-bordered w-full"
-            />
-          </div>
-        </div> */}
-
         {liabilities.map((item, index) => (
           <div key={index} className="px-0 w-full">
             <InputLiabilities
@@ -888,7 +766,7 @@ function LiabilitiesForm({ setData }) {
 
         <input
           type="submit"
-          className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer"
+          className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
           value="Next Step"
         />
       </form>
@@ -945,23 +823,6 @@ function Output({ goalData, setData }) {
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
       <div className="flex flex-col gap-5 w-5/6 md:w-3/5	">
-        {/* <div className="flex justify-between items-center">
-          <h2 className="font-bold ">Calculated Dreams</h2>
-          <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
-        </div> */}
-        {/* <div className="flex space-between bg-red-400">
-          <div className="w-1/2">
-            <p>
-              Lorem ipsum dolor sit amet consectetur. At sed mauris vestibulum
-              ac sem. Feugiat arcu amet habitant ultrices urna eu ut aliquet.
-              Molestie scelerisque dictumst tristique suspendisse massa.
-            </p>
-          </div>
-          <div className="w-1/2 flex items-center justify-end bg-green-400">
-            <img src={dollar} className="w-12"></img>
-          </div>
-        </div> */}
-
         <div className="flex gap-10">
           <div className="px-0 flex flex-col w-2/5">
             <div className="flex justify-between items-center">
