@@ -49,7 +49,7 @@ function Calculate() {
     <div className="flex-col relative h-auto w-full flex justify-center items-center gap-12 py-5 md:py-36">
       {selectedTab <= 2 ? (
         <>
-          <ul className="steps steps-horizontal w-2/5 lg:steps-horizontal relative md:absolute md:top-7">
+          <ul className="steps steps-horizontal w-full md:w-2/5 lg:steps-horizontal relative md:absolute md:top-7">
             <li className={liStyle(0)}>Personal</li>
             <li className={liStyle(1)}>Assets</li>
             <li className={liStyle(2)}>Liabilities</li>
@@ -64,7 +64,7 @@ function Calculate() {
         <PersonalForm
           setData={(value) => {
             console.log(value);
-            if (value.names && value.goalsData && value.revexp) {
+            if (value.names && value.goalsData ) {
               /// if all values have data then go to next Tabs
               setselectedTab(selectedTab + 1);
               setgoalData({ ...value });
@@ -87,7 +87,7 @@ function Calculate() {
       ) : selectedTab === 2 ? (
         <LiabilitiesForm
           setData={(value) => {
-            if (value.liabilities) {
+            if (value.liabilities && value.revexp ) {
               /// if all values have data then go to next Tabs
               setselectedTab(selectedTab + 1);
               setgoalData((previousGoalData) => ({
@@ -100,7 +100,7 @@ function Calculate() {
       ) : selectedTab === 3 ? (
         <Output
           setData={(value) => {
-            if (value.liabilities) {
+            if (value.liabilities ) {
               /// if all values have data then go to next Tabs
               setselectedTab(selectedTab + 1);
               setgoalData((previousGoalData) => ({
@@ -132,9 +132,14 @@ const InputNames = ({
 }) => {
   return (
     <>
-      <div className="flex flex-col justify-between w-full gap-4">
+      <div className="flex flex-col justify-between w-full gap-1 ">
+        
+        <div className="flex justify-between">
+          <p className="font-bold">Personal Info</p>
+          <IoMdInformationCircle className="text-2xl cursor-pointer"></IoMdInformationCircle>
+        </div>
         <div className="flex flex-col md:flex-row w-full gap-10 items-center">
-          <div className="w-full md:w-1/2">
+          <div className="w-full md:w-1/3">
             <label>First Name</label>
             <input
               className="input input-bordered w-full border-slate-400"
@@ -143,16 +148,18 @@ const InputNames = ({
               value={item.firstname}
               onChange={(e) =>
                 onChangeValues({
-                  firstname: e.target.value,
-                  lastname: item.lastname,
-                  agenew: item.agenew,
+                      firstname: e.target.value,
+                      lastname: item.lastname,
+                      agenew: item.agenew,
+                      email: item.email,
+                      contact: item.contact,
                 })
               }
               required
             />
           </div>
 
-          <div className="w-full md:w-1/2">
+          <div className="w-full md:w-1/3">
             <label>Last Name</label>
             <input
               className="input input-bordered w-full border-slate-400"
@@ -161,16 +168,18 @@ const InputNames = ({
               value={item.lastname}
               onChange={(e) =>
                 onChangeValues({
-                  firstname: item.firstname,
-                  lastname: e.target.value,
-                  agenew: item.agenew,
+                      firstname: item.value,
+                      lastname: e.target.value,
+                      agenew: item.agenew,
+                      email: item.email,
+                      contact: item.contact,
                 })
               }
               required
             />
           </div>
 
-          <div className="w-full md:w-1/2">
+          <div className="w-full md:w-1/3">
             <label>Age</label>
             <input
               name="agenew"
@@ -179,8 +188,11 @@ const InputNames = ({
               value={item.agenew}
               onChange={(e) =>
                 onChangeValues({
-                  firstname: item.firstname,
-                  agenew: e.target.value,
+                      firstname: item.value,
+                      lastname: item.lastname,
+                      agenew: e.target.value,
+                      email: item.email,
+                      contact: item.contact,
                 })
               }
               required
@@ -195,6 +207,52 @@ const InputNames = ({
             </span>
           )}
         </div>
+
+        <div className="flex justify-start gap-10">
+              <div className="w-full md:w-1/3">
+                <label>Email Address</label>
+                <input
+                  className="input input-bordered w-full border-slate-400"
+                  name="email"
+                  type="email"
+                  value={item.email}
+                  onChange={(e) =>
+                    onChangeValues({
+                      firstname: item.value,
+                      lastname: item.lastname,
+                      agenew: item.agenew,
+                      email: e.target.value,
+                      contact: item.contact,
+                    })
+                  }
+                  required
+                />
+              </div>
+
+              <div className="w-full md:w-1/3">
+                <label>Contact Number</label>
+                <input
+                  className="input input-bordered w-full border-slate-400"
+                  name="contact"
+                  type="number"
+                  value={item.contact}
+                  onChange={(e) =>
+                    onChangeValues({
+                      firstname: item.value,
+                      lastname: item.lastname,
+                      agenew: item.agenew,
+                      email: item.email,
+                      contact: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </div>  
+              <div className="w-full md:w-1/3">
+              
+              </div>  
+        </div>
+{/* 
         {isLast && (
           <div
             className="flex items-center gap-2 cursor-pointer"
@@ -202,6 +260,121 @@ const InputNames = ({
           >
             <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
             <p className="text-sm my-2 text-[#A0161B]">Add Dependent</p>
+          </div>
+        )} */}
+      </div>
+    </>
+  );
+};
+
+const InputDependents = ({
+  isLast,
+  item,
+  onChangeValues,
+  addNewNameDependent,
+  isDeletedButtonVisible,
+  handleRemoveNameDependent,
+}) => {
+  return (
+    <>
+      <div className="flex flex-col justify-between w-full gap-1">
+        <p className="font-bold">Dependents</p>
+        <div className="flex flex-col md:flex-row w-full gap-10 items-center">
+          <div className="w-full md:w-1/3">
+            <label>First Name</label>
+            <input
+              className="input input-bordered w-full border-slate-400"
+              name="firstnamedependent"
+              type="text"
+              value={item.firstnamedependent}
+              onChange={(e) =>
+                onChangeValues({
+                  firstnamedependent: e.target.value,
+                  lastnamedependent: item.lastnamedependent,
+                  agedependent: item.agedependent,
+                })
+              }
+              
+            />
+          </div>
+
+          <div className="w-full md:w-1/3">
+            <label>Last Name</label>
+            <input
+              className="input input-bordered w-full border-slate-400"
+              name="lastnamedependent"
+              type="text"
+              value={item.lastnamedependent}
+              onChange={(e) =>
+                onChangeValues({
+                  firstnamedependent: item.firstnamedependent,
+                  lastnamedependent: e.target.value,
+                  agedependent: item.agenewdependent,
+                })
+              }
+              
+            />
+          </div>
+
+          <div className="w-full md:w-1/3">
+            <label>Age</label>
+            <input
+              name="agedependent"
+              type="number"
+              className="input input-bordered w-full border-slate-400"
+              value={item.agedependent}
+              onChange={(e) =>
+                onChangeValues({
+                  firstnamedependent: item.firstnamedependent,
+                  lastnamedependent: item.lastnamedependent,
+                  agedependent: e.target.value,
+                })
+              }
+              
+            />
+          </div>
+          {isDeletedButtonVisible && (
+            <span
+              className="cursor-pointer -mt-6 md:mt-5"
+              onClick={handleRemoveNameDependent}
+            >
+              <BsTrash className="text-[#A0161B]"></BsTrash>
+            </span>
+          )}
+        </div>
+
+        <div className="flex justify-start gap-10">
+              <div className="w-full md:w-1/3">
+                <label>Relationship</label>
+                <input
+                  className="input input-bordered w-full border-slate-400"
+                  name="relationship"
+                  type="text"
+                  value={item.relationship}
+                  onChange={(e) =>
+                    onChangeValues({
+                      firstname: e.target.value,
+                      lastname: item.lastname,
+                      agenew: item.agenew,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="w-full md:w-1/3">
+              </div>  
+
+              <div className="w-full md:w-1/3">
+              </div>  
+        </div>
+
+        {isLast && (
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={addNewNameDependent}
+          >
+            <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
+            <p className="text-sm my-2 text-[#A0161B]">Add Another Dependent</p>
           </div>
         )}
       </div>
@@ -219,43 +392,110 @@ const InputRevExp = ({
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col items-start md:flex-row w-full gap-10 items-center">
-          <div className="w-full md:w-2/6">
-            <label>Monthly Revenue</label>
-            <div className="flex items-center border-slate-400">
-              <input
-                name="revenue"
-                type="number"
-                className="input input-bordered w-full border-slate-400"
-                placeholder="Revenue"
-                value={item.revenue}
-                onChange={(e) =>
-                  onChangeValues({
-                    expenses: item.expenses,
-                    revenue: e.target.value,
-                  })
-                }
-                required
-              />
-            </div>
+        <div className="flex items-start md:flex-col w-full gap-10 items-center">
+          
+          <div className="flex flex-col w-full gap-2">
+                <p className="font-bold">Monthly Revenue</p>
+                <div className="flex w-full gap-10">
+                  <div className="w-1/2">
+                    <label>Multiplier</label>
+                    <div className="flex items-center border-slate-400">
+                      <input
+                        name="multiplierrev"
+                        type="number"
+                        className="input input-bordered w-full border-slate-400"
+                        placeholder="0"
+                        value={item.multiplierrev}
+                        onChange={(e) =>
+                          onChangeValues({
+                            revenue: item.revenue,
+                            multiplierrev: e.target.value,
+                            expenses: item.expenses,
+                            multiplierexp: item.multiplierexp,
+                          })
+                        }
+                        required
+                      />
+                  </div>
+                </div>
+
+                <div className="w-1/2">
+                  <label>Monthly Revenue</label>
+                  <div className="flex items-center border-slate-400">
+                    <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
+                      <p className="text-center">USD</p>
+                    </div>
+                    <input
+                      name="revenue"
+                      type="number"
+                      className="input w-full rounded-l-none border-slate-400"
+                      placeholder="0"
+                      value={item.revenue}
+                      onChange={(e) =>
+                        onChangeValues({
+                          revenue: e.target.value,
+                          multiplierrev: item.multiplierrev,
+                          expenses: item.expenses,
+                          multiplierexp: item.multiplierexp, 
+                        })
+                      }
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
           </div>
 
-          <div className="w-full md:w-2/6">
-            <label>Monthly Expenses</label>
-            <div className="flex items-center border-slate-400">
-              <input
-                name="expenses"
-                type="number"
-                className="input input-bordered w-full border-slate-400"
-                value={item.expenses}
-                onChange={(e) =>
-                  onChangeValues({
-                    revenue: item.revenue,
-                    expenses: e.target.value,
-                  })
-                }
-                required
-              />
+          <div className="flex flex-col w-full gap-2">
+            <p className="font-bold">Monthly Expenses</p>
+            <div className="flex gap-10">
+                <div className="w-1/2">
+                  <label>Monthly Expenses</label>
+                  <div className="flex items-center border-slate-400">
+                    <input
+                      name="multiplierexp"
+                      type="number"
+                      className="input input-bordered w-full border-slate-400"
+                      placeholder="0"
+                      value={item.multiplierexp}
+                      onChange={(e) =>
+                        onChangeValues({
+                          revenue: item.revenue,
+                          multiplierrev: item.multiplierrev,
+                          expenses: item.expenses,
+                          multiplierexp: e.target.value,                 
+                        })
+                      }
+                      required
+                    />
+                  </div>
+                </div>     
+          
+                <div className="w-1/2">
+                  <label>Monthly Expenses</label>
+                  <div className="flex items-center border-slate-400">
+                    <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
+                      <p className="text-center">USD</p>
+                    </div>
+                    <input
+                      name="expenses"
+                      type="number"
+                      className="input input-bordered rounded-l-none w-full border-slate-400"
+                      placeholder="0"
+                      value={item.expenses}
+                      onChange={(e) =>
+                        onChangeValues({
+                          revenue: item.revenue,
+                          multiplierrev: item.multiplierrev,
+                          expenses: e.target.value,
+                          multiplierexp: item.multiplierexp, 
+                        })
+                      }
+                      required
+                    />
+                  </div>
+                </div>
+
             </div>
           </div>
         </div>
@@ -352,7 +592,7 @@ const InputAssets = ({
               className="input input-bordered w-full border-slate-400"
               value={item.asset}
               onChange={(e) =>
-                onChangeValues({ asset: e.target.value, amount: item.amount })
+                onChangeValues({ asset: e.target.value, amount: item.amount, assetmultiplier: item.assetmultiplier})
               }
               required
             >
@@ -365,22 +605,40 @@ const InputAssets = ({
             </select>
           </div>
 
-          <div className="w-full md:w-1/2">
-            <label>Amount</label>
-            <div className="flex items-center border-slate-400 w-full">
-              <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                <p className="text-center">USD</p>
+          <div className="flex gap-10 w-full md:w-1/2">
+            <div className="w-1/4">
+              <label>Multiplier</label>
+              <div className="flex items-center border-slate-400 w-full"> 
+                <input
+                  name="assetmultiplier"
+                  type="number"
+                  placeholder="0"
+                  className="input w-full input-bordered border-slate-400"
+                  value={item.assetmultiplier}
+                  onChange={(e) =>
+                    onChangeValues({ asset: item.asset, amount: item.amount, assetmultiplier: e.target.value})
+                  }
+                  
+                />
               </div>
-              <input
-                name="amount"
-                type="number"
-                className="input input-bordered w-3/4 rounded-l-none border-slate-400"
-                value={item.amount}
-                onChange={(e) =>
-                  onChangeValues({ asset: item.asset, amount: e.target.value })
-                }
-                required
-              />
+            </div>
+            <div className="w-3/4">
+              <label>Amount</label>
+              <div className="flex items-center border-slate-400 w-full">
+                <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
+                  <p className="text-center">USD</p>
+                </div>
+                <input
+                  name="amount"
+                  type="number"
+                  className="input input-bordered w-3/4 rounded-l-none border-slate-400"
+                  value={item.amount}
+                  onChange={(e) =>
+                    onChangeValues({ asset: item.asset, amount: e.target.value, assetmultiplier: item.assetmultiplier})
+                  }
+                  required
+                />
+              </div>
             </div>
           </div>
 
@@ -425,6 +683,7 @@ const InputLiabilities = ({
                 onChangeValues({
                   liability: e.target.value,
                   amount: item.amount,
+                  liabilitymultiplier: item.liabilitymultiplier
                 })
               }
               required
@@ -438,7 +697,26 @@ const InputLiabilities = ({
             </select>
           </div>
 
-          <div className="w-full md:w-1/2">
+          <div className="w-full flex gap-10 md:w-1/2">
+
+            <div className="w-1/4">
+              <label>Multiplier</label>
+              <div className="flex items-center border-slate-400 w-full"> 
+                <input
+                  placeholder="0"
+                  name="liabilitymultiplier"
+                  type="number"
+                  className="input w-full input-bordered border-slate-400"
+                  value={item.liabilitymultiplier}
+                  onChange={(e) =>
+                    onChangeValues({ liability: e.target.value, amount: item.amount, liabilitymultiplier: item.liabilitymultiplier })
+                  }
+             
+                />
+              </div>
+            </div>
+          
+            <div className="w-3/4">
             <label>Amount</label>
             <div className="flex items-center border-slate-400">
               <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
@@ -453,11 +731,14 @@ const InputLiabilities = ({
                   onChangeValues({
                     liability: item.liability,
                     amount: e.target.value,
+                    liabilitymultiplier: item.liabilitymultiplier,
                   })
                 }
                 required
               />
             </div>
+            </div>
+            
           </div>
 
           <span
@@ -489,23 +770,31 @@ function PersonalForm({ setData }) {
       // lastName: lastName,
       // age: age,
       names: names,
+      dependents: dependents,
       goalsData: goals,
-      revexp: revexp,
+      
     });
+
+  
   };
 
-  const [revexp, setRevexp] = useState([
+  
+  const [names, setNames] = useState([
     {
-      revenue: 0.0,
-      expenses: 0.0,
+      firstname: "",
+      lastname: "",
+      agenew: "not filled",
+      email: "",
+      contact: "",
     },
   ]);
 
-  const [names, setNames] = useState([
+  const [dependents, setDependents] = useState([
     {
-      name: "",
-      lastname: "",
-      agenew: "not filled",
+      firstnamedependent: "",
+      lastnamedependent: "",
+      agedependent: "not filled",
+      relationship: "",
     },
   ]);
 
@@ -526,12 +815,32 @@ function PersonalForm({ setData }) {
     ]);
   };
 
+  const addNewNameDependent = () => {
+    setDependents([
+      ...dependents,
+      {
+        firstnamedependent: "",
+        agedependent: "not filled",
+    
+      },
+    ]);
+  };
+
   const handleRemoveName = (index) => {
     if (names.length !== 1) {
       const values = [...names];
       values.splice(index, 1);
       setNames(values);
     }
+  };
+
+  const handleRemoveNameDependent = (index) => {
+    if (dependents.length !== 1) {
+      const values = [...dependents];
+      values.splice(index, 1);
+      setDependents(values);
+    }
+    console.log("remove dependents");
   };
 
   const handleRemoveGoal = (index) => {
@@ -553,76 +862,79 @@ function PersonalForm({ setData }) {
   };
 
   return (
-    <div className="w-full justify-center items-center flex flex-col gap-3">
-      <div className="w-1/2 ">
-        <p className="font-bold text-center md:text-left">Personal Info</p>
+   
+      <div className="w-full justify-center items-center flex flex-col gap-3 ">
+        <div className="w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
+            <form
+              onSubmit={(e) => {
+                handleSubmit(e);
+              }}
+              className="gap-10 flex flex-col w-5/6	md:w-full"
+            >
+              {names.map((item, index) => (
+                <div key={index} className="px-0 w-full">
+                  <InputNames
+                    item={item}
+                    onChangeValues={(data) => {
+                      var namesTemporary = [...names];
+                      namesTemporary[index] = data;
+                      setNames(namesTemporary);
+                    }}
+                    addNewName={addNewName}
+                    handleRemoveName={handleRemoveName}
+                    isDeletedButtonVisible={names.length - 1 > 0}
+                    isLast={names.length - 1 === index}
+                  />
+                </div>
+              ))}
+
+            
+              {goals.map((item, index) => (
+                <div key={index} className="px-0 w-full">
+                  <InputGoals
+                    item={item}
+                    onChangeValues={(data) => {
+                      var goalsTemporary = [...goals];
+                      goalsTemporary[index] = data;
+                      setGoals(goalsTemporary);
+                    }}
+                    addNewGoal={addNewGoal}
+                    handleRemoveGoal={handleRemoveGoal}
+                    isLast={goals.length - 1 === index}
+                  />
+                </div>
+              ))}
+
+              {dependents.map((item, index) => (
+                <div key={index} className="px-0 w-full">
+                  <InputDependents
+                    item={item}
+                    onChangeValues={(data) => {
+                      var dependentsTemporary = [...dependents];
+                      dependentsTemporary[index] = data;
+                      setDependents(dependentsTemporary);
+                    }}
+                    addNewNameDependent={addNewNameDependent}
+                    handleRemoveNameDependent={handleRemoveNameDependent}
+                    isDeletedButtonVisible={dependents.length - 1 > 0}
+                    isLast={dependents.length - 1 === index}
+                  />
+                </div>
+              ))}
+
+              <input
+                type="submit"
+                className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+                value="Next Step"
+              />
+            </form>
+            <a href="/calculate" className="flex items-center gap-2">
+              <img src={refresh} className="w-4 h-4"></img>
+              <p className="text-[#8A8A8E]">Back to start</p>
+            </a>
+        </div>
       </div>
-      <form
-        onSubmit={(e) => {
-          handleSubmit(e);
-        }}
-        className="gap-10 flex flex-col w-5/6	md:w-1/2"
-      >
-        {names.map((item, index) => (
-          <div key={index} className="px-0 w-full">
-            <InputNames
-              item={item}
-              onChangeValues={(data) => {
-                var namesTemporary = [...names];
-                namesTemporary[index] = data;
-                setNames(namesTemporary);
-              }}
-              addNewName={addNewName}
-              handleRemoveName={handleRemoveName}
-              isDeletedButtonVisible={names.length - 1 > 0}
-              isLast={names.length - 1 === index}
-            />
-          </div>
-        ))}
-
-        {revexp.map((item, index) => (
-          <div key={index} className="px-0 w-full">
-            <InputRevExp
-              item={item}
-              onChangeValues={(data) => {
-                var namesTemporary = [...revexp];
-                namesTemporary[index] = data;
-                setRevexp(namesTemporary);
-              }}
-              // addNewRevExp={addNewRevExp}
-              // handleRemoveRevExp={handleRemoveRevExp}
-              isLast={revexp.length - 1 === index}
-            />
-          </div>
-        ))}
-
-        {goals.map((item, index) => (
-          <div key={index} className="px-0 w-full">
-            <InputGoals
-              item={item}
-              onChangeValues={(data) => {
-                var goalsTemporary = [...goals];
-                goalsTemporary[index] = data;
-                setGoals(goalsTemporary);
-              }}
-              addNewGoal={addNewGoal}
-              handleRemoveGoal={handleRemoveGoal}
-              isLast={goals.length - 1 === index}
-            />
-          </div>
-        ))}
-
-        <input
-          type="submit"
-          className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
-          value="Next Step"
-        />
-      </form>
-      <a href="/calculate" className="flex items-center gap-2">
-        <img src={refresh} className="w-4 h-4"></img>
-        <p className="text-[#8A8A8E]">Back to start</p>
-      </a>
-    </div>
+  
   );
 }
 
@@ -660,44 +972,48 @@ function AssetsForm({ setData }) {
   };
 
   return (
-    <div className="w-full justify-center items-center flex flex-col gap-3">
-      <div className="w-1/2">
-        <p className="font-bold text-center md:text-left">
-          Assement Management
-        </p>
-      </div>
-      <form
-        onSubmit={(e) => {
-          handleSubmit(e);
-        }}
-        className="flex flex-col gap-10 w-5/6 md:w-1/2"
-      >
-        {assets.map((item, index) => (
-          <div key={index} className="px-0 w-full">
-            <InputAssets
-              item={item}
-              onChangeValues={(data) => {
-                var assetsTemporary = [...assets];
-                assetsTemporary[index] = data;
-                setAssets(assetsTemporary);
-              }}
-              addNewAsset={addNewAsset}
-              handleRemoveAsset={handleRemoveAsset}
-              isLast={assets.length - 1 === index}
-            />
+    <div className="w-full justify-center items-center flex flex-col gap-3 ">
+      <div className="w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
+          <div className="w-full flex justify-between">
+            <p className="font-bold text-center md:text-left">
+              Assement Management
+            </p>
+            <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
           </div>
-        ))}
+          <form
+            onSubmit={(e) => {
+              handleSubmit(e);
+            }}
+            className="flex flex-col gap-10 w-5/6 md:w-full"
+          >
+            {assets.map((item, index) => (
+              <div key={index} className="px-0 w-full">
+                <InputAssets
+                  item={item}
+                  onChangeValues={(data) => {
+                    var assetsTemporary = [...assets];
+                    assetsTemporary[index] = data;
+                    setAssets(assetsTemporary);
+                  }}
+                  addNewAsset={addNewAsset}
+                  handleRemoveAsset={handleRemoveAsset}
+                  isLast={assets.length - 1 === index}
+                />
+              </div>
+            ))}
 
-        <input
-          type="submit"
-          className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
-          value="Next Step"
-        />
-      </form>
-      <a href="/calculate" className="flex items-center gap-2">
-        <img src={refresh} className="w-4 h-4"></img>
-        <p className="text-[#8A8A8E]">Back to start</p>
-      </a>
+            <input
+              type="submit"
+              className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+              value="Next Step"
+            />
+          </form>
+          <a href="/calculate" className="flex items-center gap-2">
+            <img src={refresh} className="w-4 h-4"></img>
+            <p className="text-[#8A8A8E]">Back to start</p>
+          </a>
+      </div>
+
     </div>
   );
 }
@@ -707,8 +1023,18 @@ function LiabilitiesForm({ setData }) {
     e.preventDefault();
     setData({
       liabilities: liabilities,
+      revexp: revexp,
     });
   };
+
+  const [revexp, setRevexp] = useState([
+    {
+      revenue: 0.0,
+      multiplierrev: 0.0,
+      expenses: 0.0,
+      multiplierexp: 0.0,
+    },
+  ]);
 
   const [liabilities, setLiability] = useState([
     {
@@ -737,44 +1063,65 @@ function LiabilitiesForm({ setData }) {
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
-      <div className="w-1/2 ">
+      <div className="w-8/12 flex justify-between">
         <p className="font-bold text-center md:text-left">
           Liability Management
         </p>
+        <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
       </div>
-      <form
-        onSubmit={(e) => {
-          handleSubmit(e);
-        }}
-        className="flex flex-col w-5/6 md:w-1/2 gap-10"
-      >
-        {liabilities.map((item, index) => (
-          <div key={index} className="px-0 w-full">
-            <InputLiabilities
-              item={item}
-              onChangeValues={(data) => {
-                var liabilityTemporary = [...liabilities];
-                liabilityTemporary[index] = data;
-                setLiability(liabilityTemporary);
-              }}
-              addNewLiability={addNewLiability}
-              handleRemoveLiability={handleRemoveLiability}
-              isLast={liabilities.length - 1 === index}
+      <div className="w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
+          <form
+            onSubmit={(e) => {
+              handleSubmit(e);
+            }}
+            className="flex flex-col w-5/6 md:w-full gap-10"
+          >
+            {liabilities.map((item, index) => (
+              <div key={index} className="px-0 w-full">
+                <InputLiabilities
+                  item={item}
+                  onChangeValues={(data) => {
+                    var liabilityTemporary = [...liabilities];
+                    liabilityTemporary[index] = data;
+                    setLiability(liabilityTemporary);
+                  }}
+                  addNewLiability={addNewLiability}
+                  handleRemoveLiability={handleRemoveLiability}
+                  isLast={liabilities.length - 1 === index}
+                />
+              </div>
+            ))}
+
+            {revexp.map((item, index) => (
+              <div key={index} className="px-0 w-full">
+                <InputRevExp
+                  item={item}
+                  onChangeValues={(data) => {
+                    var namesTemporary = [...revexp];
+                    namesTemporary[index] = data;
+                    setRevexp(namesTemporary);
+                  }}
+                  // addNewRevExp={addNewRevExp}
+                  // handleRemoveRevExp={handleRemoveRevExp}
+                  isLast={revexp.length - 1 === index}
+                />
+              </div>
+            ))}
+
+
+            <input
+              type="submit"
+              className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+              value="Next Step"
             />
-          </div>
-        ))}
+          </form>
 
-        <input
-          type="submit"
-          className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
-          value="Next Step"
-        />
-      </form>
-
-      <a href="/calculate" className="flex items-center gap-2">
-        <img src={refresh} className="w-4 h-4"></img>
-        <p className="text-[#8A8A8E]">Back to start</p>
-      </a>
+          <a href="/calculate" className="flex items-center gap-2">
+            <img src={refresh} className="w-4 h-4"></img>
+            <p className="text-[#8A8A8E]">Back to start</p>
+          </a>
+      </div>
+      
     </div>
   );
 }
@@ -824,7 +1171,7 @@ function Output({ goalData, setData }) {
     <div className="w-full justify-center items-center flex flex-col gap-3">
       <div className="flex flex-col gap-5 w-5/6 md:w-3/5	">
         <div className="flex gap-10">
-          <div className="px-0 flex flex-col w-2/5">
+          <div className="px-0 flex flex-col w-2/5 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
             <div className="flex justify-between items-center">
               <h2 className="font-bold text-xl">Realistically Towards Dream</h2>
               <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
@@ -833,10 +1180,13 @@ function Output({ goalData, setData }) {
             <div className="p-10 ">
               <CircularProgressbar value={percentage} text={`${percentage}%`} />
             </div>
+            <div>
+              <p>Lorem ipsum dolor sit amet consectetur. Turpis massa tincidunt non quam gravida porttitor sem nulla. Morbi venenatis imperdiet at vitae lectus pellentesque nisl ultricies mattis.</p>
+            </div>
           </div>
 
-          <div className="flex flex-col gap-7 w-3/5">
-            <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-7 w-3/5 ">
+            <div className="flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
               <div className="flex flex-row gap-2 justify-between">
                 <p className="font-bold">Financially Towards Dream 40%</p>
                 <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
@@ -846,42 +1196,47 @@ function Output({ goalData, setData }) {
                 <ProgressBar
                   completed={40}
                   bgColor={"#D35055"}
-                  baseBgColor={"#CACACA"}
+                  baseBgColor={"#FFD2D2"}
                   isLabelVisible={false}
                   borderRadius={10}
                 />
               </div>
             </div>
 
-            <div className="flex flex-col gap-3">
-              <p className="font-bold">Total Calculation</p>
-              <div className="flex justify-between flex-row gap-2">
+            <div className="flex flex-col gap-6 shadow-gray-400 px-7 py-7 rounded-lg shadow-md h-full">
+              <div className="flex justify-between">
+                <p className="font-bold">Total Calculation</p>
+                <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
+              </div>
+              <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
                 <p>You need to save monthly:</p>
                 <p className="py-0 my-0"> ${revexpSum}</p>
               </div>
 
-              <div className="flex justify-between flex-row gap-2">
+              <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
                 <p>Total Assets:</p>
                 <p className="py-0 my-0"> ${assetSum}</p>
               </div>
 
-              <div className="flex justify-between flex-row gap-2">
+              <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
                 <p>Total Liabilities:</p>
                 <p className="py-0 my-0"> ${liabilitySum}</p>
               </div>
+
+              <form
+                onSubmit={(e) => {
+                  handleSubmit(e);
+                }}
+                className="flex bg-green-400 bg-green-400 w-full gap-10 "
+              >
+                <input
+                  type="submit"
+                  className="py-3 w-full rounded-md bg-[#A0161B] text-white cursor-pointer"
+                  value="See Details"
+                />
+              </form>
             </div>
-            <form
-              onSubmit={(e) => {
-                handleSubmit(e);
-              }}
-              className="flex bg-green-400 bg-green-400 w-full gap-10 "
-            >
-              <input
-                type="submit"
-                className="py-3 w-full rounded-md bg-[#A0161B] text-white cursor-pointer"
-                value="See Details"
-              />
-            </form>
+            
           </div>
         </div>
 
@@ -938,30 +1293,30 @@ function CalculateForm({ goalData }) {
     <div>
       <div className="grid grid-cols-11 my-4">
         <div className="text-left"></div>
-        <div className="">Year 1</div>
-        <div className="">Year 2</div>
-        <div className="">Year 3</div>
-        <div className="">Year 4</div>
-        <div className="">Year 5</div>
-        <div className="">Year 6</div>
-        <div className="">Year 7</div>
-        <div className="">Year 8</div>
-        <div className="">Year 9</div>
-        <div className="">Year 10</div>
+        <div className="">1st Year</div>
+        <div className="">2nd Year</div>
+        <div className="">3rd Year</div>
+        <div className="">4th Year</div>
+        <div className="">5th Year</div>
+        <div className="">6th Year</div>
+        <div className="">7th Year</div>
+        <div className="">8th Year</div>
+        <div className="">9th Year</div>
+        <div className="">10th Year</div>
       </div>
       {newAssetsData.map((assetItem) => (
         <div className="grid grid-cols-11">
-          <div className="text-left">{assetItem.asset}</div>
-          <div className="">{assetItem.year_one}</div>
-          <div className="">{assetItem.year_two}</div>
-          <div className="">{assetItem.year_three}</div>
-          <div className="">{assetItem.year_four}</div>
-          <div className="">{assetItem.year_five}</div>
-          <div className="">{assetItem.year_six}</div>
-          <div className="">{assetItem.year_seven}</div>
-          <div className="">{assetItem.year_eight}</div>
-          <div className="">{assetItem.year_nine}</div>
-          <div className="">{assetItem.year_ten}</div>
+          <div className="text-center py-3">{assetItem.asset}</div>
+          <div className="py-3">{assetItem.year_one}</div>
+          <div className="py-3">{assetItem.year_two}</div>
+          <div className="py-3">{assetItem.year_three}</div>
+          <div className="py-3">{assetItem.year_four}</div>
+          <div className="py-3">{assetItem.year_five}</div>
+          <div className="py-3">{assetItem.year_six}</div>
+          <div className="py-3">{assetItem.year_seven}</div>
+          <div className="py-3">{assetItem.year_eight}</div>
+          <div className="py-3">{assetItem.year_nine}</div>
+          <div className="py-3">{assetItem.year_ten}</div>
         </div>
       ))}
     </div>
@@ -1007,33 +1362,33 @@ function CalculateLiabilityForm({ goalData }) {
   }, []);
 
   return (
-    <div className="">
+    <div className="shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
       <div className="grid grid-cols-11 my-4">
         <div className="text-left"></div>
-        <div className="">Year 1</div>
-        <div className="">Year 2</div>
-        <div className="">Year 3</div>
-        <div className="">Year 4</div>
-        <div className="">Year 5</div>
-        <div className="">Year 6</div>
-        <div className="">Year 7</div>
-        <div className="">Year 8</div>
-        <div className="">Year 9</div>
-        <div className="">Year 10</div>
+        <div className="">1st Year</div>
+        <div className="">2nd Year</div>
+        <div className="">3rd Year</div>
+        <div className="">4th Year</div>
+        <div className="">5th Year</div>
+        <div className="">6th Year</div>
+        <div className="">7th Year</div>
+        <div className="">8th Year</div>
+        <div className="">9th Year</div>
+        <div className="">10th Year</div>
       </div>
       {newLiabilityData.map((liabilityItem) => (
-        <div className="grid grid-cols-11">
-          <div className="text-left">{liabilityItem.liability}</div>
-          <div className="">{liabilityItem.year_one}</div>
-          <div className="">{liabilityItem.year_two}</div>
-          <div className="">{liabilityItem.year_three}</div>
-          <div className="">{liabilityItem.year_four}</div>
-          <div className="">{liabilityItem.year_five}</div>
-          <div className="">{liabilityItem.year_six}</div>
-          <div className="">{liabilityItem.year_seven}</div>
-          <div className="">{liabilityItem.year_eight}</div>
-          <div className="">{liabilityItem.year_nine}</div>
-          <div className="">{liabilityItem.year_ten}</div>
+        <div className="grid grid-cols-11 ">
+          <div className="text-center py-3">{liabilityItem.liability}</div>
+          <div className="py-3 ">{liabilityItem.year_one}</div>
+          <div className="py-3">{liabilityItem.year_two}</div>
+          <div className="py-3">{liabilityItem.year_three}</div>
+          <div className="py-3">{liabilityItem.year_four}</div>
+          <div className="py-3">{liabilityItem.year_five}</div>
+          <div className="py-3">{liabilityItem.year_six}</div>
+          <div className="py-3">{liabilityItem.year_seven}</div>
+          <div className="py-3">{liabilityItem.year_eight}</div>
+          <div className="py-3">{liabilityItem.year_nine}</div>
+          <div className="py-3">{liabilityItem.year_ten}</div>
         </div>
       ))}
     </div>
@@ -1066,7 +1421,7 @@ function AnnualForm({ goalData }) {
           <h2 className="text-3xl md:text-lg font-bold ">Assets</h2>
           <div className="w-full grid ">
             <div className="flex flex-col">
-              <div className="text-center">
+              <div className="text-center shadow-gray-400 rounded-lg shadow-md">
                 <CalculateForm goalData={goalData}></CalculateForm>
               </div>
             </div>

@@ -22,3 +22,11 @@
   fill: #011013;
   font-size: 18px !important;
 }
+
+.w-30 {
+  width: 30% !important;
+}
+
+.CircularProgressbar .CircularProgressbar-trail {
+  stroke: #FFD2D2;
+}
