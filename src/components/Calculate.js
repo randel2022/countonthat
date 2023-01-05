@@ -47,13 +47,13 @@ function Calculate() {
   console.log(goalData);
   return (
     <div className="flex-col relative h-auto w-full flex justify-center items-center gap-12 py-5 md:py-36">
-      {selectedTab <= 2 ? (
+      {selectedTab <= 3 ? (
         <>
           <ul className="steps steps-horizontal w-full md:w-2/5 lg:steps-horizontal relative md:absolute md:top-7">
             <li className={liStyle(0)}>Personal</li>
             <li className={liStyle(1)}>Assets</li>
             <li className={liStyle(2)}>Liabilities</li>
-            {/* <li className={liStyle(3) || liStyle(4)}>Result</li> */}
+            <li className={liStyle(3)}>Other</li>
           </ul>
         </>
       ) : (
@@ -98,6 +98,19 @@ function Calculate() {
           }}
         ></LiabilitiesForm>
       ) : selectedTab === 3 ? (
+        <OtherForm
+          setData={(value) => {
+            if (value.other ) {
+              /// if all values have data then go to next Tabs
+              setselectedTab(selectedTab + 1);
+              setgoalData((previousGoalData) => ({
+                ...previousGoalData,
+                ...value,
+              }));
+            }
+          }}
+        ></OtherForm>
+      ) : selectedTab === 4 ? (
         <Output
           setData={(value) => {
             if (value.liabilities ) {
@@ -111,11 +124,12 @@ function Calculate() {
           }}
           goalData={goalData}
         ></Output>
-      ) : selectedTab === 4 ? (
+      ) : selectedTab === 5 ? (
         <AnnualForm goalData={goalData}></AnnualForm>
       ) : (
         <></>
-      )}
+      )
+      }
     </div>
   );
 }
@@ -132,8 +146,7 @@ const InputNames = ({
 }) => {
   return (
     <>
-      <div className="flex flex-col justify-between w-full gap-1 ">
-        
+      <div className="flex flex-col justify-between w-full gap-1 "> 
         <div className="flex justify-between">
           <p className="font-bold">Personal Info</p>
           <IoMdInformationCircle className="text-2xl cursor-pointer"></IoMdInformationCircle>
@@ -168,7 +181,7 @@ const InputNames = ({
               value={item.lastname}
               onChange={(e) =>
                 onChangeValues({
-                      firstname: item.value,
+                      firstname: item.firstname,
                       lastname: e.target.value,
                       agenew: item.agenew,
                       email: item.email,
@@ -188,7 +201,7 @@ const InputNames = ({
               value={item.agenew}
               onChange={(e) =>
                 onChangeValues({
-                      firstname: item.value,
+                      firstname: item.firstname,
                       lastname: item.lastname,
                       agenew: e.target.value,
                       email: item.email,
@@ -218,7 +231,7 @@ const InputNames = ({
                   value={item.email}
                   onChange={(e) =>
                     onChangeValues({
-                      firstname: item.value,
+                      firstname: item.firstname,
                       lastname: item.lastname,
                       agenew: item.agenew,
                       email: e.target.value,
@@ -238,7 +251,7 @@ const InputNames = ({
                   value={item.contact}
                   onChange={(e) =>
                     onChangeValues({
-                      firstname: item.value,
+                      firstname: item.firstname,
                       lastname: item.lastname,
                       agenew: item.agenew,
                       email: item.email,
@@ -252,7 +265,7 @@ const InputNames = ({
               
               </div>  
         </div>
-{/* 
+        {/* 
         {isLast && (
           <div
             className="flex items-center gap-2 cursor-pointer"
@@ -450,7 +463,7 @@ const InputRevExp = ({
             <p className="font-bold">Monthly Expenses</p>
             <div className="flex gap-10">
                 <div className="w-1/2">
-                  <label>Monthly Expenses</label>
+                  <label>Multiplier</label>
                   <div className="flex items-center border-slate-400">
                     <input
                       name="multiplierexp"
@@ -673,6 +686,13 @@ const InputLiabilities = ({
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
+        <div className="w-full flex justify-between">
+          <p className="font-bold text-center md:text-left">
+            Liability Management
+          </p>
+          <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
+        </div>
+
         <div className="flex flex-col md:flex-row w-full gap-10 items-center">
           <div className="w-full md:w-1/2">
             <label>Liability</label>
@@ -709,7 +729,7 @@ const InputLiabilities = ({
                   className="input w-full input-bordered border-slate-400"
                   value={item.liabilitymultiplier}
                   onChange={(e) =>
-                    onChangeValues({ liability: e.target.value, amount: item.amount, liabilitymultiplier: item.liabilitymultiplier })
+                    onChangeValues({ liability: item.liability, amount: item.amount, liabilitymultiplier: e.target.value })
                   }
              
                 />
@@ -755,6 +775,104 @@ const InputLiabilities = ({
           >
             <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
             <p className="text-sm my-2 text-[#A0161B]">Add Another Liability</p>
+          </div>
+        )}
+      </div>
+    </>
+  );
+};
+
+const InputOther = ({
+  isLast,
+  item,
+  onChangeValues,
+  addNewOther,
+  handleRemoveOther,
+}) => {
+  return (
+    <>
+      <div className="flex flex-col justify-between w-full gap-4">
+        <div className="flex flex-col md:flex-col w-full gap-10 items-start">
+
+        <div className="w-full flex justify-between">
+          <p className="font-bold text-center md:text-left">
+            Others
+          </p>
+          <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
+        </div>
+          
+          <div className="w-full flex gap-10 md:w-1/2">
+            <div className="w-3/4">
+              <label>Account title</label>
+              <div className="flex items-center border-slate-400 w-full"> 
+                <input
+                  placeholder="0"
+                  name="account"
+                  type="text"
+                  className="input w-full input-bordered border-slate-400"
+                  value={item.account}
+                  onChange={(e) =>
+                    onChangeValues({ account: e.target.value, amount: item.amount, plan: item.plan })
+                  }
+             
+                />
+              </div>
+            </div>
+          
+            <div className="flex items-center gap-5 w-3/4">
+            <div className="">
+              <label>Score</label>
+              <div className="flex items-center border-slate-400">
+                <input
+                  name="amount"
+                  type="number"
+                  className="input input-bordered w-full border-slate-400"
+                  value={item.amount}
+                  onChange={(e) =>
+                    onChangeValues({
+                      account: item.account, amount: e.target.value, plan: item.plan
+                    })
+                  }
+                  required
+                />
+              </div>
+            </div>
+              <span
+                className="cursor-pointer -mt-6 md:mt-5"
+                onClick={handleRemoveOther}
+              >
+                  <BsTrash className="text-[#A0161B]"></BsTrash>
+              </span>
+            </div>
+            
+          </div>
+
+          <div className="w-full">
+              <label>Plan</label>
+              <div className="flex items-center border-slate-400 w-full"> 
+                <input
+                  placeholder="Write your plan"
+                  name="plan"
+                  type="text"
+                  className="input w-full input-bordered border-slate-400"
+                  value={item.plan}
+                  onChange={(e) =>
+                    onChangeValues({ account: item.account, amount: item.amount, plan: e.target.value })
+                  }
+             
+                />
+              </div>
+          </div>
+
+          
+        </div>
+        {isLast && (
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={addNewOther}
+          >
+            <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
+            <p className="text-sm my-2 text-[#A0161B]">Add Another</p>
           </div>
         )}
       </div>
@@ -950,6 +1068,7 @@ function AssetsForm({ setData }) {
     {
       asset: "home",
       amount: 0.0,
+      assetmultiplier: 0.0,
     },
   ]);
 
@@ -959,6 +1078,7 @@ function AssetsForm({ setData }) {
       {
         asset: "home",
         amount: 0.0,
+        assetmultiplier: 0.0,
       },
     ]);
   };
@@ -1040,6 +1160,7 @@ function LiabilitiesForm({ setData }) {
     {
       liability: "Mortgage",
       amount: 0.0,
+      liabilitymultiplier: 0.0
     },
   ]);
 
@@ -1049,6 +1170,7 @@ function LiabilitiesForm({ setData }) {
       {
         liability: "Mortgage",
         amount: 0.0,
+        liabilitymultiplier: 0.0
       },
     ]);
   };
@@ -1063,12 +1185,7 @@ function LiabilitiesForm({ setData }) {
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
-      <div className="w-8/12 flex justify-between">
-        <p className="font-bold text-center md:text-left">
-          Liability Management
-        </p>
-        <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
-      </div>
+      
       <div className="w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
           <form
             onSubmit={(e) => {
@@ -1126,6 +1243,84 @@ function LiabilitiesForm({ setData }) {
   );
 }
 
+function OtherForm({ setData }) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setData({
+      other: other,
+    });
+  };
+
+  const [other, setOther] = useState([
+    {
+      account: "",
+      amount: 0.0,
+      plan: "",
+    },
+  ]);
+
+  const addNewOther = () => {
+    setOther([
+      ...other,
+      {
+        account: "",
+        amount: 0.0,
+        plan: "",
+      },
+    ]);
+  };
+
+  const handleRemoveOther = (index) => {
+    if (other.length !== 1) {
+      const values = [...other];
+      values.splice(index, 1);
+      setOther(values);
+    }
+  };
+
+  return (
+    <div className="w-full justify-center items-center flex flex-col gap-3">
+      
+      <div className="w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
+          <form
+            onSubmit={(e) => {
+              handleSubmit(e);
+            }}
+            className="flex flex-col w-5/6 md:w-full gap-10"
+          >
+            {other.map((item, index) => (
+              <div key={index} className="px-0 w-full">
+                <InputOther
+                  item={item}
+                  onChangeValues={(data) => {
+                    var otherTemporary = [...other];
+                    otherTemporary[index] = data;
+                    setOther(otherTemporary);
+                  }}
+                  addNewOther={addNewOther}
+                  handleRemoveOther={handleRemoveOther}
+                  isLast={other.length - 1 === index}
+                />
+              </div>
+            ))}
+
+            <input
+              type="submit"
+              className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+              value="Next Step"
+            />
+          </form>
+
+          <a href="/calculate" className="flex items-center gap-2">
+            <img src={refresh} className="w-4 h-4"></img>
+            <p className="text-[#8A8A8E]">Back to start</p>
+          </a>
+      </div>
+      
+    </div>
+  );
+}
+
 function BasicExample() {
   return <ProgressBar now={60} />;
 }
@@ -1151,11 +1346,19 @@ function Output({ goalData, setData }) {
   });
 
   const assetSum = assets.reduce((accumulator, object) => {
-    return accumulator + Number(object.amount);
+    return accumulator + Number(object.amount) * Number(object.assetmultiplier);
   }, 0);
 
   const liabilitySum = liabilities.reduce((accumulator, object) => {
-    return accumulator + Number(object.amount);
+    return accumulator + Number(object.amount) * Number(object.liabilitymultiplier);
+  }, 0);
+
+  const revenueSum = revexp.map((object) => {
+    return Number(object.revenue) * Number(object.multiplierrev);
+  });
+
+  const expensesSum = revexp.reduce((accumulator, object) => {
+    return accumulator + Number(object.expenses) * Number(object.multiplierexp);
   }, 0);
 
   const handleSubmit = (e) => {
@@ -1209,8 +1412,8 @@ function Output({ goalData, setData }) {
                 <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
               </div>
               <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
-                <p>You need to save monthly:</p>
-                <p className="py-0 my-0"> ${revexpSum}</p>
+                <p>Total Revenue:</p>
+                <p className="py-0 my-0"> ${revenueSum}</p>
               </div>
 
               <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
@@ -1221,6 +1424,11 @@ function Output({ goalData, setData }) {
               <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
                 <p>Total Liabilities:</p>
                 <p className="py-0 my-0"> ${liabilitySum}</p>
+              </div>
+
+              <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
+                <p>Total Expenses:</p>
+                <p className="py-0 my-0"> ${expensesSum}</p>
               </div>
 
               <form
@@ -1273,16 +1481,16 @@ function CalculateForm({ goalData }) {
     goalData.assets.map((assetItem) => {
       temporaryAssetsData.push({
         ...assetItem,
-        year_one: assetItem.amount * 1,
-        year_two: assetItem.amount * 2,
-        year_three: assetItem.amount * 3,
-        year_four: assetItem.amount * 4,
-        year_five: assetItem.amount * 5,
-        year_six: assetItem.amount * 6,
-        year_seven: assetItem.amount * 7,
-        year_eight: assetItem.amount * 8,
-        year_nine: assetItem.amount * 9,
-        year_ten: assetItem.amount * 10,
+        year_one: (assetItem.amount * assetItem.assetmultiplier)* 1,
+        year_two: (assetItem.amount * assetItem.assetmultiplier) * 2,
+        year_three: (assetItem.amount * assetItem.assetmultiplier) * 3,
+        year_four: (assetItem.amount * assetItem.assetmultiplier) * 4,
+        year_five: (assetItem.amount * assetItem.assetmultiplier) * 5,
+        year_six: (assetItem.amount * assetItem.assetmultiplier) * 6,
+        year_seven: (assetItem.amount * assetItem.assetmultiplier) * 7,
+        year_eight: (assetItem.amount * assetItem.assetmultiplier) * 8,
+        year_nine: (assetItem.amount * assetItem.assetmultiplier) * 9,
+        year_ten: (assetItem.amount * assetItem.assetmultiplier) * 10,
       });
     });
     console.log(temporaryAssetsData);
@@ -1345,16 +1553,16 @@ function CalculateLiabilityForm({ goalData }) {
     goalData.liabilities.map((liabilityItem) => {
       temporaryLiabilitiesData.push({
         ...liabilityItem,
-        year_one: liabilityItem.amount * 1,
-        year_two: liabilityItem.amount * 2,
-        year_three: liabilityItem.amount * 3,
-        year_four: liabilityItem.amount * 4,
-        year_five: liabilityItem.amount * 5,
-        year_six: liabilityItem.amount * 6,
-        year_seven: liabilityItem.amount * 7,
-        year_eight: liabilityItem.amount * 8,
-        year_nine: liabilityItem.amount * 9,
-        year_ten: liabilityItem.amount * 10,
+        year_one: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 1,
+        year_two: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 2,
+        year_three: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 3,
+        year_four: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 4,
+        year_five: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 5,
+        year_six: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 6,
+        year_seven: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 7,
+        year_eight: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 8,
+        year_nine: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 9,
+        year_ten: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 10,
       });
     });
 
@@ -1418,7 +1626,13 @@ function AnnualForm({ goalData }) {
     <div className="w-full justify-center items-center flex flex-col gap-8 ">
       <div className="flex flex-col gap-20 w-10/12">
         <div className="flex flex-wrap flex-col justify-start items-start px:10 md:px-0 gap-3  w-full">
-          <h2 className="text-3xl md:text-lg font-bold ">Assets</h2>
+          <div className="w-full flex justify-between">
+            <h2 className="font-bold text-lg text-center md:text-left">
+              Assets
+            </h2>
+            <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
+          </div>
+
           <div className="w-full grid ">
             <div className="flex flex-col">
               <div className="text-center shadow-gray-400 rounded-lg shadow-md">
@@ -1429,7 +1643,12 @@ function AnnualForm({ goalData }) {
         </div>
 
         <div className="flex flex-wrap flex-col justify-start items-start px:10 md:px-0 gap-3  w-full">
-          <h2 className="text-3xl md:text-lg font-bold ">Liabilities</h2>
+          <div className="w-full flex justify-between">
+            <h2 className="font-bold text-lg text-center md:text-left">
+              Liabilities
+            </h2>
+            <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
+          </div>
           <div className="w-full grid ">
             <div className="flex flex-col">
               <div className="text-center">
