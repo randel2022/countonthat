@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import React from "react";
 import API from "./mockAPI";
@@ -29,22 +29,33 @@ import {
   Theme,
   Toggle,
 } from "react-daisyui";
+import { useQuery } from "react-query";
+import Calculate from "../services/calculate";
 
-function Calculate() {
+function CalculateComponent() {
   const [selectedTab, setselectedTab] = useState(0);
   const [goalData, setgoalData] = useState({});
+
+  const goalDataRef = useRef();
+  const calculateService = new Calculate();
+
+
+  const { data, status, refetch  } = useQuery(["goalData", goalData ], () => calculateService.totalGoal(goalData), {
+    enabled: false,
+  });
+
+  console.log(goalData);
+
 
   const liStyle = (curIdx) => {
     var style = "";
     style = curIdx === selectedTab ? "step step-dark-red" : "step";
     style = `${style} ${
       curIdx < selectedTab ? "step-dark-red step-success" : ""
-    }`;
-    console.log(style);
+    }`; 
     return style;
   };
-
-  console.log(goalData);
+ 
   return (
     <div className="flex-col relative h-auto w-full flex justify-center items-center gap-12 py-5 md:py-36">
       {selectedTab <= 3 ? (
@@ -62,8 +73,7 @@ function Calculate() {
 
       {selectedTab === 0 ? (
         <PersonalForm
-          setData={(value) => {
-            console.log(value);
+          setData={(value) => { 
             if (value.names && value.goalsData ) {
               /// if all values have data then go to next Tabs
               setselectedTab(selectedTab + 1);
@@ -73,6 +83,7 @@ function Calculate() {
         ></PersonalForm>
       ) : selectedTab === 1 ? (
         <AssetsForm
+          goBack={()=> setselectedTab(selectedTab - 1)}
           setData={(value) => {
             if (value.assets) {
               /// if all values have data then go to next Tabs
@@ -80,12 +91,16 @@ function Calculate() {
               setgoalData((previousGoalData) => ({
                 ...previousGoalData,
                 ...value,
-              }));
+              })); 
+              setTimeout(() => {
+                refetch()
+              }, 100);
             }
           }}
         ></AssetsForm>
       ) : selectedTab === 2 ? (
         <LiabilitiesForm
+          goBack={()=> setselectedTab(selectedTab - 1)}
           setData={(value) => {
             if (value.liabilities && value.revexp ) {
               /// if all values have data then go to next Tabs
@@ -99,6 +114,7 @@ function Calculate() {
         ></LiabilitiesForm>
       ) : selectedTab === 3 ? (
         <OtherForm
+          goBack={()=> setselectedTab(selectedTab - 1)}
           setData={(value) => {
             if (value.other ) {
               /// if all values have data then go to next Tabs
@@ -107,20 +123,14 @@ function Calculate() {
                 ...previousGoalData,
                 ...value,
               }));
+
             }
           }}
         ></OtherForm>
       ) : selectedTab === 4 ? (
         <Output
-          setData={(value) => {
-            if (value.liabilities ) {
-              /// if all values have data then go to next Tabs
-              setselectedTab(selectedTab + 1);
-              setgoalData((previousGoalData) => ({
-                ...previousGoalData,
-                ...value,
-              }));
-            }
+          nextTab={() => {  
+            setselectedTab(selectedTab + 1);  
           }}
           goalData={goalData}
         ></Output>
@@ -134,7 +144,7 @@ function Calculate() {
   );
 }
 
-export default Calculate;
+export default CalculateComponent;
 
 const InputNames = ({
   isLast,
@@ -1056,7 +1066,7 @@ function PersonalForm({ setData }) {
   );
 }
 
-function AssetsForm({ setData }) {
+function AssetsForm({ setData, goBack }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setData({
@@ -1122,12 +1132,22 @@ function AssetsForm({ setData }) {
               </div>
             ))}
 
-            <input
-              type="submit"
-              className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
-              value="Next Step"
-            />
+            <div className="flex justify-end gap-5">
+              <input
+                type="button"
+                onClick={goBack}
+                className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+                value="Back"
+              />
+
+              <input
+                type="submit"
+                className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+                value="Next Step"
+              />
+            </div>
           </form>
+          
           <a href="/calculate" className="flex items-center gap-2">
             <img src={refresh} className="w-4 h-4"></img>
             <p className="text-[#8A8A8E]">Back to start</p>
@@ -1138,7 +1158,7 @@ function AssetsForm({ setData }) {
   );
 }
 
-function LiabilitiesForm({ setData }) {
+function LiabilitiesForm({ setData, goBack }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setData({
@@ -1225,12 +1245,20 @@ function LiabilitiesForm({ setData }) {
               </div>
             ))}
 
+            <div className="flex justify-end gap-5 ">
+              <input
+                type="button"
+                onClick={goBack}
+                className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+                value="Back"
+              />
 
-            <input
-              type="submit"
-              className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
-              value="Next Step"
+              <input
+                type="submit"
+                className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+                value="Next Step"
             />
+            </div>
           </form>
 
           <a href="/calculate" className="flex items-center gap-2">
@@ -1243,7 +1271,7 @@ function LiabilitiesForm({ setData }) {
   );
 }
 
-function OtherForm({ setData }) {
+function OtherForm({ setData, goBack }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setData({
@@ -1304,11 +1332,20 @@ function OtherForm({ setData }) {
               </div>
             ))}
 
-            <input
-              type="submit"
-              className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
-              value="Next Step"
-            />
+            <div className=" w-full flex justify-end gap-5">
+              <input
+                type="button"
+                onClick={goBack}
+                className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+                value="Back"
+              />
+
+              <input
+                type="submit"
+                className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+                value="Next Step"
+              />
+            </div>
           </form>
 
           <a href="/calculate" className="flex items-center gap-2">
@@ -1325,7 +1362,7 @@ function BasicExample() {
   return <ProgressBar now={60} />;
 }
 
-function Output({ goalData, setData }) {
+function Output({ goalData, nextTab  }) {
   const {
     firstName,
     lastName,
@@ -1363,9 +1400,7 @@ function Output({ goalData, setData }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setData({
-      liabilities: liabilities,
-    });
+    nextTab();
   };
 
   const percentage = 60;
