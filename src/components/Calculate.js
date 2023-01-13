@@ -18,6 +18,8 @@ import { IoMdInformationCircle } from "react-icons/io";
 
 import "./Calculate.css";
 
+import { IoIosArrowBack } from "react-icons/io";
+
 import {
   Avatar,
   Button,
@@ -159,9 +161,9 @@ const InputNames = ({
       <div className="flex flex-col justify-between w-full gap-1 "> 
         <div className="flex justify-between">
           <p className="font-bold">Personal Info</p>
-          <IoMdInformationCircle className="text-2xl cursor-pointer"></IoMdInformationCircle>
+          <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block"></IoMdInformationCircle>
         </div>
-        <div className="flex flex-col md:flex-row w-full gap-10 items-center">
+        <div className="flex flex-col md:flex-row w-full gap-2 md:gap-10 items-center">
           <div className="w-full md:w-1/3">
             <label>First Name</label>
             <input
@@ -231,7 +233,7 @@ const InputNames = ({
           )}
         </div>
 
-        <div className="flex justify-start gap-10">
+        <div className="flex flex-col md:flex-row justify-start gap-2 md:gap-10">
               <div className="w-full md:w-1/3">
                 <label>Email Address</label>
                 <input
@@ -302,7 +304,7 @@ const InputDependents = ({
     <>
       <div className="flex flex-col justify-between w-full gap-1">
         <p className="font-bold">Dependents</p>
-        <div className="flex flex-col md:flex-row w-full gap-10 items-center">
+        <div className="flex flex-col md:flex-row w-full gap-2 md:gap-10 items-center">
           <div className="w-full md:w-1/3">
             <label>First Name</label>
             <input
@@ -366,7 +368,7 @@ const InputDependents = ({
           )}
         </div>
 
-        <div className="flex justify-start gap-10">
+        <div className=" flex flex-col justify-start gap-10">
               <div className="w-full md:w-1/3">
                 <label>Relationship</label>
                 <input
@@ -384,11 +386,7 @@ const InputDependents = ({
                 />
               </div>
 
-              <div className="w-full md:w-1/3">
-              </div>  
-
-              <div className="w-full md:w-1/3">
-              </div>  
+             
         </div>
 
         {isLast && (
@@ -537,7 +535,7 @@ const InputGoals = ({
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col md:flex-row w-full gap-10 items-center">
+        <div className="flex flex-col md:flex-row w-full gap-2 md:gap-10 items-center">
           <div className="w-full md:w-1/2">
             <label>Goal</label>
             <select
@@ -696,13 +694,6 @@ const InputLiabilities = ({
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="w-full flex justify-between">
-          <p className="font-bold text-center md:text-left">
-            Liability Management
-          </p>
-          <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
-        </div>
-
         <div className="flex flex-col md:flex-row w-full gap-10 items-center">
           <div className="w-full md:w-1/2">
             <label>Liability</label>
@@ -992,7 +983,7 @@ function PersonalForm({ setData }) {
   return (
    
       <div className="w-full justify-center items-center flex flex-col gap-3 ">
-        <div className="w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
+        <div className="w-full md:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-0 md:px-7 py-7 rounded-lg shadow-none md:hadow-md">
             <form
               onSubmit={(e) => {
                 handleSubmit(e);
@@ -1052,7 +1043,7 @@ function PersonalForm({ setData }) {
 
               <input
                 type="submit"
-                className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+                className="py-3 w-full md:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
                 value="Next Step"
               />
             </form>
@@ -1132,13 +1123,11 @@ function AssetsForm({ setData, goBack }) {
               </div>
             ))}
 
-            <div className="flex justify-end gap-5">
-              <input
-                type="button"
-                onClick={goBack}
-                className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
-                value="Back"
-              />
+            <div className="flex justify-end gap-12">
+              <div className="flex items-center cursor-pointer gap-2" onClick={goBack}>
+                <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
+                <p className="text-[#A0161B] font-bold">Go Back</p>
+              </div>
 
               <input
                 type="submit"
@@ -1207,6 +1196,13 @@ function LiabilitiesForm({ setData, goBack }) {
     <div className="w-full justify-center items-center flex flex-col gap-3">
       
       <div className="w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
+          <div className="w-full flex justify-between">
+            <p className="font-bold text-center md:text-left">
+              Liability Management
+            </p>
+            <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
+          </div>
+
           <form
             onSubmit={(e) => {
               handleSubmit(e);
@@ -1245,13 +1241,11 @@ function LiabilitiesForm({ setData, goBack }) {
               </div>
             ))}
 
-            <div className="flex justify-end gap-5 ">
-              <input
-                type="button"
-                onClick={goBack}
-                className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
-                value="Back"
-              />
+            <div className="flex justify-end gap-7">
+              <div className="flex items-center cursor-pointer gap-2" onClick={goBack}>
+                <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
+                <p className="text-[#A0161B] font-bold">Go Back</p>
+              </div>
 
               <input
                 type="submit"
@@ -1332,13 +1326,11 @@ function OtherForm({ setData, goBack }) {
               </div>
             ))}
 
-            <div className=" w-full flex justify-end gap-5">
-              <input
-                type="button"
-                onClick={goBack}
-                className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
-                value="Back"
-              />
+            <div className=" w-full flex justify-end gap-7">
+              <div className="flex items-center cursor-pointer gap-2" onClick={goBack}>
+                <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
+                <p className="text-[#A0161B] font-bold">Go Back</p>
+              </div>
 
               <input
                 type="submit"
