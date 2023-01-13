@@ -360,7 +360,7 @@ const InputDependents = ({
           </div>
           {isDeletedButtonVisible && (
             <span
-              className="cursor-pointer -mt-6 md:mt-5"
+              className="cursor-pointer -mt-6 md:mt-5 hidden md:block"
               onClick={handleRemoveNameDependent}
             >
               <BsTrash className="text-[#A0161B]"></BsTrash>
@@ -371,22 +371,30 @@ const InputDependents = ({
         <div className=" flex flex-col justify-start gap-10">
               <div className="w-full md:w-1/3">
                 <label>Relationship</label>
-                <input
-                  className="input input-bordered w-full border-slate-400"
-                  name="relationship"
-                  type="text"
-                  value={item.relationship}
-                  onChange={(e) =>
-                    onChangeValues({
-                      firstname: e.target.value,
-                      lastname: item.lastname,
-                      agenew: item.agenew,
-                    })
-                  }
-                />
+                <div className="flex flex items-center">
+                  <input
+                    className="input input-bordered w-full border-slate-400"
+                    name="relationship"
+                    type="text"
+                    value={item.relationship}
+                    onChange={(e) =>
+                      onChangeValues({
+                        firstname: e.target.value,
+                        lastname: item.lastname,
+                        agenew: item.agenew,
+                      })
+                    }
+                  />
+                  {isDeletedButtonVisible && (
+                    <span
+                      className="cursor-pointer ml-4 md:mt-5 block md:hidden"
+                      onClick={handleRemoveNameDependent}
+                    >
+                      <BsTrash className="text-[#A0161B]"></BsTrash>
+                    </span>
+                  )}
+                </div>
               </div>
-
-             
         </div>
 
         {isLast && (
@@ -413,12 +421,12 @@ const InputRevExp = ({
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex items-start md:flex-col w-full gap-10 items-center">
+        <div className="flex items-start flex-col w-full gap-10 items-center">
           
-          <div className="flex flex-col w-full gap-2">
+          <div className="flex flex-col w-full gap-2 ">
                 <p className="font-bold">Monthly Revenue</p>
-                <div className="flex w-full gap-10">
-                  <div className="w-1/2">
+                <div className="flex flex-col md:flex-row w-full gap-3 md:gap-10">
+                  <div className="w-full md:w-1/2">
                     <label>Multiplier</label>
                     <div className="flex items-center border-slate-400">
                       <input
@@ -440,7 +448,7 @@ const InputRevExp = ({
                   </div>
                 </div>
 
-                <div className="w-1/2">
+                <div className="w-full md:w-1/2">
                   <label>Monthly Revenue</label>
                   <div className="flex items-center border-slate-400">
                     <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
@@ -469,8 +477,8 @@ const InputRevExp = ({
 
           <div className="flex flex-col w-full gap-2">
             <p className="font-bold">Monthly Expenses</p>
-            <div className="flex gap-10">
-                <div className="w-1/2">
+            <div className="flex flex-col md:flex-row gap-3 md:gap-10">
+                <div className="w-full md:w-1/2">
                   <label>Multiplier</label>
                   <div className="flex items-center border-slate-400">
                     <input
@@ -492,7 +500,7 @@ const InputRevExp = ({
                   </div>
                 </div>     
           
-                <div className="w-1/2">
+                <div className="w=full md:w-1/2">
                   <label>Monthly Expenses</label>
                   <div className="flex items-center border-slate-400">
                     <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
@@ -531,6 +539,7 @@ const InputGoals = ({
   onChangeValues,
   addNewGoal,
   handleRemoveGoal,
+  isDeletedButtonVisible,
 }) => {
   return (
     <>
@@ -572,15 +581,29 @@ const InputGoals = ({
                 }
                 required
               />
+
+              {isDeletedButtonVisible && (
+                <span
+                className="cursor-pointer ml-4 md:mt-5 block md:hidden"
+                onClick={handleRemoveGoal}
+                >
+                      <BsTrash className="text-[#A0161B]"></BsTrash>
+                </span>
+              )}
             </div>
+
           </div>
 
-          <span
-            className="cursor-pointer -mt-6 md:mt-5"
-            onClick={handleRemoveGoal}
-          >
-            <BsTrash className="text-[#A0161B]"></BsTrash>
-          </span>
+          {isDeletedButtonVisible && (
+            <span
+              className="cursor-pointer -mt-6 md:mt-5 hidden md:block"
+              onClick={handleRemoveGoal}
+            >
+              <BsTrash className="text-[#A0161B]"></BsTrash>
+            </span>
+          )}
+
+          
         </div>
         {isLast && (
           <div
@@ -602,11 +625,12 @@ const InputAssets = ({
   onChangeValues,
   addNewAsset,
   handleRemoveAsset,
+  isDeletedButtonVisible,
 }) => {
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col md:flex-row w-full gap-10 items-center">
+        <div className="flex flex-col md:flex-row w-full gap-3 md:gap-10 items-center">
           <div className="w-full md:w-1/2">
             <label>Asset</label>
             <select
@@ -626,8 +650,8 @@ const InputAssets = ({
             </select>
           </div>
 
-          <div className="flex gap-10 w-full md:w-1/2">
-            <div className="w-1/4">
+          <div className="flex flex-col md:flex-row gap-3 md:gap-10 w-full md:w-1/2">
+            <div className="w-full md:w-1/4">
               <label>Multiplier</label>
               <div className="flex items-center border-slate-400 w-full"> 
                 <input
@@ -643,32 +667,45 @@ const InputAssets = ({
                 />
               </div>
             </div>
-            <div className="w-3/4">
+            <div className="w-full md:w-3/4">
               <label>Amount</label>
-              <div className="flex items-center border-slate-400 w-full">
+              <div className="flex items-center border-slate-400 w-full items-center">
                 <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
                   <p className="text-center">USD</p>
                 </div>
                 <input
                   name="amount"
                   type="number"
-                  className="input input-bordered w-3/4 rounded-l-none border-slate-400"
+                  className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
                   onChange={(e) =>
                     onChangeValues({ asset: item.asset, amount: e.target.value, assetmultiplier: item.assetmultiplier})
                   }
                   required
                 />
+
+                { isDeletedButtonVisible && ( <span
+                    className="cursor-pointer block md:hidden ml-4"
+                    onClick={handleRemoveAsset}
+                >
+                    <BsTrash className="text-[#A0161B]"></BsTrash>
+                </span>)
+                }
+
               </div>
             </div>
           </div>
 
-          <span
-            className="cursor-pointer -mt-6 md:mt-5"
-            onClick={handleRemoveAsset}
-          >
-            <BsTrash className="text-[#A0161B]"></BsTrash>
-          </span>
+           { isDeletedButtonVisible && (
+              <span
+                className="cursor-pointer hidden md:block -mt-6 md:mt-5"
+                onClick={handleRemoveAsset}
+              >
+                  <BsTrash className="text-[#A0161B]"></BsTrash>
+              </span>
+            )
+           }       
+          
         </div>
         {isLast && (
           <div
@@ -690,11 +727,12 @@ const InputLiabilities = ({
   onChangeValues,
   addNewLiability,
   handleRemoveLiability,
+  isDeletedButtonVisible,
 }) => {
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col md:flex-row w-full gap-10 items-center">
+        <div className="flex flex-col md:flex-row w-full gap-3 md:gap-10 items-center">
           <div className="w-full md:w-1/2">
             <label>Liability</label>
             <select
@@ -718,9 +756,9 @@ const InputLiabilities = ({
             </select>
           </div>
 
-          <div className="w-full flex gap-10 md:w-1/2">
+          <div className="w-full flex-col md:flex-row flex gap-3 md:gap-10 md:w-1/2">
 
-            <div className="w-1/4">
+            <div className="w-full md:w-1/4">
               <label>Multiplier</label>
               <div className="flex items-center border-slate-400 w-full"> 
                 <input
@@ -737,7 +775,7 @@ const InputLiabilities = ({
               </div>
             </div>
           
-            <div className="w-3/4">
+            <div className="w-full md:w-3/4">
             <label>Amount</label>
             <div className="flex items-center border-slate-400">
               <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
@@ -757,13 +795,22 @@ const InputLiabilities = ({
                 }
                 required
               />
+
+              { isDeletedButtonVisible && (<span
+                className="cursor-pointer ml-4 block md:hidden"
+                onClick={handleRemoveLiability}
+              >
+                <BsTrash className="text-[#A0161B]"></BsTrash>
+              </span>)
+              }
+              
             </div>
             </div>
             
           </div>
 
           <span
-            className="cursor-pointer -mt-6 md:mt-5"
+            className="cursor-pointer -mt-6 md:mt-5 hidden md:block"
             onClick={handleRemoveLiability}
           >
             <BsTrash className="text-[#A0161B]"></BsTrash>
@@ -789,21 +836,15 @@ const InputOther = ({
   onChangeValues,
   addNewOther,
   handleRemoveOther,
+  isDeletedButtonVisible
 }) => {
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col md:flex-col w-full gap-10 items-start">
-
-        <div className="w-full flex justify-between">
-          <p className="font-bold text-center md:text-left">
-            Others
-          </p>
-          <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
-        </div>
+        <div className="flex flex-col md:flex-col w-full gap-3 md:gap-10 items-start">      
           
-          <div className="w-full flex gap-10 md:w-1/2">
-            <div className="w-3/4">
+          <div className="w-full flex flex-col md:flex-row gap-3 md:gap-10 md:w-1/2">
+            <div className="w-full md:w-3/4">
               <label>Account title</label>
               <div className="flex items-center border-slate-400 w-full"> 
                 <input
@@ -820,8 +861,8 @@ const InputOther = ({
               </div>
             </div>
           
-            <div className="flex items-center gap-5 w-3/4">
-            <div className="">
+            <div className="flex items-center gap-5 w-full md:w-3/4">
+            <div className="w-full">
               <label>Score</label>
               <div className="flex items-center border-slate-400">
                 <input
@@ -838,12 +879,15 @@ const InputOther = ({
                 />
               </div>
             </div>
-              <span
-                className="cursor-pointer -mt-6 md:mt-5"
+            {
+              isDeletedButtonVisible && (<span
+                className="cursor-pointer "
                 onClick={handleRemoveOther}
               >
                   <BsTrash className="text-[#A0161B]"></BsTrash>
-              </span>
+              </span>)
+            }
+              
             </div>
             
           </div>
@@ -1019,6 +1063,7 @@ function PersonalForm({ setData }) {
                     }}
                     addNewGoal={addNewGoal}
                     handleRemoveGoal={handleRemoveGoal}
+                    isDeletedButtonVisible={goals.length - 1 > 0}
                     isLast={goals.length - 1 === index}
                   />
                 </div>
@@ -1094,7 +1139,7 @@ function AssetsForm({ setData, goBack }) {
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3 ">
-      <div className="w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
+      <div className="w-full md:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-none md:shadow-md">
           <div className="w-full flex justify-between">
             <p className="font-bold text-center md:text-left">
               Assement Management
@@ -1105,7 +1150,7 @@ function AssetsForm({ setData, goBack }) {
             onSubmit={(e) => {
               handleSubmit(e);
             }}
-            className="flex flex-col gap-10 w-5/6 md:w-full"
+            className="flex flex-col gap-10 w-full"
           >
             {assets.map((item, index) => (
               <div key={index} className="px-0 w-full">
@@ -1119,19 +1164,20 @@ function AssetsForm({ setData, goBack }) {
                   addNewAsset={addNewAsset}
                   handleRemoveAsset={handleRemoveAsset}
                   isLast={assets.length - 1 === index}
+                  isDeletedButtonVisible={assets.length - 1 > 0}
                 />
               </div>
             ))}
 
-            <div className="flex justify-end gap-12">
-              <div className="flex items-center cursor-pointer gap-2" onClick={goBack}>
+            <div className="flex flex-col md:flex-row justify-center md:justify-end gap-3 md:gap-12">
+              <div className="flex items-center cursor-pointer gap-2 justify-center" onClick={goBack}>
                 <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
                 <p className="text-[#A0161B] font-bold">Go Back</p>
               </div>
 
               <input
                 type="submit"
-                className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+                className="py-3 w-full md:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-center md:self-end"
                 value="Next Step"
               />
             </div>
@@ -1195,12 +1241,12 @@ function LiabilitiesForm({ setData, goBack }) {
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
       
-      <div className="w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
+      <div className="w-full md:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-0 md:px-7 py-7 rounded-lg shadow-none md:shadow-md">
           <div className="w-full flex justify-between">
             <p className="font-bold text-center md:text-left">
               Liability Management
             </p>
-            <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
+            <IoMdInformationCircle className="text-2xl hidden md:block"></IoMdInformationCircle>
           </div>
 
           <form
@@ -1221,6 +1267,7 @@ function LiabilitiesForm({ setData, goBack }) {
                   addNewLiability={addNewLiability}
                   handleRemoveLiability={handleRemoveLiability}
                   isLast={liabilities.length - 1 === index}
+                  isDeletedButtonVisible={liabilities.length - 1 > 0}
                 />
               </div>
             ))}
@@ -1241,15 +1288,15 @@ function LiabilitiesForm({ setData, goBack }) {
               </div>
             ))}
 
-            <div className="flex justify-end gap-7">
-              <div className="flex items-center cursor-pointer gap-2" onClick={goBack}>
+            <div className="flex flex-col md:flex-row justify-end gap-3 md:gap-7">
+              <div className="flex items-center justify-center cursor-pointer gap-2" onClick={goBack}>
                 <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
                 <p className="text-[#A0161B] font-bold">Go Back</p>
               </div>
 
               <input
                 type="submit"
-                className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+                className="py-3 w-full md:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
                 value="Next Step"
             />
             </div>
@@ -1302,8 +1349,17 @@ function OtherForm({ setData, goBack }) {
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
+
       
-      <div className="w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
+      
+      <div className="w-full md:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-0 md:px-7 py-7 rounded-lg shadow-md">
+
+         <div className="w-full flex justify-between px-8 md:px-0">
+          <p className="font-bold text-center md:text-left">
+            Others
+          </p>
+          <IoMdInformationCircle className="text-2xl hidden md:block"></IoMdInformationCircle>
+        </div>
           <form
             onSubmit={(e) => {
               handleSubmit(e);
@@ -1322,19 +1378,20 @@ function OtherForm({ setData, goBack }) {
                   addNewOther={addNewOther}
                   handleRemoveOther={handleRemoveOther}
                   isLast={other.length - 1 === index}
+                  isDeletedButtonVisible={other.length - 1 > 0}
                 />
               </div>
             ))}
 
-            <div className=" w-full flex justify-end gap-7">
-              <div className="flex items-center cursor-pointer gap-2" onClick={goBack}>
+            <div className=" w-full flex flex-col md:flex-row justify-end gap-7">
+              <div className="flex items-center justify-center cursor-pointer gap-2" onClick={goBack}>
                 <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
                 <p className="text-[#A0161B] font-bold">Go Back</p>
               </div>
 
               <input
                 type="submit"
-                className="py-3 w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+                className="py-3 w-full md:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
                 value="Next Step"
               />
             </div>
@@ -1350,9 +1407,7 @@ function OtherForm({ setData, goBack }) {
   );
 }
 
-function BasicExample() {
-  return <ProgressBar now={60} />;
-}
+
 
 function Output({ goalData, nextTab  }) {
   const {
@@ -1400,8 +1455,8 @@ function Output({ goalData, nextTab  }) {
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
       <div className="flex flex-col gap-5 w-5/6 md:w-3/5	">
-        <div className="flex gap-10">
-          <div className="px-0 flex flex-col w-2/5 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
+        <div className="flex flex-col md:flex-row gap-10">
+          <div className="px-0 flex flex-col w-full md:w-2/5 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
             <div className="flex justify-between items-center">
               <h2 className="font-bold text-xl">Realistically Towards Dream</h2>
               <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
@@ -1415,7 +1470,7 @@ function Output({ goalData, nextTab  }) {
             </div>
           </div>
 
-          <div className="flex flex-col gap-7 w-3/5 ">
+          <div className="flex flex-col gap-7 w-full md:w-3/5">
             <div className="flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
               <div className="flex flex-row gap-2 justify-between">
                 <p className="font-bold">Financially Towards Dream 40%</p>
@@ -1433,7 +1488,7 @@ function Output({ goalData, nextTab  }) {
               </div>
             </div>
 
-            <div className="flex flex-col gap-6 shadow-gray-400 px-7 py-7 rounded-lg shadow-md h-full">
+            <div className="flex flex-col gap-4 md:gap-6 shadow-gray-400 px-7 py-7 rounded-lg shadow-md h-full">
               <div className="flex justify-between">
                 <p className="font-bold">Total Calculation</p>
                 <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
