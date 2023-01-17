@@ -1808,9 +1808,9 @@ function CalculateForm({ goalData }) {
   }, []);
 
   return (
-    <div className="overflow-x-auto">
-      <div className="grid grid-cols-11 my-4 w-80 md:w-full">
-        <div className="text-left "></div>
+    <div className="overflow-x-auto w-80 md:w-full">
+      <div className="grid grid-cols-11 my-4 w-900 md:w-full">
+        <div className="text-left"></div>
         <div className="">1st Year</div>
         <div className="">2nd Year</div>
         <div className="">3rd Year</div>
@@ -1823,8 +1823,8 @@ function CalculateForm({ goalData }) {
         <div className="">10th Year</div>
       </div>
       {newAssetsData.map((assetItem) => (
-        <div className="grid grid-cols-11 w-fit md:w-full">
-          <div className="text-center py-3">{assetItem.asset}</div>
+        <div className="grid grid-cols-11 w-900 md:w-full">
+          <div className="text-left pl-3 md:pl-7 py-3">{assetItem.asset}</div>
           <div className="py-3">{assetItem.year_one}</div>
           <div className="py-3">{assetItem.year_two}</div>
           <div className="py-3">{assetItem.year_three}</div>
@@ -1880,8 +1880,8 @@ function CalculateLiabilityForm({ goalData }) {
   }, []);
 
   return (
-    <div className="shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
-      <div className="grid grid-cols-11 my-4">
+    <div className="overflow-x-auto w-80 md:w-full">
+      <div className="grid grid-cols-11 my-4 w-900 md:w-full">
         <div className="text-left"></div>
         <div className="">1st Year</div>
         <div className="">2nd Year</div>
@@ -1895,8 +1895,8 @@ function CalculateLiabilityForm({ goalData }) {
         <div className="">10th Year</div>
       </div>
       {newLiabilityData.map((liabilityItem) => (
-        <div className="grid grid-cols-11 ">
-          <div className="text-center py-3">{liabilityItem.liability}</div>
+        <div className="grid grid-cols-11 w-900 md:w-full">
+          <div className="text-left pl-3 md:pl-7 py-3">{liabilityItem.liability}</div>
           <div className="py-3 ">{liabilityItem.year_one}</div>
           <div className="py-3">{liabilityItem.year_two}</div>
           <div className="py-3">{liabilityItem.year_three}</div>
@@ -1961,7 +1961,7 @@ function AnnualForm({ goalData }) {
           </div>
           <div className="w-full grid ">
             <div className="flex flex-col">
-              <div className="text-center">
+              <div className="text-center shadow-gray-400 rounded-lg shadow-md">
                 <CalculateLiabilityForm
                   goalData={goalData}
                 ></CalculateLiabilityForm>
