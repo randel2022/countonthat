@@ -1809,8 +1809,8 @@ function CalculateForm({ goalData }) {
 
   return (
     <div className="overflow-x-auto w-80 md:w-full">
-      <div className="grid grid-cols-11 my-4 w-900 md:w-full">
-        <div className="text-left"></div>
+      <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
+        <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1"></div>
         <div className="">1st Year</div>
         <div className="">2nd Year</div>
         <div className="">3rd Year</div>
@@ -1823,9 +1823,9 @@ function CalculateForm({ goalData }) {
         <div className="">10th Year</div>
       </div>
       {newAssetsData.map((assetItem) => (
-        <div className="grid grid-cols-11 w-900 md:w-full">
-          <div className="text-left pl-3 md:pl-7 py-3">{assetItem.asset}</div>
-          <div className="py-3">{assetItem.year_one}</div>
+        <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
+          <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1">{assetItem.asset}</div>
+          <div className="py-3 ">{assetItem.year_one}</div>
           <div className="py-3">{assetItem.year_two}</div>
           <div className="py-3">{assetItem.year_three}</div>
           <div className="py-3">{assetItem.year_four}</div>
@@ -1881,8 +1881,8 @@ function CalculateLiabilityForm({ goalData }) {
 
   return (
     <div className="overflow-x-auto w-80 md:w-full">
-      <div className="grid grid-cols-11 my-4 w-900 md:w-full">
-        <div className="text-left"></div>
+      <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
+        <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1"></div>
         <div className="">1st Year</div>
         <div className="">2nd Year</div>
         <div className="">3rd Year</div>
@@ -1895,8 +1895,8 @@ function CalculateLiabilityForm({ goalData }) {
         <div className="">10th Year</div>
       </div>
       {newLiabilityData.map((liabilityItem) => (
-        <div className="grid grid-cols-11 w-900 md:w-full">
-          <div className="text-left pl-3 md:pl-7 py-3">{liabilityItem.liability}</div>
+        <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
+          <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1">{liabilityItem.liability}</div>
           <div className="py-3 ">{liabilityItem.year_one}</div>
           <div className="py-3">{liabilityItem.year_two}</div>
           <div className="py-3">{liabilityItem.year_three}</div>
