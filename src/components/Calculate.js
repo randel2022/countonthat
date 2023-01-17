@@ -1808,8 +1808,8 @@ function CalculateForm({ goalData }) {
   }, []);
 
   return (
-    <div className=" overflow-x-auto">
-      <div className="grid grid-cols-11 my-4 w-fit md:w-full ">
+    <div className="overflow-x-auto">
+      <div className="grid grid-cols-11 my-4 w-80 md:w-full">
         <div className="text-left "></div>
         <div className="">1st Year</div>
         <div className="">2nd Year</div>
@@ -1944,7 +1944,7 @@ function AnnualForm({ goalData }) {
           </div>
 
           <div className="w-full grid ">
-            <div className="flex flex-col">
+            <div className="flex flex-col md:w-full">
               <div className="text-center shadow-gray-400 rounded-lg shadow-md">
                 <CalculateForm goalData={goalData}></CalculateForm>
               </div>
