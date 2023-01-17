@@ -221,6 +221,8 @@ const InputNames = ({
                 })
               }
               required
+              max={99}
+              
             />
           </div>
           {isDeletedButtonVisible && (
@@ -441,8 +443,11 @@ const InputRevExp = ({
                             multiplierrev: e.target.value,
                             expenses: item.expenses,
                             multiplierexp: item.multiplierexp,
+                            currencyrev: item.currencyrev,
+                            currencyexp: item.currencyexp,
                           })
                         }
+                        max={100}
                         required
                       />
                   </div>
@@ -452,7 +457,32 @@ const InputRevExp = ({
                   <label>Monthly Revenue</label>
                   <div className="flex items-center border-slate-400">
                     <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                      <p className="text-center">USD</p>
+                        <select
+                            className="w-11/12"
+                            value={item.currencyrev}
+                            onChange={(e) =>
+                              onChangeValues({ 
+                                revenue: item.revenue,
+                                multiplierrev: item.multiplierrev,
+                                expenses: item.expenses,
+                                multiplierexp: item.multiplierexp,
+                                currencyrev: e.target.value, 
+                                currencyexp: item.currencyexp,
+                              })
+                            }
+                            required
+                          >
+                          <option disabled>
+                            {" "}
+                            Choose Currency{" "}
+                          </option>
+                          <option value="usd" selected>USD</option>
+                          <option value="eur">EUR</option>
+                          <option value="cad">CAD</option>
+                          <option value="gbp">GBP</option>
+                          <option value="bhd">BHD</option>
+                          <option value="kwd">KWD</option>
+                        </select>
                     </div>
                     <input
                       name="revenue"
@@ -466,6 +496,8 @@ const InputRevExp = ({
                           multiplierrev: item.multiplierrev,
                           expenses: item.expenses,
                           multiplierexp: item.multiplierexp, 
+                          currencyrev: item.currencyrev,
+                          currencyexp: item.currencyexp,
                         })
                       }
                       required
@@ -492,10 +524,13 @@ const InputRevExp = ({
                           revenue: item.revenue,
                           multiplierrev: item.multiplierrev,
                           expenses: item.expenses,
-                          multiplierexp: e.target.value,                 
+                          multiplierexp: e.target.value,
+                          currencyrev: item.currencyrev,
+                          currencyexp: item.currencyexp,             
                         })
                       }
                       required
+                      max={100}
                     />
                   </div>
                 </div>     
@@ -504,7 +539,31 @@ const InputRevExp = ({
                   <label>Monthly Expenses</label>
                   <div className="flex items-center border-slate-400">
                     <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                      <p className="text-center">USD</p>
+                        <select
+                            className="w-11/12"
+                            value={item.currencyexp}
+                            onChange={(e) =>
+                              onChangeValues({ 
+                                revenue: item.revenue,
+                                multiplierrev: item.multiplierrev,
+                                expenses: item.expenses,
+                                multiplierexp: item.multiplierexp,
+                                currencyrev: item.currencyrev,
+                                currencyexp: e.target.value,    })
+                            }
+                            required
+                          >
+                          <option disabled>
+                            {" "}
+                            Choose Currency{" "}
+                          </option>
+                          <option value="usd" selected>USD</option>
+                          <option value="eur">EUR</option>
+                          <option value="cad">CAD</option>
+                          <option value="gbp">GBP</option>
+                          <option value="bhd">BHD</option>
+                          <option value="kwd">KWD</option>
+                        </select>
                     </div>
                     <input
                       name="expenses"
@@ -518,6 +577,8 @@ const InputRevExp = ({
                           multiplierrev: item.multiplierrev,
                           expenses: e.target.value,
                           multiplierexp: item.multiplierexp, 
+                          currencyrev: item.currencyrev,
+                          currencyexp: item.currencyexp, 
                         })
                       }
                       required
@@ -568,8 +629,27 @@ const InputGoals = ({
           <div className="w-full md:w-1/2">
             <label>Amount</label>
             <div className="flex items-center border-slate-400">
-              <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                <p className="text-center">USD</p>
+              <div className="flex justify-center rounded-r-none w-1/3 md:w-1/4 input input-bordered border-black items-center">
+                {/* <p className="text-center">USD</p> */}
+                <select
+                  className="w-11/12"
+                  value={item.currency}
+                  onChange={(e) =>
+                    onChangeValues({ goal: item.goal, currency: e.target.value, amount: item.amount })
+                  }
+                  required
+                >
+                    <option disabled >
+                      {" "}
+                      Choose Currency{" "}
+                    </option>
+                    <option value="usd" selected>USD</option>
+                    <option value="eur">EUR</option>
+                    <option value="cad">CAD</option>
+                    <option value="gbp">GBP</option>
+                    <option value="bhd">BHD</option>
+                    <option value="kwd">KWD</option>
+                </select>
               </div>
               <input
                 name="amount"
@@ -577,7 +657,7 @@ const InputGoals = ({
                 className="input input-bordered w-3/4 rounded-l-none border-slate-400"
                 value={item.amount}
                 onChange={(e) =>
-                  onChangeValues({ goal: item.goal, amount: e.target.value })
+                  onChangeValues({ goal: item.goal, currency: item.currency, amount: e.target.value })
                 }
                 required
               />
@@ -661,9 +741,9 @@ const InputAssets = ({
                   className="input w-full input-bordered border-slate-400"
                   value={item.assetmultiplier}
                   onChange={(e) =>
-                    onChangeValues({ asset: item.asset, amount: item.amount, assetmultiplier: e.target.value})
+                    onChangeValues({ asset: item.asset, currency: item.currency, amount: item.amount, assetmultiplier: e.target.value})
                   }
-                  
+                  max={100}
                 />
               </div>
             </div>
@@ -671,7 +751,26 @@ const InputAssets = ({
               <label>Amount</label>
               <div className="flex items-center border-slate-400 w-full items-center">
                 <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                  <p className="text-center">USD</p>
+                  {/* <p className="text-center">USD</p> */}
+                  <select
+                    className="w-11/12"
+                    value={item.currency}
+                    onChange={(e) =>
+                      onChangeValues({ asset: item.asset, currency: e.target.value, amount: item.amount, assetmultiplier: item.assetmultiplier })
+                    }
+                    required
+                  >
+                      <option disabled>
+                        {" "}
+                        Choose Currency{" "}
+                      </option>
+                      <option value="usd" selected>USD</option>
+                      <option value="eur">EUR</option>
+                      <option value="cad">CAD</option>
+                      <option value="gbp">GBP</option>
+                      <option value="bhd">BHD</option>
+                      <option value="kwd">KWD</option>
+                  </select>
                 </div>
                 <input
                   name="amount"
@@ -679,7 +778,7 @@ const InputAssets = ({
                   className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
                   onChange={(e) =>
-                    onChangeValues({ asset: item.asset, amount: e.target.value, assetmultiplier: item.assetmultiplier})
+                    onChangeValues({ asset: item.asset, currency: item.currency, amount: e.target.value, assetmultiplier: item.assetmultiplier})
                   }
                   required
                 />
@@ -768,9 +867,9 @@ const InputLiabilities = ({
                   className="input w-full input-bordered border-slate-400"
                   value={item.liabilitymultiplier}
                   onChange={(e) =>
-                    onChangeValues({ liability: item.liability, amount: item.amount, liabilitymultiplier: e.target.value })
+                    onChangeValues({ liability: item.liability, amount: item.amount, liabilitymultiplier: e.target.value, currencyliability: item.currencyliability })
                   }
-             
+                  max={100}
                 />
               </div>
             </div>
@@ -779,7 +878,26 @@ const InputLiabilities = ({
             <label>Amount</label>
             <div className="flex items-center border-slate-400">
               <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                <p className="text-center">USD</p>
+                {/* <p className="text-center">USD</p> */}
+                  <select
+                    className="w-11/12"
+                    value={item.currencyliability}
+                    onChange={(e) =>
+                      onChangeValues({ liability: item.liability, amount: item.amount, liabilitymultiplier: item.liabilitymultiplier, currencyliability: e.target.value })
+                    }
+                    required
+                  >
+                      <option disabled>
+                        {" "}
+                        Choose Currency{" "}
+                      </option>
+                      <option value="usd" selected>USD</option>
+                      <option value="eur">EUR</option>
+                      <option value="cad">CAD</option>
+                      <option value="gbp">GBP</option>
+                      <option value="bhd">BHD</option>
+                      <option value="kwd">KWD</option>
+                  </select>
               </div>
               <input
                 name="amount"
@@ -791,6 +909,7 @@ const InputLiabilities = ({
                     liability: item.liability,
                     amount: e.target.value,
                     liabilitymultiplier: item.liabilitymultiplier,
+                    currencyliability: item.currencyliability,
                   })
                 }
                 required
@@ -965,6 +1084,7 @@ function PersonalForm({ setData }) {
     {
       amount: 0.0,
       goal: "savings",
+      currency: "usd",
     },
   ]);
 
@@ -1020,6 +1140,7 @@ function PersonalForm({ setData }) {
       {
         amount: 0.0,
         goal: "savings",
+        currency: "usd",
       },
     ]);
   };
@@ -1027,7 +1148,7 @@ function PersonalForm({ setData }) {
   return (
    
       <div className="w-full justify-center items-center flex flex-col gap-3 ">
-        <div className="w-full md:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-0 md:px-7 py-7 rounded-lg shadow-none md:shadow-md ">
+        <div className="w-full md:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-0 md:px-7 py-7 rounded-lg shadow-none md:shadow-md">
             <form
               onSubmit={(e) => {
                 handleSubmit(e);
@@ -1115,6 +1236,7 @@ function AssetsForm({ setData, goBack }) {
       asset: "home",
       amount: 0.0,
       assetmultiplier: 0.0,
+      currency: "usd"
     },
   ]);
 
@@ -1125,6 +1247,7 @@ function AssetsForm({ setData, goBack }) {
         asset: "home",
         amount: 0.0,
         assetmultiplier: 0.0,
+        currency: "usd",
       },
     ]);
   };
@@ -1208,6 +1331,8 @@ function LiabilitiesForm({ setData, goBack }) {
       multiplierrev: 0.0,
       expenses: 0.0,
       multiplierexp: 0.0,
+      currencyrev: "usd",
+      currencyexp: "usd",
     },
   ]);
 
@@ -1215,7 +1340,8 @@ function LiabilitiesForm({ setData, goBack }) {
     {
       liability: "Mortgage",
       amount: 0.0,
-      liabilitymultiplier: 0.0
+      liabilitymultiplier: 0.0,
+      currencyliability: "usd",
     },
   ]);
 
@@ -1225,7 +1351,8 @@ function LiabilitiesForm({ setData, goBack }) {
       {
         liability: "Mortgage",
         amount: 0.0,
-        liabilitymultiplier: 0.0
+        liabilitymultiplier: 0.0,
+        currencyliability: "usd",
       },
     ]);
   };
@@ -1407,8 +1534,6 @@ function OtherForm({ setData, goBack }) {
   );
 }
 
-
-
 function Output({ goalData, nextTab  }) {
   const {
     firstName,
@@ -1444,6 +1569,28 @@ function Output({ goalData, nextTab  }) {
   const expensesSum = revexp.reduce((accumulator, object) => {
     return accumulator + Number(object.expenses) * Number(object.multiplierexp);
   }, 0);
+
+
+  const goalsCurrency = goalsData.map((object) => {
+    return (object.currency);
+  });
+
+  const assetsCurrency = assets.map((object) => {
+    return (object.currency);
+  });
+
+  const liabilityCurrency = liabilities.map((object) => {
+    return (object.currencyliability);
+  });
+
+  const revCurrency = revexp.map((object) => {
+    return (object.currencyrev);
+  });
+
+  const expCurrency = revexp.map((object) => {
+    return (object.currencyexp);
+  });
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -1495,22 +1642,103 @@ function Output({ goalData, nextTab  }) {
               </div>
               <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
                 <p>Total Revenue:</p>
-                <p className="py-0 my-0"> ${revenueSum}</p>
+                <p className="py-0 my-0"> 
+                  {
+                    revCurrency == "usd" ? <>$</>:<></>
+                  }
+                  {
+                    revCurrency == "eur" ? <>EUR</>:<></>
+                  }
+                  {
+                    revCurrency == "cad" ? <>CAD</>:<></>
+                  }
+                  {
+                    revCurrency == "gbp" ? <>GBP</>:<></>
+                  }
+                  {
+                    revCurrency == "bhd" ? <>BHD</>:<></>
+                  }
+                  {
+                    revCurrency == "kwd" ? <>KWD</>:<></>
+                  }
+                   &nbsp;
+                  {revenueSum}</p>
               </div>
 
               <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
                 <p>Total Assets:</p>
-                <p className="py-0 my-0"> ${assetSum}</p>
+                <p className="py-0 my-0">
+                  {
+                    assetsCurrency == "usd" ? <>$</>:<></>
+                  }
+                  {
+                    assetsCurrency == "eur" ? <>EUR</>:<></>
+                  }
+                  {
+                    assetsCurrency == "cad" ? <>CAD</>:<></>
+                  }
+                  {
+                    assetsCurrency == "gbp" ? <>GBP</>:<></>
+                  }
+                  {
+                    assetsCurrency == "bhd" ? <>BHD</>:<></>
+                  }
+                  {
+                    assetsCurrency == "kwd" ? <>KWD</>:<></>
+                  }
+                   &nbsp;
+                  {assetSum}
+                </p>
               </div>
 
               <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
                 <p>Total Liabilities:</p>
-                <p className="py-0 my-0"> ${liabilitySum}</p>
+                <p className="py-0 my-0"> 
+                  {
+                    liabilityCurrency == "usd" ? <>$</>:<></>
+                  }
+                  {
+                    liabilityCurrency == "eur" ? <>EUR</>:<></>
+                  }
+                  {
+                    liabilityCurrency == "cad" ? <>CAD</>:<></>
+                  }
+                  {
+                    liabilityCurrency == "gbp" ? <>GBP</>:<></>
+                  }
+                  {
+                    liabilityCurrency == "bhd" ? <>BHD</>:<></>
+                  }
+                  {
+                    liabilityCurrency == "kwd" ? <>KWD</>:<></>
+                  }
+                   &nbsp;
+                  {liabilitySum}</p>
               </div>
 
               <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
                 <p>Total Expenses:</p>
-                <p className="py-0 my-0"> ${expensesSum}</p>
+                <p className="py-0 my-0"> 
+                  {
+                    expCurrency == "usd" ? <>$</>:<></>
+                  }
+                  {
+                    expCurrency == "eur" ? <>EUR</>:<></>
+                  }
+                  {
+                    expCurrency == "cad" ? <>CAD</>:<></>
+                  }
+                  {
+                    expCurrency == "gbp" ? <>GBP</>:<></>
+                  }
+                  {
+                    expCurrency == "bhd" ? <>BHD</>:<></>
+                  }
+                  {
+                    expCurrency == "kwd" ? <>KWD</>:<></>
+                  }
+                   &nbsp;
+                {expensesSum}</p>            
               </div>
 
               <form
