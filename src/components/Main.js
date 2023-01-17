@@ -332,7 +332,7 @@ function Main() {
           <img src={step1}></img>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 w-full md:w-3/4">
+      <div className="flex flex-col-reverse md:grid col-start-1 grid-cols-1 md:grid-cols-2 w-full md:w-3/4">
         
         <div className="">
           <img src={step2}></img>
@@ -372,7 +372,7 @@ function Main() {
           <img src={step3}></img>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 w-full md:w-3/4">
+      <div className="flex flex-col-reverse md:grid grid-cols-1 md:grid-cols-2 w-full md:w-3/4">
         
         <div className="">
           <img src={step4}></img>
