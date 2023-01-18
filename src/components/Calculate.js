@@ -198,6 +198,7 @@ const InputNames = ({
                       agenew: item.agenew,
                       email: item.email,
                       contact: item.contact,
+                      currency: item.currency,
                 })
               }
               required
@@ -218,6 +219,7 @@ const InputNames = ({
                       agenew: e.target.value,
                       email: item.email,
                       contact: item.contact,
+                      currency: item.currency,
                 })
               }
               required
@@ -250,6 +252,7 @@ const InputNames = ({
                       agenew: item.agenew,
                       email: e.target.value,
                       contact: item.contact,
+                      currency: item.currency,
                     })
                   }
                   required
@@ -270,29 +273,143 @@ const InputNames = ({
                       agenew: item.agenew,
                       email: item.email,
                       contact: e.target.value,
+                      currency: item.currency,
                     })
                   }
                   required
                 />
               </div>  
               <div className="w-full md:w-1/3">
-              
-              </div>  
+              <label>Currency</label>
+              <div className="flex justify-center rounded-r-none input input-bordered border-black items-center">
+                  <select
+                    className="w-full"
+                    value={item.currency}
+                    onChange={(e) =>
+                      onChangeValues({ 
+                        firstname: item.firstname,
+                        lastname: item.lastname,
+                        agenew: item.agenew,
+                        email: item.email,
+                        contact: item.contact,
+                        currency: e.target.value, 
+                      })
+                    }
+                    required
+                  >
+                      <option disabled >
+                        {" "}
+                        Choose Currency{" "}
+                      </option>
+                      <option value="usd" selected>USD</option>
+                      <option value="eur">EUR</option>
+                      <option value="cad">CAD</option>
+                      <option value="gbp">GBP</option>
+                      <option value="bhd">BHD</option>
+                      <option value="kwd">KWD</option>
+                  </select>             
+              </div>
+            </div>  
         </div>
-        {/* 
-        {isLast && (
-          <div
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={addNewName}
-          >
-            <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
-            <p className="text-sm my-2 text-[#A0161B]">Add Dependent</p>
-          </div>
-        )} */}
+        
       </div>
     </>
   );
 };
+
+const InputGoals = ({
+  isLast,
+  item,
+  onChangeValues,
+  addNewGoal,
+  handleRemoveGoal,
+  isDeletedButtonVisible,
+ 
+}) => {
+
+
+  return (
+    <>
+      <div className="flex flex-col justify-between w-full gap-4">
+        <div className="flex flex-col md:flex-row w-full gap-2 md:gap-10 items-center">
+          <div className="w-full md:w-1/2">
+            <label>Goal</label>
+            <select
+              className="input input-bordered w-full border-slate-400"
+              value={item.goal}
+              onChange={(e) =>
+                onChangeValues({ goal: e.target.value, amount: item.amount })
+              }
+              required
+            >
+              <option disabled selected>
+                {" "}
+                Choose a Goal{" "}
+              </option>
+              <option value="savings">Savings</option>
+              <option value="house">House</option>
+              <option value="car">Luxury Car</option>
+            </select>
+          </div>
+
+          <div className="w-full md:w-1/2">
+            <label>Amount</label>
+            <div className="flex items-center border-slate-400">
+              <div className="flex justify-center rounded-r-none w-1/3 md:w-1/4 input input-bordered border-black items-center">
+                {/* <p className="text-center">USD</p> */}
+              </div>
+              <input
+                name="amount"
+                type="number"
+                className="input input-bordered w-3/4 rounded-l-none border-slate-400"
+                value={item.amount}
+                onChange={(e) =>
+                  onChangeValues({ goal: item.goal, currency: item.currency, amount: e.target.value })
+                }
+                required
+              />
+
+              {isDeletedButtonVisible && (
+                <span
+                className="cursor-pointer ml-4 md:mt-5 block md:hidden"
+                onClick={handleRemoveGoal}
+                >
+                      <BsTrash className="text-[#A0161B]"></BsTrash>
+                </span>
+              )}
+            </div>
+
+                
+
+          </div>
+
+          {isDeletedButtonVisible && (
+            <span
+              className="cursor-pointer -mt-6 md:mt-5 hidden md:block"
+              onClick={handleRemoveGoal}
+            >
+              <BsTrash className="text-[#A0161B]"></BsTrash>
+            </span>
+          )}
+
+          
+        </div>
+        {isLast && (
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={addNewGoal}
+          >
+            <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
+            <p className="text-sm my-2 text-[#A0161B]">Add Another Goal</p>
+          </div>
+        )}
+      </div>
+    </>
+  );
+};
+
+
+
 
 const InputDependents = ({
   isLast,
@@ -589,111 +706,6 @@ const InputRevExp = ({
             </div>
           </div>
         </div>
-      </div>
-    </>
-  );
-};
-
-const InputGoals = ({
-  isLast,
-  item,
-  onChangeValues,
-  addNewGoal,
-  handleRemoveGoal,
-  isDeletedButtonVisible,
-}) => {
-  return (
-    <>
-      <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col md:flex-row w-full gap-2 md:gap-10 items-center">
-          <div className="w-full md:w-1/2">
-            <label>Goal</label>
-            <select
-              className="input input-bordered w-full border-slate-400"
-              value={item.goal}
-              onChange={(e) =>
-                onChangeValues({ goal: e.target.value, amount: item.amount })
-              }
-              required
-            >
-              <option disabled selected>
-                {" "}
-                Choose a Goal{" "}
-              </option>
-              <option value="savings">Savings</option>
-              <option value="house">House</option>
-              <option value="car">Luxury Car</option>
-            </select>
-          </div>
-
-          <div className="w-full md:w-1/2">
-            <label>Amount</label>
-            <div className="flex items-center border-slate-400">
-              <div className="flex justify-center rounded-r-none w-1/3 md:w-1/4 input input-bordered border-black items-center">
-                {/* <p className="text-center">USD</p> */}
-                <select
-                  className="w-11/12"
-                  value={item.currency}
-                  onChange={(e) =>
-                    onChangeValues({ goal: item.goal, currency: e.target.value, amount: item.amount })
-                  }
-                  required
-                >
-                    <option disabled >
-                      {" "}
-                      Choose Currency{" "}
-                    </option>
-                    <option value="usd" selected>USD</option>
-                    <option value="eur">EUR</option>
-                    <option value="cad">CAD</option>
-                    <option value="gbp">GBP</option>
-                    <option value="bhd">BHD</option>
-                    <option value="kwd">KWD</option>
-                </select>
-              </div>
-              <input
-                name="amount"
-                type="number"
-                className="input input-bordered w-3/4 rounded-l-none border-slate-400"
-                value={item.amount}
-                onChange={(e) =>
-                  onChangeValues({ goal: item.goal, currency: item.currency, amount: e.target.value })
-                }
-                required
-              />
-
-              {isDeletedButtonVisible && (
-                <span
-                className="cursor-pointer ml-4 md:mt-5 block md:hidden"
-                onClick={handleRemoveGoal}
-                >
-                      <BsTrash className="text-[#A0161B]"></BsTrash>
-                </span>
-              )}
-            </div>
-
-          </div>
-
-          {isDeletedButtonVisible && (
-            <span
-              className="cursor-pointer -mt-6 md:mt-5 hidden md:block"
-              onClick={handleRemoveGoal}
-            >
-              <BsTrash className="text-[#A0161B]"></BsTrash>
-            </span>
-          )}
-
-          
-        </div>
-        {isLast && (
-          <div
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={addNewGoal}
-          >
-            <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
-            <p className="text-sm my-2 text-[#A0161B]">Add Another Goal</p>
-          </div>
-        )}
       </div>
     </>
   );
