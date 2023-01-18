@@ -1760,7 +1760,7 @@ function CalculateLiabilityForm({ goalData }) {
     <div className="overflow-x-auto w-25 lg:w-full">
       <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full ">
         <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1"></div>
-        <div className="">11st Year</div>
+        <div className="">1st Year</div>
         <div className="">2nd Year</div>
         <div className="">3rd Year</div>
         <div className="">4th Year</div>
@@ -1772,7 +1772,7 @@ function CalculateLiabilityForm({ goalData }) {
         <div className="">10th Year</div>
       </div>
       {newLiabilityData.map((liabilityItem) => (
-        <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full ">
+        <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
           <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1">{liabilityItem.liability}</div>
           <div className="py-3 ">{liabilityItem.year_one}</div>
           <div className="py-3">{liabilityItem.year_two}</div>
