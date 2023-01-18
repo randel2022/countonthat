@@ -232,7 +232,7 @@ function Main() {
         <h2 className="text-3xl md:text-6xl text-center font-bold">
           Take the first step to<br></br>achieving your dreams.
         </h2>
-        <p className="text-center">
+        <p className="text-center lg:px-28">
           Achieving your dreams is a process that starts with taking the first
           step. Understanding your goal and outlining the steps to get there are
           crucial to becoming successful. DreamWalk is guided by the philosophy
