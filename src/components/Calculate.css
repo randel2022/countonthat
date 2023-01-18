@@ -43,3 +43,13 @@
 .box-div:nth-child(odd){
   background-color: white;
 }
+
+.input-goal{
+  border-right: none !important;
+  text-transform: capitalize;
+}
+
+.input-goal::input[type=text] {
+  text-transform: capitalize !important;
+  color: red !important;
+}

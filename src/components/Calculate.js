@@ -20,11 +20,17 @@ import "./Calculate.css";
 
 import { IoIosArrowBack } from "react-icons/io";
 
+import { Dropdown } from "semantic-ui-react";
+import "semantic-ui-css/semantic.min.css";
+
+import Flag from 'react-world-flags';
+
+import Searchable from 'react-searchable-dropdown';
+
 import {
   Avatar,
   Button,
   Card,
-  Dropdown,
   Modal,
   Steps,
   Tabs,
@@ -44,9 +50,7 @@ function CalculateComponent() {
 
   const { data, status, refetch  } = useQuery(["goalData", goalData ], () => calculateService.totalGoal(goalData), {
     enabled: false,
-  });
-
-  console.log(goalData);
+  }); 
 
 
   const liStyle = (curIdx) => {
@@ -74,7 +78,7 @@ function CalculateComponent() {
       )}
 
       {selectedTab === 0 ? (
-        <PersonalForm
+        <PersonalForm 
           setData={(value) => { 
             if (value.names && value.goalsData ) {
               /// if all values have data then go to next Tabs
@@ -85,6 +89,7 @@ function CalculateComponent() {
         ></PersonalForm>
       ) : selectedTab === 1 ? (
         <AssetsForm
+          currency={goalData.names.currency}
           goBack={()=> setselectedTab(selectedTab - 1)}
           setData={(value) => {
             if (value.assets) {
@@ -102,6 +107,7 @@ function CalculateComponent() {
         ></AssetsForm>
       ) : selectedTab === 2 ? (
         <LiabilitiesForm
+          currency={goalData.names.currency}
           goBack={()=> setselectedTab(selectedTab - 1)}
           setData={(value) => {
             if (value.liabilities && value.revexp ) {
@@ -131,6 +137,7 @@ function CalculateComponent() {
         ></OtherForm>
       ) : selectedTab === 4 ? (
         <Output
+          currency={goalData.names.currency}
           nextTab={() => {  
             setselectedTab(selectedTab + 1);  
           }}
@@ -148,6 +155,9 @@ function CalculateComponent() {
 
 export default CalculateComponent;
 
+
+
+
 const InputNames = ({
   isLast,
   item,
@@ -156,6 +166,20 @@ const InputNames = ({
   isDeletedButtonVisible,
   handleRemoveName,
 }) => {
+
+  const onChangeInputValue = (key, value) => {
+    const currentValue = {
+      firstname: item.firstName,
+      lastname: item.lastname,
+      agenew: item.agenew,
+      email: item.email,
+      contact: item.contact,
+      currency: item.currency
+    }
+    currentValue[key] = value;
+    onChangeValues(currentValue)
+  }
+
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-1 "> 
@@ -171,15 +195,7 @@ const InputNames = ({
               name="firstname"
               type="text"
               value={item.firstname}
-              onChange={(e) =>
-                onChangeValues({
-                      firstname: e.target.value,
-                      lastname: item.lastname,
-                      agenew: item.agenew,
-                      email: item.email,
-                      contact: item.contact,
-                })
-              }
+              onChange={(e) => onChangeInputValue("firstname", e.target.value)}
               required
             />
           </div>
@@ -191,16 +207,7 @@ const InputNames = ({
               name="lastname"
               type="text"
               value={item.lastname}
-              onChange={(e) =>
-                onChangeValues({
-                      firstname: item.firstname,
-                      lastname: e.target.value,
-                      agenew: item.agenew,
-                      email: item.email,
-                      contact: item.contact,
-                      currency: item.currency,
-                })
-              }
+              onChange={(e) => onChangeInputValue("lastname", e.target.value)}
               required
             />
           </div>
@@ -212,16 +219,7 @@ const InputNames = ({
               type="number"
               className="input input-bordered w-full border-slate-400"
               value={item.agenew}
-              onChange={(e) =>
-                onChangeValues({
-                      firstname: item.firstname,
-                      lastname: item.lastname,
-                      agenew: e.target.value,
-                      email: item.email,
-                      contact: item.contact,
-                      currency: item.currency,
-                })
-              }
+              onChange={(e) => onChangeInputValue("agenew", e.target.value)}
               required
               max={99}
               
@@ -245,16 +243,7 @@ const InputNames = ({
                   name="email"
                   type="email"
                   value={item.email}
-                  onChange={(e) =>
-                    onChangeValues({
-                      firstname: item.firstname,
-                      lastname: item.lastname,
-                      agenew: item.agenew,
-                      email: e.target.value,
-                      contact: item.contact,
-                      currency: item.currency,
-                    })
-                  }
+                  onChange={(e) => onChangeInputValue("email", e.target.value)}
                   required
                 />
               </div>
@@ -266,35 +255,17 @@ const InputNames = ({
                   name="contact"
                   type="number"
                   value={item.contact}
-                  onChange={(e) =>
-                    onChangeValues({
-                      firstname: item.firstname,
-                      lastname: item.lastname,
-                      agenew: item.agenew,
-                      email: item.email,
-                      contact: e.target.value,
-                      currency: item.currency,
-                    })
-                  }
+                  onChange={(e) => onChangeInputValue("contact", e.target.value)}
                   required
                 />
               </div>  
               <div className="w-full md:w-1/3">
               <label>Currency</label>
-              <div className="flex justify-center rounded-r-none input input-bordered border-black items-center">
+              <div className="flex justify-center border-slate-400 input input-bordered  items-center">
                   <select
                     className="w-full"
                     value={item.currency}
-                    onChange={(e) =>
-                      onChangeValues({ 
-                        firstname: item.firstname,
-                        lastname: item.lastname,
-                        agenew: item.agenew,
-                        email: item.email,
-                        contact: item.contact,
-                        currency: e.target.value, 
-                      })
-                    }
+                    onChange={(e) => onChangeInputValue("currency", e.target.value)}
                     required
                   >
                       <option disabled >
@@ -302,7 +273,7 @@ const InputNames = ({
                         Choose Currency{" "}
                       </option>
                       <option value="usd" selected>USD</option>
-                      <option value="eur">EUR</option>
+                      <option value="eur"><Flag code="AFG" />EUR</option>
                       <option value="cad">CAD</option>
                       <option value="gbp">GBP</option>
                       <option value="bhd">BHD</option>
@@ -327,44 +298,67 @@ const InputGoals = ({
  
 }) => {
 
+    
+  const onChangeInputValue = (key, value) => {
+    console.log("onchange");
+    console.log(key, value);
+    const currentValue = {
+      goal: item.goal, amount: item.amount, currency: item.currency
+    }
+    currentValue[key] = value;
+    onChangeValues(currentValue)
+  }
 
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
         <div className="flex flex-col md:flex-row w-full gap-2 md:gap-10 items-center">
           <div className="w-full md:w-1/2">
-            <label>Goal</label>
-            <select
-              className="input input-bordered w-full border-slate-400"
-              value={item.goal}
-              onChange={(e) =>
-                onChangeValues({ goal: e.target.value, amount: item.amount })
-              }
-              required
-            >
-              <option disabled selected>
-                {" "}
-                Choose a Goal{" "}
-              </option>
-              <option value="savings">Savings</option>
-              <option value="house">House</option>
-              <option value="car">Luxury Car</option>
-            </select>
+            <label>Goals</label>
+            <div className="relative">
+              <input
+                className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none"
+                type="text"
+                value={item.goal}
+                onChange={(e) =>
+                  onChangeInputValue("goal", e.target.value) 
+                }
+                required
+              />
+              <select
+                className="input input-bordered w-full border-slate-400"
+                value={item.goal}
+                onChange={(e) => 
+                  onChangeInputValue("goal", e.target.value) 
+                }
+                required
+              >
+                <option disabled selected>
+                  {" "}
+                  Choose a Goal{" "}
+                </option>
+                <option value="savings" className="capitalize">Savings</option>
+                <option value="house" className="capitalize">House</option>
+                <option value="car" className="capitalize">Luxury Car</option>
+              </select>
+            </div>
+            
           </div>
 
           <div className="w-full md:w-1/2">
             <label>Amount</label>
             <div className="flex items-center border-slate-400">
               <div className="flex justify-center rounded-r-none w-1/3 md:w-1/4 input input-bordered border-black items-center">
-                {/* <p className="text-center">USD</p> */}
+                <p className="text-center">{item.currency}</p>
+                 
               </div>
               <input
                 name="amount"
                 type="number"
                 className="input input-bordered w-3/4 rounded-l-none border-slate-400"
                 value={item.amount}
-                onChange={(e) =>
-                  onChangeValues({ goal: item.goal, currency: item.currency, amount: e.target.value })
+                onChange={(e) => 
+                  onChangeInputValue("amount", e.target.value) 
                 }
                 required
               />
@@ -378,10 +372,9 @@ const InputGoals = ({
                 </span>
               )}
             </div>
-
-                
-
           </div>
+
+     
 
           {isDeletedButtonVisible && (
             <span
@@ -391,8 +384,6 @@ const InputGoals = ({
               <BsTrash className="text-[#A0161B]"></BsTrash>
             </span>
           )}
-
-          
         </div>
         {isLast && (
           <div
@@ -407,9 +398,6 @@ const InputGoals = ({
     </>
   );
 };
-
-
-
 
 const InputDependents = ({
   isLast,
@@ -490,7 +478,7 @@ const InputDependents = ({
         <div className=" flex flex-col justify-start gap-10">
               <div className="w-full md:w-1/3">
                 <label>Relationship</label>
-                <div className="flex flex items-center">
+                <div className="flex flex items-center mr-0 md:mr-6">
                   <input
                     className="input input-bordered w-full border-slate-400"
                     name="relationship"
@@ -514,6 +502,7 @@ const InputDependents = ({
                   )}
                 </div>
               </div>
+              
         </div>
 
         {isLast && (
@@ -530,187 +519,6 @@ const InputDependents = ({
   );
 };
 
-const InputRevExp = ({
-  isLast,
-  item,
-  onChangeValues,
-  addNewRevExp,
-  handleRemoveRevExp,
-}) => {
-  return (
-    <>
-      <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex items-start flex-col w-full gap-10 items-center">
-          
-          <div className="flex flex-col w-full gap-2 ">
-                <p className="font-bold">Monthly Revenue</p>
-                <div className="flex flex-col md:flex-row w-full gap-3 md:gap-10">
-                  <div className="w-full md:w-1/2">
-                    <label>Multiplier</label>
-                    <div className="flex items-center border-slate-400">
-                      <input
-                        name="multiplierrev"
-                        type="number"
-                        className="input input-bordered w-full border-slate-400"
-                        placeholder="0"
-                        value={item.multiplierrev}
-                        onChange={(e) =>
-                          onChangeValues({
-                            revenue: item.revenue,
-                            multiplierrev: e.target.value,
-                            expenses: item.expenses,
-                            multiplierexp: item.multiplierexp,
-                            currencyrev: item.currencyrev,
-                            currencyexp: item.currencyexp,
-                          })
-                        }
-                        max={100}
-                        required
-                      />
-                  </div>
-                </div>
-
-                <div className="w-full md:w-1/2">
-                  <label>Monthly Revenue</label>
-                  <div className="flex items-center border-slate-400">
-                    <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                        <select
-                            className="w-11/12"
-                            value={item.currencyrev}
-                            onChange={(e) =>
-                              onChangeValues({ 
-                                revenue: item.revenue,
-                                multiplierrev: item.multiplierrev,
-                                expenses: item.expenses,
-                                multiplierexp: item.multiplierexp,
-                                currencyrev: e.target.value, 
-                                currencyexp: item.currencyexp,
-                              })
-                            }
-                            required
-                          >
-                          <option disabled>
-                            {" "}
-                            Choose Currency{" "}
-                          </option>
-                          <option value="usd" selected>USD</option>
-                          <option value="eur">EUR</option>
-                          <option value="cad">CAD</option>
-                          <option value="gbp">GBP</option>
-                          <option value="bhd">BHD</option>
-                          <option value="kwd">KWD</option>
-                        </select>
-                    </div>
-                    <input
-                      name="revenue"
-                      type="number"
-                      className="input w-full rounded-l-none border-slate-400"
-                      placeholder="0"
-                      value={item.revenue}
-                      onChange={(e) =>
-                        onChangeValues({
-                          revenue: e.target.value,
-                          multiplierrev: item.multiplierrev,
-                          expenses: item.expenses,
-                          multiplierexp: item.multiplierexp, 
-                          currencyrev: item.currencyrev,
-                          currencyexp: item.currencyexp,
-                        })
-                      }
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-          </div>
-
-          <div className="flex flex-col w-full gap-2">
-            <p className="font-bold">Monthly Expenses</p>
-            <div className="flex flex-col md:flex-row gap-3 md:gap-10">
-                <div className="w-full md:w-1/2">
-                  <label>Multiplier</label>
-                  <div className="flex items-center border-slate-400">
-                    <input
-                      name="multiplierexp"
-                      type="number"
-                      className="input input-bordered w-full border-slate-400"
-                      placeholder="0"
-                      value={item.multiplierexp}
-                      onChange={(e) =>
-                        onChangeValues({
-                          revenue: item.revenue,
-                          multiplierrev: item.multiplierrev,
-                          expenses: item.expenses,
-                          multiplierexp: e.target.value,
-                          currencyrev: item.currencyrev,
-                          currencyexp: item.currencyexp,             
-                        })
-                      }
-                      required
-                      max={100}
-                    />
-                  </div>
-                </div>     
-          
-                <div className="w=full md:w-1/2">
-                  <label>Monthly Expenses</label>
-                  <div className="flex items-center border-slate-400">
-                    <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                        <select
-                            className="w-11/12"
-                            value={item.currencyexp}
-                            onChange={(e) =>
-                              onChangeValues({ 
-                                revenue: item.revenue,
-                                multiplierrev: item.multiplierrev,
-                                expenses: item.expenses,
-                                multiplierexp: item.multiplierexp,
-                                currencyrev: item.currencyrev,
-                                currencyexp: e.target.value,    })
-                            }
-                            required
-                          >
-                          <option disabled>
-                            {" "}
-                            Choose Currency{" "}
-                          </option>
-                          <option value="usd" selected>USD</option>
-                          <option value="eur">EUR</option>
-                          <option value="cad">CAD</option>
-                          <option value="gbp">GBP</option>
-                          <option value="bhd">BHD</option>
-                          <option value="kwd">KWD</option>
-                        </select>
-                    </div>
-                    <input
-                      name="expenses"
-                      type="number"
-                      className="input input-bordered rounded-l-none w-full border-slate-400"
-                      placeholder="0"
-                      value={item.expenses}
-                      onChange={(e) =>
-                        onChangeValues({
-                          revenue: item.revenue,
-                          multiplierrev: item.multiplierrev,
-                          expenses: e.target.value,
-                          multiplierexp: item.multiplierexp, 
-                          currencyrev: item.currencyrev,
-                          currencyexp: item.currencyexp, 
-                        })
-                      }
-                      required
-                    />
-                  </div>
-                </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
-
 const InputAssets = ({
   isLast,
   item,
@@ -719,27 +527,51 @@ const InputAssets = ({
   handleRemoveAsset,
   isDeletedButtonVisible,
 }) => {
+
+  const onChangeInputValue = (key, value) => {
+    const currentValue = {
+      asset: item.asset, 
+      amount: item.amount, 
+      assetmultiplier: item.assetmultiplier,
+      currency: item.currency
+    }
+    currentValue[key] = value;
+    onChangeValues(currentValue)
+  }
+
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
         <div className="flex flex-col md:flex-row w-full gap-3 md:gap-10 items-center">
           <div className="w-full md:w-1/2">
             <label>Asset</label>
-            <select
-              className="input input-bordered w-full border-slate-400"
-              value={item.asset}
-              onChange={(e) =>
-                onChangeValues({ asset: e.target.value, amount: item.amount, assetmultiplier: item.assetmultiplier})
-              }
-              required
-            >
-              <option disabled selected>
-                Choose an Asset
-              </option>
-              <option value="home">Home</option>
-              <option value="investment">Investments</option>
-              <option value="business">Busines Value</option>
-            </select>
+            <div className="relative">
+              <input
+                className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none"
+                value={item.asset}
+                onChange={(e) =>
+                  onChangeInputValue("asset", e.target.value)
+                }
+                required
+              />
+              <select
+                className="input input-bordered w-full border-slate-400"
+                value={item.asset}
+                onChange={(e) =>
+                  onChangeInputValue("asset", e.target.value)
+                }
+                required
+              >
+                <option disabled selected>
+                  Choose an Asset
+                </option>
+                <option value="home">Home</option>
+                <option value="investment">Investments</option>
+                <option value="business">Busines Value</option>
+              </select>
+            </div>
+
+            
           </div>
 
           <div className="flex flex-col md:flex-row gap-3 md:gap-10 w-full md:w-1/2">
@@ -753,7 +585,7 @@ const InputAssets = ({
                   className="input w-full input-bordered border-slate-400"
                   value={item.assetmultiplier}
                   onChange={(e) =>
-                    onChangeValues({ asset: item.asset, currency: item.currency, amount: item.amount, assetmultiplier: e.target.value})
+                    onChangeInputValue("assetmultiplier", e.target.value)
                   }
                   max={100}
                 />
@@ -763,26 +595,9 @@ const InputAssets = ({
               <label>Amount</label>
               <div className="flex items-center border-slate-400 w-full items-center">
                 <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                  {/* <p className="text-center">USD</p> */}
-                  <select
-                    className="w-11/12"
-                    value={item.currency}
-                    onChange={(e) =>
-                      onChangeValues({ asset: item.asset, currency: e.target.value, amount: item.amount, assetmultiplier: item.assetmultiplier })
-                    }
-                    required
-                  >
-                      <option disabled>
-                        {" "}
-                        Choose Currency{" "}
-                      </option>
-                      <option value="usd" selected>USD</option>
-                      <option value="eur">EUR</option>
-                      <option value="cad">CAD</option>
-                      <option value="gbp">GBP</option>
-                      <option value="bhd">BHD</option>
-                      <option value="kwd">KWD</option>
-                  </select>
+                  <p className="text-center">{item.currency}</p>
+                 
+                  
                 </div>
                 <input
                   name="amount"
@@ -790,7 +605,7 @@ const InputAssets = ({
                   className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
                   onChange={(e) =>
-                    onChangeValues({ asset: item.asset, currency: item.currency, amount: e.target.value, assetmultiplier: item.assetmultiplier})
+                    onChangeInputValue("amount", e.target.value)
                   }
                   required
                 />
@@ -840,35 +655,54 @@ const InputLiabilities = ({
   handleRemoveLiability,
   isDeletedButtonVisible,
 }) => {
+
+  const onChangeInputValue = (key, value) => {
+    const currentValue = {
+      liability: item.liability, 
+      amount: item.amount, 
+      liabilitymultiplier: item.liabilitymultiplier,
+      currencyliability: item.currencyliability
+    }
+    currentValue[key] = value;
+    onChangeValues(currentValue)
+  }
+
+
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
         <div className="flex flex-col md:flex-row w-full gap-3 md:gap-10 items-center">
           <div className="w-full md:w-1/2">
             <label>Liability</label>
-            <select
-              className="input input-bordered w-full border-slate-400"
-              value={item.liability}
-              onChange={(e) =>
-                onChangeValues({
-                  liability: e.target.value,
-                  amount: item.amount,
-                  liabilitymultiplier: item.liabilitymultiplier
-                })
-              }
-              required
-            >
-              <option disabled selected>
-                Select a Liability
-              </option>
-              <option value="mortgage">Mortgage</option>
-              <option value="creditcard">Credit Card</option>
-              <option value="studentdebt">Student Debt</option>
-            </select>
+
+            <div className="relative">
+              <input
+                className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none"
+                value={item.liability}
+                onChange={(e) =>
+                  onChangeInputValue("liability", e.target.value)
+                }
+                required
+              />
+              <select
+                className="input input-bordered w-full border-slate-400"
+                value={item.liability}
+                onChange={(e) =>
+                  onChangeInputValue("liability", e.target.value)
+                }
+                required
+              >
+                <option disabled selected>
+                  Select a Liability
+                </option>
+                <option value="mortgage">Mortgage</option>
+                <option value="creditcard">Credit Card</option>
+                <option value="studentdebt">Student Debt</option>
+              </select>
+            </div>
           </div>
 
           <div className="w-full flex-col md:flex-row flex gap-3 md:gap-10 md:w-1/2">
-
             <div className="w-full md:w-1/4">
               <label>Multiplier</label>
               <div className="flex items-center border-slate-400 w-full"> 
@@ -879,7 +713,7 @@ const InputLiabilities = ({
                   className="input w-full input-bordered border-slate-400"
                   value={item.liabilitymultiplier}
                   onChange={(e) =>
-                    onChangeValues({ liability: item.liability, amount: item.amount, liabilitymultiplier: e.target.value, currencyliability: item.currencyliability })
+                    onChangeInputValue("liabilitymultiplier", e.target.value)
                   }
                   max={100}
                 />
@@ -890,26 +724,7 @@ const InputLiabilities = ({
             <label>Amount</label>
             <div className="flex items-center border-slate-400">
               <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                {/* <p className="text-center">USD</p> */}
-                  <select
-                    className="w-11/12"
-                    value={item.currencyliability}
-                    onChange={(e) =>
-                      onChangeValues({ liability: item.liability, amount: item.amount, liabilitymultiplier: item.liabilitymultiplier, currencyliability: e.target.value })
-                    }
-                    required
-                  >
-                      <option disabled>
-                        {" "}
-                        Choose Currency{" "}
-                      </option>
-                      <option value="usd" selected>USD</option>
-                      <option value="eur">EUR</option>
-                      <option value="cad">CAD</option>
-                      <option value="gbp">GBP</option>
-                      <option value="bhd">BHD</option>
-                      <option value="kwd">KWD</option>
-                  </select>
+                <p className="text-center">{item.currencyliability}</p>
               </div>
               <input
                 name="amount"
@@ -917,12 +732,7 @@ const InputLiabilities = ({
                 className="input input-bordered w-3/4 rounded-l-none border-slate-400"
                 value={item.amount}
                 onChange={(e) =>
-                  onChangeValues({
-                    liability: item.liability,
-                    amount: e.target.value,
-                    liabilitymultiplier: item.liabilitymultiplier,
-                    currencyliability: item.currencyliability,
-                  })
+                  onChangeInputValue("amount", e.target.value)
                 }
                 required
               />
@@ -956,6 +766,125 @@ const InputLiabilities = ({
             <p className="text-sm my-2 text-[#A0161B]">Add Another Liability</p>
           </div>
         )}
+      </div>
+    </>
+  );
+};
+
+const InputRevExp = ({
+  isLast,
+  item,
+  onChangeValues,
+  addNewRevExp,
+  handleRemoveRevExp,
+}) => {
+
+  const onChangeInputValue = (key, value) => {
+    const currentValue = {
+      multiplierrev: item.multiplierrev, 
+      revenue: item.revenue, 
+      currencyrev: item.currencyrev,
+      expenses: item.expenses,
+      multiplierexp: item.multiplierexp,
+      currencyexp: item.currencyexp
+    }
+    currentValue[key] = value;
+    onChangeValues(currentValue)
+  }
+
+  
+  return (
+    <>
+      <div className="flex flex-col justify-between w-full gap-4">
+        <div className="flex items-start flex-col w-full gap-10 items-center">
+          
+          <div className="flex flex-col w-full gap-2 ">
+                <p className="font-bold">Monthly Revenue</p>
+                <div className="flex flex-col md:flex-row w-full gap-3 md:gap-10">
+                  <div className="w-full md:w-1/2">
+                    <label>Multiplier</label>
+                    <div className="flex items-center border-slate-400">
+                      <input
+                        name="multiplierrev"
+                        type="number"
+                        className="input input-bordered w-full border-slate-400"
+                        placeholder="0"
+                        value={item.multiplierrev}
+                        onChange={(e) =>
+                          onChangeInputValue("multiplierrev", e.target.value)
+                        }
+                        max={100}
+                        required
+                      />
+                  </div>
+                </div>
+
+                <div className="w-full md:w-1/2">
+                  <label>Monthly Revenue</label>
+                  <div className="flex items-center border-slate-400">
+                    <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
+                      {item.currencyrev}
+                    </div>
+                    <input
+                      name="revenue"
+                      type="number"
+                      className="input w-full rounded-l-none border-slate-400"
+                      placeholder="0"
+                      value={item.revenue}
+                      onChange={(e) =>
+                        onChangeInputValue("revenue", e.target.value)
+                      }
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+          </div>
+
+          <div className="flex flex-col w-full gap-2">
+            <p className="font-bold">Monthly Expenses</p>
+            <div className="flex flex-col md:flex-row gap-3 md:gap-10">
+                <div className="w-full md:w-1/2">
+                  <label>Multiplier</label>
+                  <div className="flex items-center border-slate-400">
+                    <input
+                      name="multiplierexp"
+                      type="number"
+                      className="input input-bordered w-full border-slate-400"
+                      placeholder="0"
+                      value={item.multiplierexp}
+                      onChange={(e) =>
+                        onChangeInputValue("multiplierexp", e.target.value)
+                      }
+                      required
+                      max={100}
+                    />
+                  </div>
+                </div>     
+          
+                <div className="w=full md:w-1/2">
+                  <label>Monthly Expenses</label>
+                  <div className="flex items-center border-slate-400">
+                    <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
+                      {item.currencyexp} 
+                    </div>
+                    <input
+                      name="expenses"
+                      type="number"
+                      className="input input-bordered rounded-l-none w-full border-slate-400"
+                      placeholder="0"
+                      value={item.expenses}
+                      onChange={(e) =>
+                        onChangeInputValue("expenses", e.target.value)
+                      }
+                      required
+                    />
+                  </div>
+                </div>
+
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
@@ -1056,33 +985,35 @@ const InputOther = ({
   );
 };
 
-function PersonalForm({ setData }) {
+
+function PersonalForm({  setData }) {
   const handleSubmit = (e) => {
     e.preventDefault();
-    setData({
-      // firstName: firstName,
-      // lastName: lastName,
-      // age: age,
-      names: names,
+    setData({ 
+      names: personalDetails,
       dependents: dependents,
-      goalsData: goals,
-      
+      goalsData: goals, 
     });
-
-  
+    
+    
   };
-
   
-  const [names, setNames] = useState([
-    {
-      firstname: "",
-      lastname: "",
-      agenew: "not filled",
-      email: "",
-      contact: "",
-    },
-  ]);
-
+  
+  const [personalDetails, setpersonalDetails] = useState({
+    firstname: "",
+    lastname: "",
+    agenew: "not filled",
+    email: "",
+    contact: "",
+    currency: "USD"
+  });
+  
+  const initialGoalState =  {
+    amount: 0.0,
+    goal: "savings",
+    currency: personalDetails.currency.toUpperCase(),
+  };
+  
   const [dependents, setDependents] = useState([
     {
       firstnamedependent: "",
@@ -1091,18 +1022,14 @@ function PersonalForm({ setData }) {
       relationship: "",
     },
   ]);
-
+ 
   const [goals, setGoals] = useState([
-    {
-      amount: 0.0,
-      goal: "savings",
-      currency: "usd",
-    },
+    initialGoalState
   ]);
 
   const addNewName = () => {
-    setNames([
-      ...names,
+    setpersonalDetails([
+      ...personalDetails,
       {
         firstname: "",
         agenew: "not filled",
@@ -1122,11 +1049,11 @@ function PersonalForm({ setData }) {
   };
 
   const handleRemoveName = (index) => {
-    if (names.length !== 1) {
-      const values = [...names];
-      values.splice(index, 1);
-      setNames(values);
-    }
+    // if (names.length !== 1) {
+    //   const values = [...names];
+    //   values.splice(index, 1);
+    //   setNames(values);
+    // }
   };
 
   const handleRemoveNameDependent = (index) => {
@@ -1149,14 +1076,16 @@ function PersonalForm({ setData }) {
   const addNewGoal = () => {
     setGoals([
       ...goals,
-      {
-        amount: 0.0,
-        goal: "savings",
-        currency: "usd",
-      },
+      initialGoalState
     ]);
   };
 
+  useEffect(() => { 
+    const temporaryGoalsArray = [...goals];
+    temporaryGoalsArray.map((goal, index) =>  goal.currency = personalDetails.currency.toUpperCase());
+    setGoals(temporaryGoalsArray)
+  }, [personalDetails])
+   
   return (
    
       <div className="w-full justify-center items-center flex flex-col gap-3 ">
@@ -1167,22 +1096,16 @@ function PersonalForm({ setData }) {
               }}
               className="gap-10 flex flex-col w-5/6	md:w-full"
             >
-              {names.map((item, index) => (
-                <div key={index} className="px-0 w-full">
+              <div  className="px-0 w-full">
                   <InputNames
-                    item={item}
-                    onChangeValues={(data) => {
-                      var namesTemporary = [...names];
-                      namesTemporary[index] = data;
-                      setNames(namesTemporary);
+                    item={personalDetails}
+                    onChangeValues={(data) => { 
+                      setpersonalDetails(data);
                     }}
                     addNewName={addNewName}
-                    handleRemoveName={handleRemoveName}
-                    isDeletedButtonVisible={names.length - 1 > 0}
-                    isLast={names.length - 1 === index}
+                    handleRemoveName={handleRemoveName} 
                   />
                 </div>
-              ))}
 
             
               {goals.map((item, index) => (
@@ -1192,6 +1115,7 @@ function PersonalForm({ setData }) {
                     onChangeValues={(data) => {
                       var goalsTemporary = [...goals];
                       goalsTemporary[index] = data;
+                      console.log(goalsTemporary);
                       setGoals(goalsTemporary);
                     }}
                     addNewGoal={addNewGoal}
@@ -1235,7 +1159,14 @@ function PersonalForm({ setData }) {
   );
 }
 
-function AssetsForm({ setData, goBack }) {
+function AssetsForm({ currency, setData, goBack }) {
+  const initialAssetData = {
+    asset: "home",
+    amount: 0.0,
+    assetmultiplier: 0.0,
+    currency: currency.toUpperCase()
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setData({
@@ -1244,23 +1175,13 @@ function AssetsForm({ setData, goBack }) {
   };
 
   const [assets, setAssets] = useState([
-    {
-      asset: "home",
-      amount: 0.0,
-      assetmultiplier: 0.0,
-      currency: "usd"
-    },
+   initialAssetData
   ]);
 
   const addNewAsset = () => {
     setAssets([
       ...assets,
-      {
-        asset: "home",
-        amount: 0.0,
-        assetmultiplier: 0.0,
-        currency: "usd",
-      },
+      initialAssetData
     ]);
   };
 
@@ -1328,7 +1249,9 @@ function AssetsForm({ setData, goBack }) {
   );
 }
 
-function LiabilitiesForm({ setData, goBack }) {
+function LiabilitiesForm({ currency, setData, goBack }) {
+
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     setData({
@@ -1337,35 +1260,35 @@ function LiabilitiesForm({ setData, goBack }) {
     });
   };
 
+  const initialRevenueData = {
+    revenue: 0.0,
+    multiplierrev: 0.0,
+    expenses: 0.0,
+    multiplierexp: 0.0,
+    currencyrev: currency.toUpperCase(),
+    currencyexp: currency.toUpperCase(), 
+  };
+
   const [revexp, setRevexp] = useState([
-    {
-      revenue: 0.0,
-      multiplierrev: 0.0,
-      expenses: 0.0,
-      multiplierexp: 0.0,
-      currencyrev: "usd",
-      currencyexp: "usd",
-    },
+    initialRevenueData
   ]);
 
+
+  const initialLiabilitiesData = {
+    liability: "Mortgage",
+    amount: 0.0,
+    liabilitymultiplier: 0.0,
+    currencyliability: currency.toUpperCase()
+  };
+
   const [liabilities, setLiability] = useState([
-    {
-      liability: "Mortgage",
-      amount: 0.0,
-      liabilitymultiplier: 0.0,
-      currencyliability: "usd",
-    },
+    initialLiabilitiesData
   ]);
 
   const addNewLiability = () => {
     setLiability([
       ...liabilities,
-      {
-        liability: "Mortgage",
-        amount: 0.0,
-        liabilitymultiplier: 0.0,
-        currencyliability: "usd",
-      },
+      initialLiabilitiesData
     ]);
   };
 
@@ -1451,7 +1374,7 @@ function LiabilitiesForm({ setData, goBack }) {
   );
 }
 
-function OtherForm({ setData, goBack }) {
+function OtherForm({ currency, setData, goBack }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setData({
@@ -1546,7 +1469,7 @@ function OtherForm({ setData, goBack }) {
   );
 }
 
-function Output({ goalData, nextTab  }) {
+function Output({ currency, setData, goalData, nextTab  }) {
   const {
     firstName,
     lastName,
@@ -1561,6 +1484,8 @@ function Output({ goalData, nextTab  }) {
     liabilities,
     liabilityAmount,
   } = goalData;
+
+  
 
   const revexpSum = revexp.map((object) => {
     return Number(object.revenue) - Number(object.expenses);
@@ -1582,6 +1507,10 @@ function Output({ goalData, nextTab  }) {
     return accumulator + Number(object.expenses) * Number(object.multiplierexp);
   }, 0);
 
+
+  const totalCurrency = goalsData.map((object) => {
+    return object.currency;
+  });
 
   const goalsCurrency = goalsData.map((object) => {
     return (object.currency);
@@ -1656,22 +1585,7 @@ function Output({ goalData, nextTab  }) {
                 <p>Total Revenue:</p>
                 <p className="py-0 my-0"> 
                   {
-                    revCurrency == "usd" ? <>$</>:<></>
-                  }
-                  {
-                    revCurrency == "eur" ? <>EUR</>:<></>
-                  }
-                  {
-                    revCurrency == "cad" ? <>CAD</>:<></>
-                  }
-                  {
-                    revCurrency == "gbp" ? <>GBP</>:<></>
-                  }
-                  {
-                    revCurrency == "bhd" ? <>BHD</>:<></>
-                  }
-                  {
-                    revCurrency == "kwd" ? <>KWD</>:<></>
+                    totalCurrency
                   }
                    &nbsp;
                   {revenueSum}</p>
@@ -1681,22 +1595,7 @@ function Output({ goalData, nextTab  }) {
                 <p>Total Assets:</p>
                 <p className="py-0 my-0">
                   {
-                    assetsCurrency == "usd" ? <>$</>:<></>
-                  }
-                  {
-                    assetsCurrency == "eur" ? <>EUR</>:<></>
-                  }
-                  {
-                    assetsCurrency == "cad" ? <>CAD</>:<></>
-                  }
-                  {
-                    assetsCurrency == "gbp" ? <>GBP</>:<></>
-                  }
-                  {
-                    assetsCurrency == "bhd" ? <>BHD</>:<></>
-                  }
-                  {
-                    assetsCurrency == "kwd" ? <>KWD</>:<></>
+                    totalCurrency
                   }
                    &nbsp;
                   {assetSum}
@@ -1707,22 +1606,7 @@ function Output({ goalData, nextTab  }) {
                 <p>Total Liabilities:</p>
                 <p className="py-0 my-0"> 
                   {
-                    liabilityCurrency == "usd" ? <>$</>:<></>
-                  }
-                  {
-                    liabilityCurrency == "eur" ? <>EUR</>:<></>
-                  }
-                  {
-                    liabilityCurrency == "cad" ? <>CAD</>:<></>
-                  }
-                  {
-                    liabilityCurrency == "gbp" ? <>GBP</>:<></>
-                  }
-                  {
-                    liabilityCurrency == "bhd" ? <>BHD</>:<></>
-                  }
-                  {
-                    liabilityCurrency == "kwd" ? <>KWD</>:<></>
+                    totalCurrency
                   }
                    &nbsp;
                   {liabilitySum}</p>
@@ -1732,22 +1616,7 @@ function Output({ goalData, nextTab  }) {
                 <p>Total Expenses:</p>
                 <p className="py-0 my-0"> 
                   {
-                    expCurrency == "usd" ? <>$</>:<></>
-                  }
-                  {
-                    expCurrency == "eur" ? <>EUR</>:<></>
-                  }
-                  {
-                    expCurrency == "cad" ? <>CAD</>:<></>
-                  }
-                  {
-                    expCurrency == "gbp" ? <>GBP</>:<></>
-                  }
-                  {
-                    expCurrency == "bhd" ? <>BHD</>:<></>
-                  }
-                  {
-                    expCurrency == "kwd" ? <>KWD</>:<></>
+                    totalCurrency
                   }
                    &nbsp;
                 {expensesSum}</p>            
@@ -1822,7 +1691,7 @@ function CalculateForm({ goalData }) {
   return (
     <div className="overflow-x-auto w-80 md:w-full">
       <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
-        <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1"></div>
+        <div className="capitalize text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1 "></div>
         <div className="">1st Year</div>
         <div className="">2nd Year</div>
         <div className="">3rd Year</div>
@@ -1836,7 +1705,7 @@ function CalculateForm({ goalData }) {
       </div>
       {newAssetsData.map((assetItem) => (
         <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
-          <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1">{assetItem.asset}</div>
+          <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1 capitalize">{assetItem.asset}</div>
           <div className="py-3 ">{assetItem.year_one}</div>
           <div className="py-3">{assetItem.year_two}</div>
           <div className="py-3">{assetItem.year_three}</div>
