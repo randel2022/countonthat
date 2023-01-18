@@ -31,7 +31,7 @@
   stroke: #FFD2D2;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 767px) {
 	.w-900 {
     width: 900px !important;
   }
@@ -53,3 +53,29 @@
   text-transform: capitalize !important;
   color: red !important;
 }
+
+@media only screen and (max-width: 767px) {
+	.w-25 {
+    width: 25.5rem;
+  }
+
+  .w-900 {
+    width: 900px;
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width:1023px) {
+  .box-div {
+    width: 600px;
+  }
+
+  .w-900 {
+    width: 1100px;
+  }
+
+  .w-25 {
+    max-width: 100%;
+    width: 46rem;
+  }
+}
+

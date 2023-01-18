@@ -187,8 +187,8 @@ const InputNames = ({
           <p className="font-bold">Personal Info</p>
           <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block"></IoMdInformationCircle>
         </div>
-        <div className="flex flex-col md:flex-row w-full gap-2 md:gap-10 items-center">
-          <div className="w-full md:w-1/3">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center ">
+          <div className="w-full lg:w-1/3">
             <label>First Name</label>
             <input
               className="input input-bordered w-full border-slate-400"
@@ -200,7 +200,7 @@ const InputNames = ({
             />
           </div>
 
-          <div className="w-full md:w-1/3">
+          <div className="w-full lg:w-1/3">
             <label>Last Name</label>
             <input
               className="input input-bordered w-full border-slate-400"
@@ -212,7 +212,7 @@ const InputNames = ({
             />
           </div>
 
-          <div className="w-full md:w-1/3">
+          <div className="w-full lg:w-1/3">
             <label>Age</label>
             <input
               name="agenew"
@@ -235,8 +235,8 @@ const InputNames = ({
           )}
         </div>
 
-        <div className="flex flex-col md:flex-row justify-start gap-2 md:gap-10">
-              <div className="w-full md:w-1/3">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
+              <div className="w-full lg:w-1/3">
                 <label>Email Address</label>
                 <input
                   className="input input-bordered w-full border-slate-400"
@@ -248,7 +248,7 @@ const InputNames = ({
                 />
               </div>
 
-              <div className="w-full md:w-1/3">
+              <div className="w-full lg:w-1/3">
                 <label>Contact Number</label>
                 <input
                   className="input input-bordered w-full border-slate-400"
@@ -259,7 +259,7 @@ const InputNames = ({
                   required
                 />
               </div>  
-              <div className="w-full md:w-1/3">
+              <div className="w-full lg:w-1/3">
               <label>Currency</label>
               <div className="flex justify-center border-slate-400 input input-bordered  items-center">
                   <select
@@ -312,8 +312,8 @@ const InputGoals = ({
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col md:flex-row w-full gap-2 md:gap-10 items-center">
-          <div className="w-full md:w-1/2">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
+          <div className="w-full lg:w-1/2">
             <label>Goals</label>
             <div className="relative">
               <input
@@ -345,7 +345,7 @@ const InputGoals = ({
             
           </div>
 
-          <div className="w-full md:w-1/2">
+          <div className="w-full lg:w-1/2">
             <label>Amount</label>
             <div className="flex items-center border-slate-400">
               <div className="flex justify-center rounded-r-none w-1/3 md:w-1/4 input input-bordered border-black items-center">
@@ -411,8 +411,8 @@ const InputDependents = ({
     <>
       <div className="flex flex-col justify-between w-full gap-1">
         <p className="font-bold">Dependents</p>
-        <div className="flex flex-col md:flex-row w-full gap-2 md:gap-10 items-center">
-          <div className="w-full md:w-1/3">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
+          <div className="w-full lg:w-1/3">
             <label>First Name</label>
             <input
               className="input input-bordered w-full border-slate-400"
@@ -430,7 +430,7 @@ const InputDependents = ({
             />
           </div>
 
-          <div className="w-full md:w-1/3">
+          <div className="w-full lg:w-1/3">
             <label>Last Name</label>
             <input
               className="input input-bordered w-full border-slate-400"
@@ -448,7 +448,7 @@ const InputDependents = ({
             />
           </div>
 
-          <div className="w-full md:w-1/3">
+          <div className="w-full lg:w-1/3">
             <label>Age</label>
             <input
               name="agedependent"
@@ -476,9 +476,9 @@ const InputDependents = ({
         </div>
 
         <div className=" flex flex-col justify-start gap-10">
-              <div className="w-full md:w-1/3">
+              <div className="w-full lg:w-1/3">
                 <label>Relationship</label>
-                <div className="flex flex items-center mr-0 md:mr-6">
+                <div className="flex flex items-center mr-0 lg:mr-6">
                   <input
                     className="input input-bordered w-full border-slate-400"
                     name="relationship"
@@ -542,8 +542,8 @@ const InputAssets = ({
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col md:flex-row w-full gap-3 md:gap-10 items-center">
-          <div className="w-full md:w-1/2">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
+          <div className="w-full lg:w-1/2">
             <label>Asset</label>
             <div className="relative">
               <input
@@ -574,8 +574,8 @@ const InputAssets = ({
             
           </div>
 
-          <div className="flex flex-col md:flex-row gap-3 md:gap-10 w-full md:w-1/2">
-            <div className="w-full md:w-1/4">
+          <div className="flex flex-col lg:flex-row gap-3 lg:gap-10 w-full lg:w-1/2">
+            <div className="w-full lg:w-1/4">
               <label>Multiplier</label>
               <div className="flex items-center border-slate-400 w-full"> 
                 <input
@@ -591,7 +591,7 @@ const InputAssets = ({
                 />
               </div>
             </div>
-            <div className="w-full md:w-3/4">
+            <div className="w-full lg:w-3/4">
               <label>Amount</label>
               <div className="flex items-center border-slate-400 w-full items-center">
                 <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
@@ -611,7 +611,7 @@ const InputAssets = ({
                 />
 
                 { isDeletedButtonVisible && ( <span
-                    className="cursor-pointer block md:hidden ml-4"
+                    className="cursor-pointer block lg:hidden ml-4"
                     onClick={handleRemoveAsset}
                 >
                     <BsTrash className="text-[#A0161B]"></BsTrash>
@@ -624,7 +624,7 @@ const InputAssets = ({
 
            { isDeletedButtonVisible && (
               <span
-                className="cursor-pointer hidden md:block -mt-6 md:mt-5"
+                className="cursor-pointer hidden lg:block -mt-6 md:mt-5"
                 onClick={handleRemoveAsset}
               >
                   <BsTrash className="text-[#A0161B]"></BsTrash>
@@ -671,8 +671,8 @@ const InputLiabilities = ({
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col md:flex-row w-full gap-3 md:gap-10 items-center">
-          <div className="w-full md:w-1/2">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
+          <div className="w-full lg:w-1/2">
             <label>Liability</label>
 
             <div className="relative">
@@ -702,8 +702,8 @@ const InputLiabilities = ({
             </div>
           </div>
 
-          <div className="w-full flex-col md:flex-row flex gap-3 md:gap-10 md:w-1/2">
-            <div className="w-full md:w-1/4">
+          <div className="w-full flex-col lg:flex-row flex gap-3 lg:gap-10 lg:w-1/2">
+            <div className="w-full lg:w-1/4">
               <label>Multiplier</label>
               <div className="flex items-center border-slate-400 w-full"> 
                 <input
@@ -720,7 +720,7 @@ const InputLiabilities = ({
               </div>
             </div>
           
-            <div className="w-full md:w-3/4">
+            <div className="w-full lg:w-3/4">
             <label>Amount</label>
             <div className="flex items-center border-slate-400">
               <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
@@ -738,7 +738,7 @@ const InputLiabilities = ({
               />
 
               { isDeletedButtonVisible && (<span
-                className="cursor-pointer ml-4 block md:hidden"
+                className="cursor-pointer ml-4 block lg:hidden"
                 onClick={handleRemoveLiability}
               >
                 <BsTrash className="text-[#A0161B]"></BsTrash>
@@ -751,7 +751,7 @@ const InputLiabilities = ({
           </div>
 
           <span
-            className="cursor-pointer -mt-6 md:mt-5 hidden md:block"
+            className="cursor-pointer -mt-6 md:mt-5 hidden lg:block"
             onClick={handleRemoveLiability}
           >
             <BsTrash className="text-[#A0161B]"></BsTrash>
@@ -796,12 +796,12 @@ const InputRevExp = ({
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex items-start flex-col w-full gap-10 items-center">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-5 lg:gap-10 items-center">
           
-          <div className="flex flex-col w-full gap-2 ">
-                <p className="font-bold">Monthly Revenue</p>
-                <div className="flex flex-col md:flex-row w-full gap-3 md:gap-10">
-                  <div className="w-full md:w-1/2">
+          <div className="flex flex-col w-full gap-2">
+                <p className="font-bold mb-0 lg:mb-3">Monthly Revenue</p>
+                <div className="flex flex-col lg:flex-row w-full gap-3 lg:gap-10">
+                  <div className="w-full lg:w-1/2">
                     <label>Multiplier</label>
                     <div className="flex items-center border-slate-400">
                       <input
@@ -819,7 +819,7 @@ const InputRevExp = ({
                   </div>
                 </div>
 
-                <div className="w-full md:w-1/2">
+                <div className="w-full lg:w-1/2">
                   <label>Monthly Revenue</label>
                   <div className="flex items-center border-slate-400">
                     <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
@@ -842,9 +842,9 @@ const InputRevExp = ({
           </div>
 
           <div className="flex flex-col w-full gap-2">
-            <p className="font-bold">Monthly Expenses</p>
-            <div className="flex flex-col md:flex-row gap-3 md:gap-10">
-                <div className="w-full md:w-1/2">
+            <p className="font-bold mb-0 lg:mb-3">Monthly Expenses</p>
+            <div className="flex flex-col lg:flex-row gap-3 lg:gap-10">
+                <div className="w-full lg:w-1/2">
                   <label>Multiplier</label>
                   <div className="flex items-center border-slate-400">
                     <input
@@ -862,7 +862,7 @@ const InputRevExp = ({
                   </div>
                 </div>     
           
-                <div className="w=full md:w-1/2">
+                <div className="w=full lg:w-1/2">
                   <label>Monthly Expenses</label>
                   <div className="flex items-center border-slate-400">
                     <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
@@ -901,10 +901,10 @@ const InputOther = ({
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col md:flex-col w-full gap-3 md:gap-10 items-start">      
+        <div className="flex flex-col lg:flex-col w-full gap-3 lg:gap-10 items-start">      
           
-          <div className="w-full flex flex-col md:flex-row gap-3 md:gap-10 md:w-1/2">
-            <div className="w-full md:w-3/4">
+          <div className="w-full flex flex-col lg:flex-row gap-3 lg:gap-10 lg:w-1/2">
+            <div className="w-full lg:w-3/4">
               <label>Account title</label>
               <div className="flex items-center border-slate-400 w-full"> 
                 <input
@@ -921,7 +921,7 @@ const InputOther = ({
               </div>
             </div>
           
-            <div className="flex items-center gap-5 w-full md:w-3/4">
+            <div className="flex items-center gap-5 w-full lg:w-3/4">
             <div className="w-full">
               <label>Score</label>
               <div className="flex items-center border-slate-400">
@@ -1089,7 +1089,7 @@ function PersonalForm({  setData }) {
   return (
    
       <div className="w-full justify-center items-center flex flex-col gap-3 ">
-        <div className="w-full md:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-0 md:px-7 py-7 rounded-lg shadow-none md:shadow-md">
+        <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-0 md:px-7 py-7 rounded-lg shadow-none lg:shadow-md">
             <form
               onSubmit={(e) => {
                 handleSubmit(e);
@@ -1145,7 +1145,7 @@ function PersonalForm({  setData }) {
 
               <input
                 type="submit"
-                className="py-3 w-full md:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+                className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
                 value="Next Step"
               />
             </form>
@@ -1195,12 +1195,12 @@ function AssetsForm({ currency, setData, goBack }) {
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3 ">
-      <div className="w-full md:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-none md:shadow-md">
+      <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-none lg:shadow-md">
           <div className="w-full flex justify-between">
             <p className="font-bold text-center md:text-left">
               Assement Management
             </p>
-            <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
+            <IoMdInformationCircle className="text-2xl hidden lg:block"></IoMdInformationCircle>
           </div>
           <form
             onSubmit={(e) => {
@@ -1225,7 +1225,7 @@ function AssetsForm({ currency, setData, goBack }) {
               </div>
             ))}
 
-            <div className="flex flex-col md:flex-row justify-center md:justify-end gap-3 md:gap-12">
+            <div className="flex flex-col lg:flex-row justify-center md:justify-end gap-3 lg:gap-12">
               <div className="flex items-center cursor-pointer gap-2 justify-center" onClick={goBack}>
                 <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
                 <p className="text-[#A0161B] font-bold">Go Back</p>
@@ -1233,7 +1233,7 @@ function AssetsForm({ currency, setData, goBack }) {
 
               <input
                 type="submit"
-                className="py-3 w-full md:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-center md:self-end"
+                className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-center md:self-end"
                 value="Next Step"
               />
             </div>
@@ -1302,13 +1302,12 @@ function LiabilitiesForm({ currency, setData, goBack }) {
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
-      
-      <div className="w-full md:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-0 md:px-7 py-7 rounded-lg shadow-none md:shadow-md">
+      <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-none lg:shadow-md">
           <div className="w-full flex justify-between">
             <p className="font-bold text-center md:text-left">
               Liability Management
             </p>
-            <IoMdInformationCircle className="text-2xl hidden md:block"></IoMdInformationCircle>
+            <IoMdInformationCircle className="text-2xl hidden lg:block"></IoMdInformationCircle>
           </div>
 
           <form
@@ -1350,7 +1349,7 @@ function LiabilitiesForm({ currency, setData, goBack }) {
               </div>
             ))}
 
-            <div className="flex flex-col md:flex-row justify-end gap-3 md:gap-7">
+            <div className="flex flex-col lg:flex-row justify-end gap-3 md:gap-7">
               <div className="flex items-center justify-center cursor-pointer gap-2" onClick={goBack}>
                 <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
                 <p className="text-[#A0161B] font-bold">Go Back</p>
@@ -1358,7 +1357,7 @@ function LiabilitiesForm({ currency, setData, goBack }) {
 
               <input
                 type="submit"
-                className="py-3 w-full md:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+                className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
                 value="Next Step"
             />
             </div>
@@ -1411,16 +1410,13 @@ function OtherForm({ currency, setData, goBack }) {
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
-
-      
-      
-      <div className="w-full md:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-0 md:px-7 py-7 rounded-lg shadow-md">
+      <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-none lg:shadow-md">
 
          <div className="w-full flex justify-between px-8 md:px-0">
           <p className="font-bold text-center md:text-left">
             Others
           </p>
-          <IoMdInformationCircle className="text-2xl hidden md:block"></IoMdInformationCircle>
+          <IoMdInformationCircle className="text-2xl hidden lg:block"></IoMdInformationCircle>
         </div>
           <form
             onSubmit={(e) => {
@@ -1445,7 +1441,7 @@ function OtherForm({ currency, setData, goBack }) {
               </div>
             ))}
 
-            <div className=" w-full flex flex-col md:flex-row justify-end gap-7">
+            <div className=" w-full flex flex-col lg:flex-row justify-end gap-7">
               <div className="flex items-center justify-center cursor-pointer gap-2" onClick={goBack}>
                 <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
                 <p className="text-[#A0161B] font-bold">Go Back</p>
@@ -1453,7 +1449,7 @@ function OtherForm({ currency, setData, goBack }) {
 
               <input
                 type="submit"
-                className="py-3 w-full md:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+                className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
                 value="Next Step"
               />
             </div>
@@ -1542,15 +1538,15 @@ function Output({ currency, setData, goalData, nextTab  }) {
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
-      <div className="flex flex-col gap-5 w-5/6 md:w-3/5	">
-        <div className="flex flex-col md:flex-row gap-10">
-          <div className="px-0 flex flex-col w-full md:w-2/5 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
+      <div className="flex flex-col gap-5 w-5/6 lg:w-3/5">
+        <div className="flex flex-col lg:flex-row gap-10">
+          <div className="px-0 flex flex-col w-full lg:w-2/5 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
             <div className="flex justify-between items-center">
               <h2 className="font-bold text-xl">Realistically Towards Dream</h2>
-              <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
+              <IoMdInformationCircle className="text-2xl md:text-6xl lg:text-2xl"></IoMdInformationCircle>
             </div>
 
-            <div className="p-10 ">
+            <div className="p-10 md:p-20 lg:p-10">
               <CircularProgressbar value={percentage} text={`${percentage}%`} />
             </div>
             <div>
@@ -1558,11 +1554,11 @@ function Output({ currency, setData, goalData, nextTab  }) {
             </div>
           </div>
 
-          <div className="flex flex-col gap-7 w-full md:w-3/5">
+          <div className="flex flex-col gap-7 w-full lg:w-3/5">
             <div className="flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
               <div className="flex flex-row gap-2 justify-between">
                 <p className="font-bold">Financially Towards Dream 40%</p>
-                <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
+                <IoMdInformationCircle className="text-2xl md:text-6xl lg:text-2xl"></IoMdInformationCircle>
               </div>
 
               <div>
@@ -1579,7 +1575,7 @@ function Output({ currency, setData, goalData, nextTab  }) {
             <div className="flex flex-col gap-4 md:gap-6 shadow-gray-400 px-7 py-7 rounded-lg shadow-md h-full">
               <div className="flex justify-between">
                 <p className="font-bold">Total Calculation</p>
-                <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
+                <IoMdInformationCircle className="text-2xl md:text-6xl lg:text-2xl"></IoMdInformationCircle>
               </div>
               <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
                 <p>Total Revenue:</p>
@@ -1689,7 +1685,7 @@ function CalculateForm({ goalData }) {
   }, []);
 
   return (
-    <div className="overflow-x-auto w-80 md:w-full">
+    <div className="overflow-x-auto w-25 lg:w-full">
       <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
         <div className="capitalize text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1 "></div>
         <div className="">1st Year</div>
@@ -1761,10 +1757,10 @@ function CalculateLiabilityForm({ goalData }) {
   }, []);
 
   return (
-    <div className="overflow-x-auto w-80 md:w-full">
-      <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
+    <div className="overflow-x-auto w-25 lg:w-full">
+      <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full ">
         <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1"></div>
-        <div className="">1st Year</div>
+        <div className="">11st Year</div>
         <div className="">2nd Year</div>
         <div className="">3rd Year</div>
         <div className="">4th Year</div>
@@ -1776,7 +1772,7 @@ function CalculateLiabilityForm({ goalData }) {
         <div className="">10th Year</div>
       </div>
       {newLiabilityData.map((liabilityItem) => (
-        <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
+        <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full ">
           <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1">{liabilityItem.liability}</div>
           <div className="py-3 ">{liabilityItem.year_one}</div>
           <div className="py-3">{liabilityItem.year_two}</div>
@@ -1814,9 +1810,9 @@ function AnnualForm({ goalData }) {
   }, 1);
 
   return (
-    <div className="w-full justify-center items-center flex flex-col gap-8 ">
+    <div className="w-full justify-center items-center flex flex-col gap-8">
       <div className="flex flex-col gap-20 w-10/12">
-        <div className="flex flex-wrap flex-col justify-start items-start px:10 md:px-0 gap-3  w-full">
+        <div className="flex flex-wrap flex-col justify-start items-start px:10 md:px-0 gap-3 w-full">
           <div className="w-full flex justify-between">
             <h2 className="font-bold text-lg text-center md:text-left">
               Assets
