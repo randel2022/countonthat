@@ -182,7 +182,7 @@ const InputNames = ({
 
   return (
     <>
-      <div className="flex flex-col justify-between w-full gap-1 "> 
+      <div className="flex flex-col justify-between w-full gap-3 pb-8 border-b-g"> 
         <div className="flex justify-between">
           <p className="font-bold">Personal Info</p>
           <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block"></IoMdInformationCircle>
@@ -192,6 +192,7 @@ const InputNames = ({
             <label>First Name</label>
             <input
               className="input input-bordered w-full border-slate-400"
+              placeholder="First Name"
               name="firstname"
               type="text"
               value={item.firstname}
@@ -204,6 +205,7 @@ const InputNames = ({
             <label>Last Name</label>
             <input
               className="input input-bordered w-full border-slate-400"
+              placeholder="Last Name"
               name="lastname"
               type="text"
               value={item.lastname}
@@ -217,6 +219,7 @@ const InputNames = ({
             <input
               name="agenew"
               type="number"
+              placeholder="Age"
               className="input input-bordered w-full border-slate-400"
               value={item.agenew}
               onChange={(e) => onChangeInputValue("agenew", e.target.value)}
@@ -240,6 +243,7 @@ const InputNames = ({
                 <label>Email Address</label>
                 <input
                   className="input input-bordered w-full border-slate-400"
+                  placeholder="Email Address"
                   name="email"
                   type="email"
                   value={item.email}
@@ -251,7 +255,8 @@ const InputNames = ({
               <div className="w-full lg:w-1/3">
                 <label>Contact Number</label>
                 <input
-                  className="input input-bordered w-full border-slate-400"
+                  className="input input-bordered w-full border-slate-400 contact-field"
+                  placeholder="Contact Number"
                   name="contact"
                   type="number"
                   value={item.contact}
@@ -263,7 +268,7 @@ const InputNames = ({
               <label>Currency</label>
               <div className="flex justify-center border-slate-400 input input-bordered  items-center">
                   <select
-                    className="w-full"
+                    className="w-full focus:outline-none"
                     value={item.currency}
                     onChange={(e) => onChangeInputValue("currency", e.target.value)}
                     required
@@ -311,13 +316,13 @@ const InputGoals = ({
 
   return (
     <>
-      <div className="flex flex-col justify-between w-full gap-4">
+      <div className="flex flex-col justify-between w-full gap-4  pb-8 border-b-g">
         <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
           <div className="w-full lg:w-1/2">
-            <label>Goals</label>
+            <label className="my-3 ">Goals</label>
             <div className="relative">
               <input
-                className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none"
+                className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                 type="text"
                 value={item.goal}
                 onChange={(e) =>
@@ -355,7 +360,7 @@ const InputGoals = ({
               <input
                 name="amount"
                 type="number"
-                className="input input-bordered w-3/4 rounded-l-none border-slate-400"
+                className="input input-bordered w-3/4 rounded-l-none border-slate-400 focus:outline-none"
                 value={item.amount}
                 onChange={(e) => 
                   onChangeInputValue("amount", e.target.value) 
@@ -387,11 +392,13 @@ const InputGoals = ({
         </div>
         {isLast && (
           <div
-            className="flex items-center gap-2 cursor-pointer"
+            className="flex items-center cursor-pointer "
             onClick={addNewGoal}
           >
-            <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
-            <p className="text-sm my-2 text-[#A0161B]">Add Another Goal</p>
+            <div className="flex items-center gap-2 border-b">
+              <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
+              <p className="text-sm text-[#A0161B]">Add Another Goal</p>
+            </div>
           </div>
         )}
       </div>
@@ -409,13 +416,14 @@ const InputDependents = ({
 }) => {
   return (
     <>
-      <div className="flex flex-col justify-between w-full gap-1">
+      <div className="flex flex-col justify-between w-full gap-3">
         <p className="font-bold">Dependents</p>
         <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
           <div className="w-full lg:w-1/3">
             <label>First Name</label>
             <input
               className="input input-bordered w-full border-slate-400"
+              placeholder="First Name"
               name="firstnamedependent"
               type="text"
               value={item.firstnamedependent}
@@ -434,6 +442,7 @@ const InputDependents = ({
             <label>Last Name</label>
             <input
               className="input input-bordered w-full border-slate-400"
+              placeholder="Last Name"
               name="lastnamedependent"
               type="text"
               value={item.lastnamedependent}
@@ -453,6 +462,7 @@ const InputDependents = ({
             <input
               name="agedependent"
               type="number"
+              placeholder="Age"
               className="input input-bordered w-full border-slate-400"
               value={item.agedependent}
               onChange={(e) =>
@@ -481,6 +491,7 @@ const InputDependents = ({
                 <div className="flex flex items-center mr-0 lg:mr-6">
                   <input
                     className="input input-bordered w-full border-slate-400"
+                    placeholder="Relationship"
                     name="relationship"
                     type="text"
                     value={item.relationship}
@@ -507,11 +518,13 @@ const InputDependents = ({
 
         {isLast && (
           <div
-            className="flex items-center gap-2 cursor-pointer"
+            className="flex items-center cursor-pointer mt-2"
             onClick={addNewNameDependent}
           >
-            <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
-            <p className="text-sm my-2 text-[#A0161B]">Add Another Dependent</p>
+            <div className="flex items-center gap-2 border-b">
+              <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
+              <p className="text-sm text-[#A0161B]">Add Another Dependent</p>
+            </div>
           </div>
         )}
       </div>
@@ -547,7 +560,7 @@ const InputAssets = ({
             <label>Asset</label>
             <div className="relative">
               <input
-                className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none"
+                className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                 value={item.asset}
                 onChange={(e) =>
                   onChangeInputValue("asset", e.target.value)
@@ -639,7 +652,7 @@ const InputAssets = ({
             onClick={addNewAsset}
           >
             <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
-            <p className="text-sm my-2 text-[#A0161B]">Add Another Asset</p>
+            <p className="text-sm text-[#A0161B]">Add Another Asset</p>
           </div>
         )}
       </div>
@@ -670,14 +683,14 @@ const InputLiabilities = ({
 
   return (
     <>
-      <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
-          <div className="w-full lg:w-1/2">
-            <label>Liability</label>
+      <div className="flex flex-col justify-between w-full gap-4  pb-6">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center ">
+          <div className="w-full lg:w-1/2 ">
+            <label>Liabilities</label>
 
-            <div className="relative">
+            <div className="relative ">
               <input
-                className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none"
+                className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                 value={item.liability}
                 onChange={(e) =>
                   onChangeInputValue("liability", e.target.value)
@@ -750,12 +763,17 @@ const InputLiabilities = ({
             
           </div>
 
-          <span
-            className="cursor-pointer -mt-6 md:mt-5 hidden lg:block"
-            onClick={handleRemoveLiability}
-          >
-            <BsTrash className="text-[#A0161B]"></BsTrash>
-          </span>
+          {
+            isDeletedButtonVisible && (
+              <span
+                  className="cursor-pointer -mt-6 md:mt-5 hidden lg:block"
+                  onClick={handleRemoveLiability}
+              >
+                  <BsTrash className="text-[#A0161B]"></BsTrash>
+              </span>
+            )
+          }      
+          
         </div>
         {isLast && (
           <div
@@ -763,7 +781,7 @@ const InputLiabilities = ({
             onClick={addNewLiability}
           >
             <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
-            <p className="text-sm my-2 text-[#A0161B]">Add Another Liability</p>
+            <p className="text-sm text-[#A0161B]">Add Another Liability</p>
           </div>
         )}
       </div>
@@ -796,10 +814,10 @@ const InputRevExp = ({
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-5 lg:gap-10 items-center">
+        <div className="flex flex-col  w-full gap-2 md:gap-5 lg:gap-10 items-center">
           
-          <div className="flex flex-col w-full gap-2">
-                <p className="font-bold mb-0 lg:mb-3">Monthly Revenue</p>
+          <div className="flex flex-col w-full gap-2 pb-8 border-b-g">
+                <p className="font-bold my-0">Monthly Revenue</p>
                 <div className="flex flex-col lg:flex-row w-full gap-3 lg:gap-10">
                   <div className="w-full lg:w-1/2">
                     <label>Multiplier</label>
@@ -842,7 +860,7 @@ const InputRevExp = ({
           </div>
 
           <div className="flex flex-col w-full gap-2">
-            <p className="font-bold mb-0 lg:mb-3">Monthly Expenses</p>
+            <p className="font-bold my-0">Monthly Expenses</p>
             <div className="flex flex-col lg:flex-row gap-3 lg:gap-10">
                 <div className="w-full lg:w-1/2">
                   <label>Multiplier</label>
@@ -1149,11 +1167,13 @@ function PersonalForm({  setData }) {
                 value="Next Step"
               />
             </form>
-            <a href="/calculate" className="flex items-center gap-2">
+            
+        </div>
+
+            <a href="/calculate" className="flex items-center gap-2 mt-4">
               <img src={refresh} className="w-4 h-4"></img>
               <p className="text-[#8A8A8E]">Back to start</p>
             </a>
-        </div>
       </div>
   
   );
@@ -1239,11 +1259,13 @@ function AssetsForm({ currency, setData, goBack }) {
             </div>
           </form>
           
-          <a href="/calculate" className="flex items-center gap-2">
-            <img src={refresh} className="w-4 h-4"></img>
-            <p className="text-[#8A8A8E]">Back to start</p>
-          </a>
+          
       </div>
+
+            <a href="/calculate" className="flex items-center gap-2 mt-4">
+              <img src={refresh} className="w-4 h-4"></img>
+              <p className="text-[#8A8A8E]">Back to start</p>
+            </a>
 
     </div>
   );
@@ -1316,23 +1338,25 @@ function LiabilitiesForm({ currency, setData, goBack }) {
             }}
             className="flex flex-col w-5/6 md:w-full gap-10"
           >
-            {liabilities.map((item, index) => (
-              <div key={index} className="px-0 w-full">
-                <InputLiabilities
-                  item={item}
-                  onChangeValues={(data) => {
-                    var liabilityTemporary = [...liabilities];
-                    liabilityTemporary[index] = data;
-                    setLiability(liabilityTemporary);
-                  }}
-                  addNewLiability={addNewLiability}
-                  handleRemoveLiability={handleRemoveLiability}
-                  isLast={liabilities.length - 1 === index}
-                  isDeletedButtonVisible={liabilities.length - 1 > 0}
-                />
-              </div>
-            ))}
-
+            <div className="w-full border-b-g">
+              {liabilities.map((item, index) => (
+                <div key={index} className="px-0 w-full">
+                  <InputLiabilities
+                    item={item}
+                    onChangeValues={(data) => {
+                      var liabilityTemporary = [...liabilities];
+                      liabilityTemporary[index] = data;
+                      setLiability(liabilityTemporary);
+                    }}
+                    addNewLiability={addNewLiability}
+                    handleRemoveLiability={handleRemoveLiability}
+                    isLast={liabilities.length - 1 === index}
+                    isDeletedButtonVisible={liabilities.length - 1 > 0}
+                  />
+                </div>
+              ))}
+            </div>
+            
             {revexp.map((item, index) => (
               <div key={index} className="px-0 w-full">
                 <InputRevExp
@@ -1363,11 +1387,12 @@ function LiabilitiesForm({ currency, setData, goBack }) {
             </div>
           </form>
 
-          <a href="/calculate" className="flex items-center gap-2">
-            <img src={refresh} className="w-4 h-4"></img>
-            <p className="text-[#8A8A8E]">Back to start</p>
-          </a>
       </div>
+
+            <a href="/calculate" className="flex items-center gap-2 mt-4">
+              <img src={refresh} className="w-4 h-4"></img>
+              <p className="text-[#8A8A8E]">Back to start</p>
+            </a>
       
     </div>
   );
@@ -1455,11 +1480,13 @@ function OtherForm({ currency, setData, goBack }) {
             </div>
           </form>
 
-          <a href="/calculate" className="flex items-center gap-2">
+          
+      </div>
+
+          <a href="/calculate" className="flex items-center gap-2 mt-4">
             <img src={refresh} className="w-4 h-4"></img>
             <p className="text-[#8A8A8E]">Back to start</p>
           </a>
-      </div>
       
     </div>
   );
@@ -1635,7 +1662,7 @@ function Output({ currency, setData, goalData, nextTab  }) {
           </div>
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex justify-center mt-2">
           <a href="/calculate" className="flex text-center items-center gap-2">
             <img src={refresh} className="w-4 h-4"></img>
             <p className="text-[#8A8A8E]">Back to start</p>
@@ -1810,8 +1837,8 @@ function AnnualForm({ goalData }) {
   }, 1);
 
   return (
-    <div className="w-full justify-center items-center flex flex-col gap-8">
-      <div className="flex flex-col gap-20 w-10/12">
+    <div className="w-full justify-center items-center flex flex-col gap-8 ">
+      <div className="flex flex-col gap-20 w-10/12 ">
         <div className="flex flex-wrap flex-col justify-start items-start px:10 md:px-0 gap-3 w-full">
           <div className="w-full flex justify-between">
             <h2 className="font-bold text-lg text-center md:text-left">
