@@ -353,15 +353,18 @@ const InputGoals = ({
   addNewGoal,
   handleRemoveGoal,
   isDeletedButtonVisible,
+  goalSum,
 }) => {
   const onChangeInputValue = (key, value) => {
     console.log("onchange");
     console.log(key, value);
+
     const currentValue = {
       goal: item.goal,
       amount: item.amount,
       currency: item.currency,
     };
+
     currentValue[key] = value;
     onChangeValues(currentValue);
   };
@@ -378,6 +381,10 @@ const InputGoals = ({
     // our api to fetch the search result
     onChangeInputValue("goal", searchTerm);
   };
+
+  // var result = arr.reduce(function (acc, obj) {
+  //   return acc + obj.amount;
+  // }, 0);
 
   return (
     <>
@@ -423,7 +430,6 @@ const InputGoals = ({
                   className="input input-bordered w-full border-slate-400"
                   value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
-                  required
                 >
                   <option disabled> Choose a Goal </option>
                   <option value="savings" className="capitalize">
@@ -437,7 +443,7 @@ const InputGoals = ({
                   </option>
                 </select>
               </div>
-              <div className="dropdown absolute">
+              <div className="dropdown relative">
                 {data
                   .filter((item) => {
                     const searchTerm = value.toLowerCase();
@@ -453,7 +459,7 @@ const InputGoals = ({
                   .map((item) => (
                     <div
                       onClick={() => onSearch(item.full_name)}
-                      className="dropdown-row"
+                      className="dropdown-row absolute"
                       key={item.full_name}
                     >
                       {item.full_name}
@@ -500,12 +506,16 @@ const InputGoals = ({
         </div>
         {isLast && (
           <div
-            className="flex items-center cursor-pointer "
+            className="flex items-center justify-between cursor-pointer "
             onClick={addNewGoal}
           >
             <div className="flex items-center gap-2 border-b">
               <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
               <p className="text-sm text-[#A0161B]">Add Another Goal</p>
+            </div>
+
+            <div>
+              <p className="text-sm">Total Goal Amount: {goalSum}</p>
             </div>
           </div>
         )}
@@ -1114,6 +1124,12 @@ function PersonalForm({ setData }) {
 
   const [goals, setGoals] = useState([initialGoalState]);
 
+  const goalSum = goals.reduce((accumulator, item) => {
+    return accumulator + Number(item.amount);
+  }, 0);
+
+  console.log(goalSum);
+
   const addNewName = () => {
     setpersonalDetails([
       ...personalDetails,
@@ -1206,6 +1222,7 @@ function PersonalForm({ setData }) {
                   handleRemoveGoal={handleRemoveGoal}
                   isDeletedButtonVisible={goals.length - 1 > 0}
                   isLast={goals.length - 1 === index}
+                  goalSum={goalSum}
                 />
               </div>
             ))}
@@ -1224,6 +1241,7 @@ function PersonalForm({ setData }) {
                 handleRemoveNameDependent={handleRemoveNameDependent}
                 isDeletedButtonVisible={dependents.length - 1 > 0}
                 isLast={dependents.length - 1 === index}
+                goalSum={goalSum}
               />
             </div>
           ))}
