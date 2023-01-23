@@ -533,6 +533,182 @@ const InputGoals = ({
   );
 };
 
+const InputAssets = ({
+  isLast,
+  item,
+  onChangeValues,
+  addNewAsset,
+  handleRemoveAsset,
+  isDeletedButtonVisible,
+}) => {
+  const onChangeInputValue = (key, value) => {
+    const currentValue = {
+      asset: item.asset,
+      amount: item.amount,
+      assetmultiplier: item.assetmultiplier,
+      currency: item.currency,
+    };
+    currentValue[key] = value;
+    onChangeValues(currentValue);
+  };
+
+  const [value, setValue] = useState("");
+
+  const onChange = (event) => {
+    setValue(event.target.value);
+  };
+
+  const onSearch = (searchTerm) => {
+    console.log("search ", searchTerm);
+    setValue(searchTerm);
+    // our api to fetch the search result
+    onChangeInputValue("asset", searchTerm);
+  };
+
+  return (
+    <>
+      <div className="flex flex-col justify-between w-full gap-4">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
+          <div className="w-full lg:w-1/2">
+            <label>Asset</label>
+            {/* <div className="relative">
+              <input
+                className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
+                value={item.asset}
+                onChange={(e) => onChangeInputValue("asset", e.target.value)}
+                required
+              />
+              <select
+                className="input input-bordered w-full border-slate-400"
+                value={item.asset}
+                onChange={(e) => onChangeInputValue("asset", e.target.value)}
+                required
+              >
+                <option disabled>Choose an Asset</option>
+                <option value="home">Home</option>
+                <option value="investment">Investments</option>
+                <option value="business">Busines Value</option>
+              </select>
+            </div> */}
+            <div className="search-container relative">
+              <div className="search-inner relative">
+                <input
+                  type="text"
+                  value={value}
+                  onChange={(e) => onSearch(e.target.value)}
+                  className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
+                  placeholder="Asset"
+                />
+                <select
+                  className="input input-bordered w-full border-slate-400"
+                  value={item.asset}
+                  onChange={(e) => onSearch(e.target.value)}
+                >
+                  <option disabled> Choose a Goal </option>
+                  <option value="home" className="capitalize">
+                    Home
+                  </option>
+                  <option value="investments" className="capitalize">
+                    Investments
+                  </option>
+                  <option value="Business Value" className="capitalize">
+                    Business Value
+                  </option>
+                </select>
+              </div>
+              <div className="dropdown relative">
+                {assetsdata
+                  .filter((item) => {
+                    const searchTerm = value.toLowerCase();
+                    const fullName = item.full_name.toLowerCase();
+
+                    return (
+                      searchTerm &&
+                      fullName.startsWith(searchTerm) &&
+                      fullName !== searchTerm
+                    );
+                  })
+                  .slice(0, 10)
+                  .map((item) => (
+                    <div
+                      onClick={() => onSearch(item.full_name)}
+                      className="dropdown-row absolute"
+                      key={item.full_name}
+                    >
+                      {item.full_name}
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col lg:flex-row gap-3 lg:gap-10 w-full lg:w-1/2">
+            <div className="w-full lg:w-1/4">
+              <label>Multiplier</label>
+              <div className="flex items-center border-slate-400 w-full">
+                <input
+                  name="assetmultiplier"
+                  type="number"
+                  placeholder="0"
+                  className="input w-full input-bordered border-slate-400"
+                  value={item.assetmultiplier}
+                  onChange={(e) =>
+                    onChangeInputValue("assetmultiplier", e.target.value)
+                  }
+                  max={100}
+                />
+              </div>
+            </div>
+            <div className="w-full lg:w-3/4">
+              <label>Amount</label>
+              <div className="flex items-center border-slate-400 w-full items-center">
+                <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
+                  <p className="text-center">{item.currency}</p>
+                </div>
+                <input
+                  name="amount"
+                  type="number"
+                  className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
+                  value={item.amount}
+                  onChange={(e) => onChangeInputValue("amount", e.target.value)}
+                  required
+                />
+
+                {isDeletedButtonVisible && (
+                  <span
+                    className="cursor-pointer block lg:hidden ml-4"
+                    onClick={handleRemoveAsset}
+                  >
+                    <BsTrash className="text-[#A0161B]"></BsTrash>
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {isDeletedButtonVisible && (
+            <span
+              className="cursor-pointer hidden lg:block -mt-6 md:mt-5"
+              onClick={handleRemoveAsset}
+            >
+              <BsTrash className="text-[#A0161B]"></BsTrash>
+            </span>
+          )}
+        </div>
+        {isLast && (
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={addNewAsset}
+          >
+            <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
+            <p className="text-sm text-[#A0161B]">Add Another Asset</p>
+          </div>
+        )}
+      </div>
+    </>
+  );
+};
+
 const InputDependents = ({
   isLast,
   item,
@@ -655,119 +831,6 @@ const InputDependents = ({
   );
 };
 
-const InputAssets = ({
-  isLast,
-  item,
-  onChangeValues,
-  addNewAsset,
-  handleRemoveAsset,
-  isDeletedButtonVisible,
-}) => {
-  const onChangeInputValue = (key, value) => {
-    const currentValue = {
-      asset: item.asset,
-      amount: item.amount,
-      assetmultiplier: item.assetmultiplier,
-      currency: item.currency,
-    };
-    currentValue[key] = value;
-    onChangeValues(currentValue);
-  };
-
-  return (
-    <>
-      <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
-          <div className="w-full lg:w-1/2">
-            <label>Asset</label>
-            <div className="relative">
-              <input
-                className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
-                value={item.asset}
-                onChange={(e) => onChangeInputValue("asset", e.target.value)}
-                required
-              />
-              <select
-                className="input input-bordered w-full border-slate-400"
-                value={item.asset}
-                onChange={(e) => onChangeInputValue("asset", e.target.value)}
-                required
-              >
-                <option disabled>Choose an Asset</option>
-                <option value="home">Home</option>
-                <option value="investment">Investments</option>
-                <option value="business">Busines Value</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="flex flex-col lg:flex-row gap-3 lg:gap-10 w-full lg:w-1/2">
-            <div className="w-full lg:w-1/4">
-              <label>Multiplier</label>
-              <div className="flex items-center border-slate-400 w-full">
-                <input
-                  name="assetmultiplier"
-                  type="number"
-                  placeholder="0"
-                  className="input w-full input-bordered border-slate-400"
-                  value={item.assetmultiplier}
-                  onChange={(e) =>
-                    onChangeInputValue("assetmultiplier", e.target.value)
-                  }
-                  max={100}
-                />
-              </div>
-            </div>
-            <div className="w-full lg:w-3/4">
-              <label>Amount</label>
-              <div className="flex items-center border-slate-400 w-full items-center">
-                <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                  <p className="text-center">{item.currency}</p>
-                </div>
-                <input
-                  name="amount"
-                  type="number"
-                  className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
-                  value={item.amount}
-                  onChange={(e) => onChangeInputValue("amount", e.target.value)}
-                  required
-                />
-
-                {isDeletedButtonVisible && (
-                  <span
-                    className="cursor-pointer block lg:hidden ml-4"
-                    onClick={handleRemoveAsset}
-                  >
-                    <BsTrash className="text-[#A0161B]"></BsTrash>
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {isDeletedButtonVisible && (
-            <span
-              className="cursor-pointer hidden lg:block -mt-6 md:mt-5"
-              onClick={handleRemoveAsset}
-            >
-              <BsTrash className="text-[#A0161B]"></BsTrash>
-            </span>
-          )}
-        </div>
-        {isLast && (
-          <div
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={addNewAsset}
-          >
-            <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
-            <p className="text-sm text-[#A0161B]">Add Another Asset</p>
-          </div>
-        )}
-      </div>
-    </>
-  );
-};
-
 const InputLiabilities = ({
   isLast,
   item,
@@ -787,6 +850,19 @@ const InputLiabilities = ({
     onChangeValues(currentValue);
   };
 
+  const [value, setValue] = useState("");
+
+  const onChange = (event) => {
+    setValue(event.target.value);
+  };
+
+  const onSearch = (searchTerm) => {
+    console.log("search ", searchTerm);
+    setValue(searchTerm);
+    // our api to fetch the search result
+    onChangeInputValue("liability", searchTerm);
+  };
+
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4  pb-6">
@@ -794,7 +870,7 @@ const InputLiabilities = ({
           <div className="w-full lg:w-1/2 ">
             <label>Liabilities</label>
 
-            <div className="relative ">
+            {/* <div className="relative ">
               <input
                 className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                 value={item.liability}
@@ -816,6 +892,56 @@ const InputLiabilities = ({
                 <option value="creditcard">Credit Card</option>
                 <option value="studentdebt">Student Debt</option>
               </select>
+            </div> */}
+            <div className="search-container relative">
+              <div className="search-inner relative">
+                <input
+                  type="text"
+                  value={value}
+                  onChange={(e) => onSearch(e.target.value)}
+                  className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
+                  placeholder="Asset"
+                />
+                <select
+                  className="input input-bordered w-full border-slate-400"
+                  value={item.liability}
+                  onChange={(e) => onSearch(e.target.value)}
+                >
+                  <option disabled> Choose a Goal </option>
+                  <option value="Mortgage" className="capitalize">
+                    Mortgage
+                  </option>
+                  <option value="Credit Card" className="capitalize">
+                    Credit Card
+                  </option>
+                  <option value="Student Debt" className="capitalize">
+                    Student Debt
+                  </option>
+                </select>
+              </div>
+              <div className="dropdown relative">
+                {liabilitiesdata
+                  .filter((item) => {
+                    const searchTerm = value.toLowerCase();
+                    const fullName = item.full_name.toLowerCase();
+
+                    return (
+                      searchTerm &&
+                      fullName.startsWith(searchTerm) &&
+                      fullName !== searchTerm
+                    );
+                  })
+                  .slice(0, 10)
+                  .map((item) => (
+                    <div
+                      onClick={() => onSearch(item.full_name)}
+                      className="dropdown-row absolute"
+                      key={item.full_name}
+                    >
+                      {item.full_name}
+                    </div>
+                  ))}
+              </div>
             </div>
           </div>
 
