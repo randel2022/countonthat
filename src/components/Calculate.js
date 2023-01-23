@@ -870,29 +870,6 @@ const InputLiabilities = ({
           <div className="w-full lg:w-1/2 ">
             <label>Liabilities</label>
 
-            {/* <div className="relative ">
-              <input
-                className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
-                value={item.liability}
-                onChange={(e) =>
-                  onChangeInputValue("liability", e.target.value)
-                }
-                required
-              />
-              <select
-                className="input input-bordered w-full border-slate-400"
-                value={item.liability}
-                onChange={(e) =>
-                  onChangeInputValue("liability", e.target.value)
-                }
-                required
-              >
-                <option disabled>Select a Liability</option>
-                <option value="mortgage">Mortgage</option>
-                <option value="creditcard">Credit Card</option>
-                <option value="studentdebt">Student Debt</option>
-              </select>
-            </div> */}
             <div className="search-container relative">
               <div className="search-inner relative">
                 <input
