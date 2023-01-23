@@ -23,9 +23,9 @@ import { IoIosArrowBack } from "react-icons/io";
 import { Dropdown } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 
-import Flag from 'react-world-flags';
+import Flag from "react-world-flags";
 
-import Searchable from 'react-searchable-dropdown';
+import Searchable from "react-searchable-dropdown";
 
 import {
   Avatar,
@@ -37,8 +37,16 @@ import {
   Theme,
   Toggle,
 } from "react-daisyui";
+
 import { useQuery } from "react-query";
+
 import Calculate from "../services/calculate";
+
+var data = [
+  { full_name: "Savings" },
+  { full_name: "House" },
+  { full_name: "Luxury Car" },
+];
 
 function CalculateComponent() {
   const [selectedTab, setselectedTab] = useState(0);
@@ -47,21 +55,23 @@ function CalculateComponent() {
   const goalDataRef = useRef();
   const calculateService = new Calculate();
 
-
-  const { data, status, refetch  } = useQuery(["goalData", goalData ], () => calculateService.totalGoal(goalData), {
-    enabled: false,
-  }); 
-
+  const { data, status, refetch } = useQuery(
+    ["goalData", goalData],
+    () => calculateService.totalGoal(goalData),
+    {
+      enabled: false,
+    }
+  );
 
   const liStyle = (curIdx) => {
     var style = "";
     style = curIdx === selectedTab ? "step step-dark-red" : "step";
     style = `${style} ${
       curIdx < selectedTab ? "step-dark-red step-success" : ""
-    }`; 
+    }`;
     return style;
   };
- 
+
   return (
     <div className="flex-col relative h-auto w-full flex justify-center items-center gap-12 py-5 md:py-36">
       {selectedTab <= 3 ? (
@@ -78,9 +88,9 @@ function CalculateComponent() {
       )}
 
       {selectedTab === 0 ? (
-        <PersonalForm 
-          setData={(value) => { 
-            if (value.names && value.goalsData ) {
+        <PersonalForm
+          setData={(value) => {
+            if (value.names && value.goalsData) {
               /// if all values have data then go to next Tabs
               setselectedTab(selectedTab + 1);
               setgoalData({ ...value });
@@ -90,7 +100,7 @@ function CalculateComponent() {
       ) : selectedTab === 1 ? (
         <AssetsForm
           currency={goalData.names.currency}
-          goBack={()=> setselectedTab(selectedTab - 1)}
+          goBack={() => setselectedTab(selectedTab - 1)}
           setData={(value) => {
             if (value.assets) {
               /// if all values have data then go to next Tabs
@@ -98,9 +108,9 @@ function CalculateComponent() {
               setgoalData((previousGoalData) => ({
                 ...previousGoalData,
                 ...value,
-              })); 
+              }));
               setTimeout(() => {
-                refetch()
+                refetch();
               }, 100);
             }
           }}
@@ -108,9 +118,9 @@ function CalculateComponent() {
       ) : selectedTab === 2 ? (
         <LiabilitiesForm
           currency={goalData.names.currency}
-          goBack={()=> setselectedTab(selectedTab - 1)}
+          goBack={() => setselectedTab(selectedTab - 1)}
           setData={(value) => {
-            if (value.liabilities && value.revexp ) {
+            if (value.liabilities && value.revexp) {
               /// if all values have data then go to next Tabs
               setselectedTab(selectedTab + 1);
               setgoalData((previousGoalData) => ({
@@ -122,24 +132,23 @@ function CalculateComponent() {
         ></LiabilitiesForm>
       ) : selectedTab === 3 ? (
         <OtherForm
-          goBack={()=> setselectedTab(selectedTab - 1)}
+          goBack={() => setselectedTab(selectedTab - 1)}
           setData={(value) => {
-            if (value.other ) {
+            if (value.other) {
               /// if all values have data then go to next Tabs
               setselectedTab(selectedTab + 1);
               setgoalData((previousGoalData) => ({
                 ...previousGoalData,
                 ...value,
               }));
-
             }
           }}
         ></OtherForm>
       ) : selectedTab === 4 ? (
         <Output
           currency={goalData.names.currency}
-          nextTab={() => {  
-            setselectedTab(selectedTab + 1);  
+          nextTab={() => {
+            setselectedTab(selectedTab + 1);
           }}
           goalData={goalData}
         ></Output>
@@ -147,16 +156,12 @@ function CalculateComponent() {
         <AnnualForm goalData={goalData}></AnnualForm>
       ) : (
         <></>
-      )
-      }
+      )}
     </div>
   );
 }
 
 export default CalculateComponent;
-
-
-
 
 const InputNames = ({
   isLast,
@@ -166,7 +171,6 @@ const InputNames = ({
   isDeletedButtonVisible,
   handleRemoveName,
 }) => {
-
   const onChangeInputValue = (key, value) => {
     const currentValue = {
       firstname: item.firstName,
@@ -174,15 +178,15 @@ const InputNames = ({
       agenew: item.agenew,
       email: item.email,
       contact: item.contact,
-      currency: item.currency
-    }
+      currency: item.currency,
+    };
     currentValue[key] = value;
-    onChangeValues(currentValue)
-  }
+    onChangeValues(currentValue);
+  };
 
   return (
     <>
-      <div className="flex flex-col justify-between w-full gap-3 pb-8 border-b-g"> 
+      <div className="flex flex-col justify-between w-full gap-3 pb-8 border-b-g">
         <div className="flex justify-between">
           <p className="font-bold">Personal Info</p>
           <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block"></IoMdInformationCircle>
@@ -225,7 +229,6 @@ const InputNames = ({
               onChange={(e) => onChangeInputValue("agenew", e.target.value)}
               required
               max={99}
-              
             />
           </div>
           {isDeletedButtonVisible && (
@@ -239,59 +242,109 @@ const InputNames = ({
         </div>
 
         <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
-              <div className="w-full lg:w-1/3">
-                <label>Email Address</label>
-                <input
-                  className="input input-bordered w-full border-slate-400"
-                  placeholder="Email Address"
-                  name="email"
-                  type="email"
-                  value={item.email}
-                  onChange={(e) => onChangeInputValue("email", e.target.value)}
-                  required
-                />
-              </div>
+          <div className="w-full lg:w-1/3">
+            <label>Email Address</label>
+            <input
+              className="input input-bordered w-full border-slate-400"
+              placeholder="Email Address"
+              name="email"
+              type="email"
+              value={item.email}
+              onChange={(e) => onChangeInputValue("email", e.target.value)}
+              required
+            />
+          </div>
 
-              <div className="w-full lg:w-1/3">
-                <label>Contact Number</label>
-                <input
-                  className="input input-bordered w-full border-slate-400 contact-field"
-                  placeholder="Contact Number"
-                  name="contact"
-                  type="number"
-                  value={item.contact}
-                  onChange={(e) => onChangeInputValue("contact", e.target.value)}
-                  required
-                />
-              </div>  
-              <div className="w-full lg:w-1/3">
-              <label>Currency</label>
-              <div className="flex justify-center border-slate-400 input input-bordered  items-center">
-                  <select
-                    className="w-full focus:outline-none"
-                    value={item.currency}
-                    onChange={(e) => onChangeInputValue("currency", e.target.value)}
-                    required
-                  >
-                      <option disabled >
-                        {" "}
-                        Choose Currency{" "}
-                      </option>
-                      <option value="usd" selected>USD</option>
-                      <option value="eur"><Flag code="AFG" />EUR</option>
-                      <option value="cad">CAD</option>
-                      <option value="gbp">GBP</option>
-                      <option value="bhd">BHD</option>
-                      <option value="kwd">KWD</option>
-                  </select>             
-              </div>
-            </div>  
+          <div className="w-full lg:w-1/3">
+            <label>Contact Number</label>
+            <input
+              className="input input-bordered w-full border-slate-400 contact-field"
+              placeholder="Contact Number"
+              name="contact"
+              type="number"
+              value={item.contact}
+              onChange={(e) => onChangeInputValue("contact", e.target.value)}
+              required
+            />
+          </div>
+          <div className="w-full lg:w-1/3">
+            <label>Currency</label>
+            <div className="flex justify-center border-slate-400 input input-bordered  items-center">
+              <select
+                className="w-full focus:outline-none"
+                value={item.currency}
+                onChange={(e) => onChangeInputValue("currency", e.target.value)}
+                required
+              >
+                <option disabled> Choose Currency </option>
+                <option value="usd">USD</option>
+                <option value="eur">EUR</option>
+                <option value="cad">CAD</option>
+                <option value="gbp">GBP</option>
+                <option value="bhd">BHD</option>
+                <option value="kwd">KWD</option>
+              </select>
+            </div>
+          </div>
         </div>
-        
       </div>
     </>
   );
 };
+
+function Search() {
+  const [value, setValue] = useState("");
+
+  const onChange = (event) => {
+    setValue(event.target.value);
+  };
+
+  const onSearch = (searchTerm) => {
+    setValue(searchTerm);
+    // our api to fetch the search result
+    console.log("search ", searchTerm);
+  };
+
+  return (
+    <div className="App">
+      <p>Goals</p>
+
+      <div className="search-container relative">
+        <div className="search-inner">
+          <input
+            type="text"
+            value={value}
+            onChange={onChange}
+            className="input input-bordered w-full border-slate-400 focus:outline-none"
+          />
+        </div>
+        <div className="dropdown absolute">
+          {data
+            .filter((item) => {
+              const searchTerm = value.toLowerCase();
+              const fullName = item.full_name.toLowerCase();
+
+              return (
+                searchTerm &&
+                fullName.startsWith(searchTerm) &&
+                fullName !== searchTerm
+              );
+            })
+            .slice(0, 10)
+            .map((item) => (
+              <div
+                onClick={() => onSearch(item.full_name)}
+                className="dropdown-row"
+                key={item.full_name}
+              >
+                {item.full_name}
+              </div>
+            ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const InputGoals = ({
   isLast,
@@ -300,54 +353,114 @@ const InputGoals = ({
   addNewGoal,
   handleRemoveGoal,
   isDeletedButtonVisible,
- 
 }) => {
-
-    
   const onChangeInputValue = (key, value) => {
     console.log("onchange");
     console.log(key, value);
     const currentValue = {
-      goal: item.goal, amount: item.amount, currency: item.currency
-    }
+      goal: item.goal,
+      amount: item.amount,
+      currency: item.currency,
+    };
     currentValue[key] = value;
-    onChangeValues(currentValue)
-  }
+    onChangeValues(currentValue);
+  };
+
+  const [value, setValue] = useState("");
+
+  const onChange = (event) => {
+    setValue(event.target.value);
+  };
+
+  const onSearch = (searchTerm) => {
+    console.log("search ", searchTerm);
+    setValue(searchTerm);
+    // our api to fetch the search result
+    onChangeInputValue("goal", searchTerm);
+  };
 
   return (
     <>
-      <div className="flex flex-col justify-between w-full gap-4  pb-8 border-b-g">
+      <div className="flex flex-col justify-between w-full gap-4  ">
         <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
           <div className="w-full lg:w-1/2">
             <label className="my-3 ">Goals</label>
-            <div className="relative">
+            {/* <div className="relative">
               <input
                 className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                 type="text"
                 value={item.goal}
-                onChange={(e) =>
-                  onChangeInputValue("goal", e.target.value) 
-                }
+                onChange={(e) => onChangeInputValue("goal", e.target.value)}
                 required
               />
               <select
                 className="input input-bordered w-full border-slate-400"
                 value={item.goal}
-                onChange={(e) => 
-                  onChangeInputValue("goal", e.target.value) 
-                }
+                onChange={(e) => onChangeInputValue("goal", e.target.value)}
                 required
               >
-                <option disabled selected>
-                  {" "}
-                  Choose a Goal{" "}
+                <option disabled> Choose a Goal </option>
+                <option value="savings" className="capitalize">
+                  Savings
                 </option>
-                <option value="savings" className="capitalize">Savings</option>
-                <option value="house" className="capitalize">House</option>
-                <option value="car" className="capitalize">Luxury Car</option>
+                <option value="house" className="capitalize">
+                  House
+                </option>
+                <option value="car" className="capitalize">
+                  Luxury Car
+                </option>
               </select>
+            </div> */}
+            <div className="search-container relative">
+              <div className="search-inner relative">
+                <input
+                  type="text"
+                  value={value}
+                  onChange={(e) => onSearch(e.target.value)}
+                  className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
+                />
+                <select
+                  className="input input-bordered w-full border-slate-400"
+                  value={item.goal}
+                  onChange={(e) => onSearch(e.target.value)}
+                  required
+                >
+                  <option disabled> Choose a Goal </option>
+                  <option value="savings" className="capitalize">
+                    Savings
+                  </option>
+                  <option value="house" className="capitalize">
+                    House
+                  </option>
+                  <option value="car" className="capitalize">
+                    Luxury Car
+                  </option>
+                </select>
+              </div>
+              <div className="dropdown absolute">
+                {data
+                  .filter((item) => {
+                    const searchTerm = value.toLowerCase();
+                    const fullName = item.full_name.toLowerCase();
+
+                    return (
+                      searchTerm &&
+                      fullName.startsWith(searchTerm) &&
+                      fullName !== searchTerm
+                    );
+                  })
+                  .slice(0, 10)
+                  .map((item) => (
+                    <div
+                      onClick={() => onSearch(item.full_name)}
+                      className="dropdown-row"
+                      key={item.full_name}
+                    >
+                      {item.full_name}
+                    </div>
+                  ))}
+              </div>
             </div>
-            
           </div>
 
           <div className="w-full lg:w-1/2">
@@ -355,31 +468,26 @@ const InputGoals = ({
             <div className="flex items-center border-slate-400">
               <div className="flex justify-center rounded-r-none w-1/3 md:w-1/4 input input-bordered border-black items-center">
                 <p className="text-center">{item.currency}</p>
-                 
               </div>
               <input
                 name="amount"
                 type="number"
                 className="input input-bordered w-3/4 rounded-l-none border-slate-400 focus:outline-none"
                 value={item.amount}
-                onChange={(e) => 
-                  onChangeInputValue("amount", e.target.value) 
-                }
+                onChange={(e) => onChangeInputValue("amount", e.target.value)}
                 required
               />
 
               {isDeletedButtonVisible && (
                 <span
-                className="cursor-pointer ml-4 md:mt-5 block md:hidden"
-                onClick={handleRemoveGoal}
+                  className="cursor-pointer ml-4 md:mt-5 block md:hidden"
+                  onClick={handleRemoveGoal}
                 >
-                      <BsTrash className="text-[#A0161B]"></BsTrash>
+                  <BsTrash className="text-[#A0161B]"></BsTrash>
                 </span>
               )}
             </div>
           </div>
-
-     
 
           {isDeletedButtonVisible && (
             <span
@@ -434,7 +542,6 @@ const InputDependents = ({
                   agedependent: item.agedependent,
                 })
               }
-              
             />
           </div>
 
@@ -453,7 +560,6 @@ const InputDependents = ({
                   agedependent: item.agenewdependent,
                 })
               }
-              
             />
           </div>
 
@@ -472,7 +578,6 @@ const InputDependents = ({
                   agedependent: e.target.value,
                 })
               }
-              
             />
           </div>
           {isDeletedButtonVisible && (
@@ -486,34 +591,33 @@ const InputDependents = ({
         </div>
 
         <div className=" flex flex-col justify-start gap-10">
-              <div className="w-full lg:w-1/3">
-                <label>Relationship</label>
-                <div className="flex flex items-center mr-0 lg:mr-6">
-                  <input
-                    className="input input-bordered w-full border-slate-400"
-                    placeholder="Relationship"
-                    name="relationship"
-                    type="text"
-                    value={item.relationship}
-                    onChange={(e) =>
-                      onChangeValues({
-                        firstname: e.target.value,
-                        lastname: item.lastname,
-                        agenew: item.agenew,
-                      })
-                    }
-                  />
-                  {isDeletedButtonVisible && (
-                    <span
-                      className="cursor-pointer ml-4 md:mt-5 block md:hidden"
-                      onClick={handleRemoveNameDependent}
-                    >
-                      <BsTrash className="text-[#A0161B]"></BsTrash>
-                    </span>
-                  )}
-                </div>
-              </div>
-              
+          <div className="w-full lg:w-1/3">
+            <label>Relationship</label>
+            <div className="flex flex items-center mr-0 lg:mr-6">
+              <input
+                className="input input-bordered w-full border-slate-400"
+                placeholder="Relationship"
+                name="relationship"
+                type="text"
+                value={item.relationship}
+                onChange={(e) =>
+                  onChangeValues({
+                    firstname: e.target.value,
+                    lastname: item.lastname,
+                    agenew: item.agenew,
+                  })
+                }
+              />
+              {isDeletedButtonVisible && (
+                <span
+                  className="cursor-pointer ml-4 md:mt-5 block md:hidden"
+                  onClick={handleRemoveNameDependent}
+                >
+                  <BsTrash className="text-[#A0161B]"></BsTrash>
+                </span>
+              )}
+            </div>
+          </div>
         </div>
 
         {isLast && (
@@ -540,17 +644,16 @@ const InputAssets = ({
   handleRemoveAsset,
   isDeletedButtonVisible,
 }) => {
-
   const onChangeInputValue = (key, value) => {
     const currentValue = {
-      asset: item.asset, 
-      amount: item.amount, 
+      asset: item.asset,
+      amount: item.amount,
       assetmultiplier: item.assetmultiplier,
-      currency: item.currency
-    }
+      currency: item.currency,
+    };
     currentValue[key] = value;
-    onChangeValues(currentValue)
-  }
+    onChangeValues(currentValue);
+  };
 
   return (
     <>
@@ -562,35 +665,27 @@ const InputAssets = ({
               <input
                 className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                 value={item.asset}
-                onChange={(e) =>
-                  onChangeInputValue("asset", e.target.value)
-                }
+                onChange={(e) => onChangeInputValue("asset", e.target.value)}
                 required
               />
               <select
                 className="input input-bordered w-full border-slate-400"
                 value={item.asset}
-                onChange={(e) =>
-                  onChangeInputValue("asset", e.target.value)
-                }
+                onChange={(e) => onChangeInputValue("asset", e.target.value)}
                 required
               >
-                <option disabled selected>
-                  Choose an Asset
-                </option>
+                <option disabled>Choose an Asset</option>
                 <option value="home">Home</option>
                 <option value="investment">Investments</option>
                 <option value="business">Busines Value</option>
               </select>
             </div>
-
-            
           </div>
 
           <div className="flex flex-col lg:flex-row gap-3 lg:gap-10 w-full lg:w-1/2">
             <div className="w-full lg:w-1/4">
               <label>Multiplier</label>
-              <div className="flex items-center border-slate-400 w-full"> 
+              <div className="flex items-center border-slate-400 w-full">
                 <input
                   name="assetmultiplier"
                   type="number"
@@ -609,42 +704,36 @@ const InputAssets = ({
               <div className="flex items-center border-slate-400 w-full items-center">
                 <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
                   <p className="text-center">{item.currency}</p>
-                 
-                  
                 </div>
                 <input
                   name="amount"
                   type="number"
                   className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
-                  onChange={(e) =>
-                    onChangeInputValue("amount", e.target.value)
-                  }
+                  onChange={(e) => onChangeInputValue("amount", e.target.value)}
                   required
                 />
 
-                { isDeletedButtonVisible && ( <span
+                {isDeletedButtonVisible && (
+                  <span
                     className="cursor-pointer block lg:hidden ml-4"
                     onClick={handleRemoveAsset}
-                >
+                  >
                     <BsTrash className="text-[#A0161B]"></BsTrash>
-                </span>)
-                }
-
+                  </span>
+                )}
               </div>
             </div>
           </div>
 
-           { isDeletedButtonVisible && (
-              <span
-                className="cursor-pointer hidden lg:block -mt-6 md:mt-5"
-                onClick={handleRemoveAsset}
-              >
-                  <BsTrash className="text-[#A0161B]"></BsTrash>
-              </span>
-            )
-           }       
-          
+          {isDeletedButtonVisible && (
+            <span
+              className="cursor-pointer hidden lg:block -mt-6 md:mt-5"
+              onClick={handleRemoveAsset}
+            >
+              <BsTrash className="text-[#A0161B]"></BsTrash>
+            </span>
+          )}
         </div>
         {isLast && (
           <div
@@ -668,18 +757,16 @@ const InputLiabilities = ({
   handleRemoveLiability,
   isDeletedButtonVisible,
 }) => {
-
   const onChangeInputValue = (key, value) => {
     const currentValue = {
-      liability: item.liability, 
-      amount: item.amount, 
+      liability: item.liability,
+      amount: item.amount,
       liabilitymultiplier: item.liabilitymultiplier,
-      currencyliability: item.currencyliability
-    }
+      currencyliability: item.currencyliability,
+    };
     currentValue[key] = value;
-    onChangeValues(currentValue)
-  }
-
+    onChangeValues(currentValue);
+  };
 
   return (
     <>
@@ -705,9 +792,7 @@ const InputLiabilities = ({
                 }
                 required
               >
-                <option disabled selected>
-                  Select a Liability
-                </option>
+                <option disabled>Select a Liability</option>
                 <option value="mortgage">Mortgage</option>
                 <option value="creditcard">Credit Card</option>
                 <option value="studentdebt">Student Debt</option>
@@ -718,7 +803,7 @@ const InputLiabilities = ({
           <div className="w-full flex-col lg:flex-row flex gap-3 lg:gap-10 lg:w-1/2">
             <div className="w-full lg:w-1/4">
               <label>Multiplier</label>
-              <div className="flex items-center border-slate-400 w-full"> 
+              <div className="flex items-center border-slate-400 w-full">
                 <input
                   placeholder="0"
                   name="liabilitymultiplier"
@@ -732,48 +817,42 @@ const InputLiabilities = ({
                 />
               </div>
             </div>
-          
-            <div className="w-full lg:w-3/4">
-            <label>Amount</label>
-            <div className="flex items-center border-slate-400">
-              <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                <p className="text-center">{item.currencyliability}</p>
-              </div>
-              <input
-                name="amount"
-                type="number"
-                className="input input-bordered w-3/4 rounded-l-none border-slate-400"
-                value={item.amount}
-                onChange={(e) =>
-                  onChangeInputValue("amount", e.target.value)
-                }
-                required
-              />
 
-              { isDeletedButtonVisible && (<span
-                className="cursor-pointer ml-4 block lg:hidden"
-                onClick={handleRemoveLiability}
-              >
-                <BsTrash className="text-[#A0161B]"></BsTrash>
-              </span>)
-              }
-              
+            <div className="w-full lg:w-3/4">
+              <label>Amount</label>
+              <div className="flex items-center border-slate-400">
+                <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
+                  <p className="text-center">{item.currencyliability}</p>
+                </div>
+                <input
+                  name="amount"
+                  type="number"
+                  className="input input-bordered w-3/4 rounded-l-none border-slate-400"
+                  value={item.amount}
+                  onChange={(e) => onChangeInputValue("amount", e.target.value)}
+                  required
+                />
+
+                {isDeletedButtonVisible && (
+                  <span
+                    className="cursor-pointer ml-4 block lg:hidden"
+                    onClick={handleRemoveLiability}
+                  >
+                    <BsTrash className="text-[#A0161B]"></BsTrash>
+                  </span>
+                )}
+              </div>
             </div>
-            </div>
-            
           </div>
 
-          {
-            isDeletedButtonVisible && (
-              <span
-                  className="cursor-pointer -mt-6 md:mt-5 hidden lg:block"
-                  onClick={handleRemoveLiability}
-              >
-                  <BsTrash className="text-[#A0161B]"></BsTrash>
-              </span>
-            )
-          }      
-          
+          {isDeletedButtonVisible && (
+            <span
+              className="cursor-pointer -mt-6 md:mt-5 hidden lg:block"
+              onClick={handleRemoveLiability}
+            >
+              <BsTrash className="text-[#A0161B]"></BsTrash>
+            </span>
+          )}
         </div>
         {isLast && (
           <div
@@ -796,110 +875,106 @@ const InputRevExp = ({
   addNewRevExp,
   handleRemoveRevExp,
 }) => {
-
   const onChangeInputValue = (key, value) => {
     const currentValue = {
-      multiplierrev: item.multiplierrev, 
-      revenue: item.revenue, 
+      multiplierrev: item.multiplierrev,
+      revenue: item.revenue,
       currencyrev: item.currencyrev,
       expenses: item.expenses,
       multiplierexp: item.multiplierexp,
-      currencyexp: item.currencyexp
-    }
+      currencyexp: item.currencyexp,
+    };
     currentValue[key] = value;
-    onChangeValues(currentValue)
-  }
+    onChangeValues(currentValue);
+  };
 
-  
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
         <div className="flex flex-col  w-full gap-2 md:gap-5 lg:gap-10 items-center">
-          
           <div className="flex flex-col w-full gap-2 pb-8 border-b-g">
-                <p className="font-bold my-0">Monthly Revenue</p>
-                <div className="flex flex-col lg:flex-row w-full gap-3 lg:gap-10">
-                  <div className="w-full lg:w-1/2">
-                    <label>Multiplier</label>
-                    <div className="flex items-center border-slate-400">
-                      <input
-                        name="multiplierrev"
-                        type="number"
-                        className="input input-bordered w-full border-slate-400"
-                        placeholder="0"
-                        value={item.multiplierrev}
-                        onChange={(e) =>
-                          onChangeInputValue("multiplierrev", e.target.value)
-                        }
-                        max={100}
-                        required
-                      />
-                  </div>
-                </div>
-
-                <div className="w-full lg:w-1/2">
-                  <label>Monthly Revenue</label>
-                  <div className="flex items-center border-slate-400">
-                    <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                      {item.currencyrev}
-                    </div>
-                    <input
-                      name="revenue"
-                      type="number"
-                      className="input w-full rounded-l-none border-slate-400"
-                      placeholder="0"
-                      value={item.revenue}
-                      onChange={(e) =>
-                        onChangeInputValue("revenue", e.target.value)
-                      }
-                      required
-                    />
-                  </div>
+            <p className="font-bold my-0">Monthly Revenue</p>
+            <div className="flex flex-col lg:flex-row w-full gap-3 lg:gap-10">
+              <div className="w-full lg:w-1/2">
+                <label>Multiplier</label>
+                <div className="flex items-center border-slate-400">
+                  <input
+                    name="multiplierrev"
+                    type="number"
+                    className="input input-bordered w-full border-slate-400"
+                    placeholder="0"
+                    value={item.multiplierrev}
+                    onChange={(e) =>
+                      onChangeInputValue("multiplierrev", e.target.value)
+                    }
+                    max={100}
+                    required
+                  />
                 </div>
               </div>
+
+              <div className="w-full lg:w-1/2">
+                <label>Monthly Revenue</label>
+                <div className="flex items-center border-slate-400">
+                  <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
+                    {item.currencyrev}
+                  </div>
+                  <input
+                    name="revenue"
+                    type="number"
+                    className="input w-full rounded-l-none border-slate-400"
+                    placeholder="0"
+                    value={item.revenue}
+                    onChange={(e) =>
+                      onChangeInputValue("revenue", e.target.value)
+                    }
+                    required
+                  />
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="flex flex-col w-full gap-2">
             <p className="font-bold my-0">Monthly Expenses</p>
             <div className="flex flex-col lg:flex-row gap-3 lg:gap-10">
-                <div className="w-full lg:w-1/2">
-                  <label>Multiplier</label>
-                  <div className="flex items-center border-slate-400">
-                    <input
-                      name="multiplierexp"
-                      type="number"
-                      className="input input-bordered w-full border-slate-400"
-                      placeholder="0"
-                      value={item.multiplierexp}
-                      onChange={(e) =>
-                        onChangeInputValue("multiplierexp", e.target.value)
-                      }
-                      required
-                      max={100}
-                    />
-                  </div>
-                </div>     
-          
-                <div className="w=full lg:w-1/2">
-                  <label>Monthly Expenses</label>
-                  <div className="flex items-center border-slate-400">
-                    <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                      {item.currencyexp} 
-                    </div>
-                    <input
-                      name="expenses"
-                      type="number"
-                      className="input input-bordered rounded-l-none w-full border-slate-400"
-                      placeholder="0"
-                      value={item.expenses}
-                      onChange={(e) =>
-                        onChangeInputValue("expenses", e.target.value)
-                      }
-                      required
-                    />
-                  </div>
+              <div className="w-full lg:w-1/2">
+                <label>Multiplier</label>
+                <div className="flex items-center border-slate-400">
+                  <input
+                    name="multiplierexp"
+                    type="number"
+                    className="input input-bordered w-full border-slate-400"
+                    placeholder="0"
+                    value={item.multiplierexp}
+                    onChange={(e) =>
+                      onChangeInputValue("multiplierexp", e.target.value)
+                    }
+                    required
+                    max={100}
+                  />
                 </div>
+              </div>
 
+              <div className="w=full lg:w-1/2">
+                <label>Monthly Expenses</label>
+                <div className="flex items-center border-slate-400">
+                  <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
+                    {item.currencyexp}
+                  </div>
+                  <input
+                    name="expenses"
+                    type="number"
+                    className="input input-bordered rounded-l-none w-full border-slate-400"
+                    placeholder="0"
+                    value={item.expenses}
+                    onChange={(e) =>
+                      onChangeInputValue("expenses", e.target.value)
+                    }
+                    required
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -914,17 +989,16 @@ const InputOther = ({
   onChangeValues,
   addNewOther,
   handleRemoveOther,
-  isDeletedButtonVisible
+  isDeletedButtonVisible,
 }) => {
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col lg:flex-col w-full gap-3 lg:gap-10 items-start">      
-          
+        <div className="flex flex-col lg:flex-col w-full gap-3 lg:gap-10 items-start">
           <div className="w-full flex flex-col lg:flex-row gap-3 lg:gap-10 lg:w-1/2">
             <div className="w-full lg:w-3/4">
               <label>Account title</label>
-              <div className="flex items-center border-slate-400 w-full"> 
+              <div className="flex items-center border-slate-400 w-full">
                 <input
                   placeholder="0"
                   name="account"
@@ -932,62 +1006,63 @@ const InputOther = ({
                   className="input w-full input-bordered border-slate-400"
                   value={item.account}
                   onChange={(e) =>
-                    onChangeValues({ account: e.target.value, amount: item.amount, plan: item.plan })
-                  }
-             
-                />
-              </div>
-            </div>
-          
-            <div className="flex items-center gap-5 w-full lg:w-3/4">
-            <div className="w-full">
-              <label>Score</label>
-              <div className="flex items-center border-slate-400">
-                <input
-                  name="amount"
-                  type="number"
-                  className="input input-bordered w-full border-slate-400"
-                  value={item.amount}
-                  onChange={(e) =>
                     onChangeValues({
-                      account: item.account, amount: e.target.value, plan: item.plan
+                      account: e.target.value,
+                      amount: item.amount,
+                      plan: item.plan,
                     })
                   }
-                  required
                 />
               </div>
             </div>
-            {
-              isDeletedButtonVisible && (<span
-                className="cursor-pointer "
-                onClick={handleRemoveOther}
-              >
+
+            <div className="flex items-center gap-5 w-full lg:w-3/4">
+              <div className="w-full">
+                <label>Score</label>
+                <div className="flex items-center border-slate-400">
+                  <input
+                    name="amount"
+                    type="number"
+                    className="input input-bordered w-full border-slate-400"
+                    value={item.amount}
+                    onChange={(e) =>
+                      onChangeValues({
+                        account: item.account,
+                        amount: e.target.value,
+                        plan: item.plan,
+                      })
+                    }
+                    required
+                  />
+                </div>
+              </div>
+              {isDeletedButtonVisible && (
+                <span className="cursor-pointer " onClick={handleRemoveOther}>
                   <BsTrash className="text-[#A0161B]"></BsTrash>
-              </span>)
-            }
-              
+                </span>
+              )}
             </div>
-            
           </div>
 
           <div className="w-full">
-              <label>Plan</label>
-              <div className="flex items-center border-slate-400 w-full"> 
-                <input
-                  placeholder="Write your plan"
-                  name="plan"
-                  type="text"
-                  className="input w-full input-bordered border-slate-400"
-                  value={item.plan}
-                  onChange={(e) =>
-                    onChangeValues({ account: item.account, amount: item.amount, plan: e.target.value })
-                  }
-             
-                />
-              </div>
+            <label>Plan</label>
+            <div className="flex items-center border-slate-400 w-full">
+              <input
+                placeholder="Write your plan"
+                name="plan"
+                type="text"
+                className="input w-full input-bordered border-slate-400"
+                value={item.plan}
+                onChange={(e) =>
+                  onChangeValues({
+                    account: item.account,
+                    amount: item.amount,
+                    plan: e.target.value,
+                  })
+                }
+              />
+            </div>
           </div>
-
-          
         </div>
         {isLast && (
           <div
@@ -1003,35 +1078,31 @@ const InputOther = ({
   );
 };
 
-
-function PersonalForm({  setData }) {
+function PersonalForm({ setData }) {
   const handleSubmit = (e) => {
     e.preventDefault();
-    setData({ 
+    setData({
       names: personalDetails,
       dependents: dependents,
-      goalsData: goals, 
+      goalsData: goals,
     });
-    
-    
   };
-  
-  
+
   const [personalDetails, setpersonalDetails] = useState({
     firstname: "",
     lastname: "",
     agenew: "not filled",
     email: "",
     contact: "",
-    currency: "USD"
+    currency: "USD",
   });
-  
-  const initialGoalState =  {
+
+  const initialGoalState = {
     amount: 0.0,
     goal: "savings",
     currency: personalDetails.currency.toUpperCase(),
   };
-  
+
   const [dependents, setDependents] = useState([
     {
       firstnamedependent: "",
@@ -1040,10 +1111,8 @@ function PersonalForm({  setData }) {
       relationship: "",
     },
   ]);
- 
-  const [goals, setGoals] = useState([
-    initialGoalState
-  ]);
+
+  const [goals, setGoals] = useState([initialGoalState]);
 
   const addNewName = () => {
     setpersonalDetails([
@@ -1061,7 +1130,6 @@ function PersonalForm({  setData }) {
       {
         firstnamedependent: "",
         agedependent: "not filled",
-    
       },
     ]);
   };
@@ -1092,90 +1160,87 @@ function PersonalForm({  setData }) {
   };
 
   const addNewGoal = () => {
-    setGoals([
-      ...goals,
-      initialGoalState
-    ]);
+    setGoals([...goals, initialGoalState]);
   };
 
-  useEffect(() => { 
+  useEffect(() => {
     const temporaryGoalsArray = [...goals];
-    temporaryGoalsArray.map((goal, index) =>  goal.currency = personalDetails.currency.toUpperCase());
-    setGoals(temporaryGoalsArray)
-  }, [personalDetails])
-   
+    temporaryGoalsArray.map(
+      (goal, index) => (goal.currency = personalDetails.currency.toUpperCase())
+    );
+    setGoals(temporaryGoalsArray);
+  }, [personalDetails]);
+
   return (
-   
-      <div className="w-full justify-center items-center flex flex-col gap-3 ">
-        <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-0 md:px-7 py-7 rounded-lg shadow-none lg:shadow-md">
-            <form
-              onSubmit={(e) => {
-                handleSubmit(e);
+    <div className="w-full justify-center items-center flex flex-col gap-3 ">
+      <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-0 md:px-7 py-7 rounded-lg shadow-none lg:shadow-md">
+        <form
+          onSubmit={(e) => {
+            handleSubmit(e);
+          }}
+          className="gap-10 flex flex-col w-5/6	md:w-full"
+        >
+          <div className="px-0 w-full">
+            <InputNames
+              item={personalDetails}
+              onChangeValues={(data) => {
+                setpersonalDetails(data);
               }}
-              className="gap-10 flex flex-col w-5/6	md:w-full"
-            >
-              <div  className="px-0 w-full">
-                  <InputNames
-                    item={personalDetails}
-                    onChangeValues={(data) => { 
-                      setpersonalDetails(data);
-                    }}
-                    addNewName={addNewName}
-                    handleRemoveName={handleRemoveName} 
-                  />
-                </div>
+              addNewName={addNewName}
+              handleRemoveName={handleRemoveName}
+            />
+          </div>
 
-            
-              {goals.map((item, index) => (
-                <div key={index} className="px-0 w-full">
-                  <InputGoals
-                    item={item}
-                    onChangeValues={(data) => {
-                      var goalsTemporary = [...goals];
-                      goalsTemporary[index] = data;
-                      console.log(goalsTemporary);
-                      setGoals(goalsTemporary);
-                    }}
-                    addNewGoal={addNewGoal}
-                    handleRemoveGoal={handleRemoveGoal}
-                    isDeletedButtonVisible={goals.length - 1 > 0}
-                    isLast={goals.length - 1 === index}
-                  />
-                </div>
-              ))}
+          <div className="w-full pb-6 border-b-g">
+            {goals.map((item, index) => (
+              <div key={index} className="px-0 w-full mb-3">
+                <InputGoals
+                  item={item}
+                  onChangeValues={(data) => {
+                    var goalsTemporary = [...goals];
+                    goalsTemporary[index] = data;
+                    console.log(goalsTemporary);
+                    setGoals(goalsTemporary);
+                  }}
+                  addNewGoal={addNewGoal}
+                  handleRemoveGoal={handleRemoveGoal}
+                  isDeletedButtonVisible={goals.length - 1 > 0}
+                  isLast={goals.length - 1 === index}
+                />
+              </div>
+            ))}
+          </div>
 
-              {dependents.map((item, index) => (
-                <div key={index} className="px-0 w-full">
-                  <InputDependents
-                    item={item}
-                    onChangeValues={(data) => {
-                      var dependentsTemporary = [...dependents];
-                      dependentsTemporary[index] = data;
-                      setDependents(dependentsTemporary);
-                    }}
-                    addNewNameDependent={addNewNameDependent}
-                    handleRemoveNameDependent={handleRemoveNameDependent}
-                    isDeletedButtonVisible={dependents.length - 1 > 0}
-                    isLast={dependents.length - 1 === index}
-                  />
-                </div>
-              ))}
-
-              <input
-                type="submit"
-                className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
-                value="Next Step"
+          {dependents.map((item, index) => (
+            <div key={index} className="px-0 w-full">
+              <InputDependents
+                item={item}
+                onChangeValues={(data) => {
+                  var dependentsTemporary = [...dependents];
+                  dependentsTemporary[index] = data;
+                  setDependents(dependentsTemporary);
+                }}
+                addNewNameDependent={addNewNameDependent}
+                handleRemoveNameDependent={handleRemoveNameDependent}
+                isDeletedButtonVisible={dependents.length - 1 > 0}
+                isLast={dependents.length - 1 === index}
               />
-            </form>
-            
-        </div>
+            </div>
+          ))}
 
-            <a href="/calculate" className="flex items-center gap-2 mt-4">
-              <img src={refresh} className="w-4 h-4"></img>
-              <p className="text-[#8A8A8E]">Back to start</p>
-            </a>
+          <input
+            type="submit"
+            className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+            value="Next Step"
+          />
+        </form>
       </div>
-  
+
+      <a href="/calculate" className="flex items-center gap-2 mt-4">
+        <img src={refresh} className="w-4 h-4"></img>
+        <p className="text-[#8A8A8E]">Back to start</p>
+      </a>
+    </div>
   );
 }
 
@@ -1184,7 +1249,7 @@ function AssetsForm({ currency, setData, goBack }) {
     asset: "home",
     amount: 0.0,
     assetmultiplier: 0.0,
-    currency: currency.toUpperCase()
+    currency: currency.toUpperCase(),
   };
 
   const handleSubmit = (e) => {
@@ -1194,15 +1259,10 @@ function AssetsForm({ currency, setData, goBack }) {
     });
   };
 
-  const [assets, setAssets] = useState([
-   initialAssetData
-  ]);
+  const [assets, setAssets] = useState([initialAssetData]);
 
   const addNewAsset = () => {
-    setAssets([
-      ...assets,
-      initialAssetData
-    ]);
+    setAssets([...assets, initialAssetData]);
   };
 
   const handleRemoveAsset = (index) => {
@@ -1216,64 +1276,62 @@ function AssetsForm({ currency, setData, goBack }) {
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3 ">
       <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-none lg:shadow-md">
-          <div className="w-full flex justify-between">
-            <p className="font-bold text-center md:text-left">
-              Assement Management
-            </p>
-            <IoMdInformationCircle className="text-2xl hidden lg:block"></IoMdInformationCircle>
-          </div>
-          <form
-            onSubmit={(e) => {
-              handleSubmit(e);
-            }}
-            className="flex flex-col gap-10 w-full"
-          >
-            {assets.map((item, index) => (
-              <div key={index} className="px-0 w-full">
-                <InputAssets
-                  item={item}
-                  onChangeValues={(data) => {
-                    var assetsTemporary = [...assets];
-                    assetsTemporary[index] = data;
-                    setAssets(assetsTemporary);
-                  }}
-                  addNewAsset={addNewAsset}
-                  handleRemoveAsset={handleRemoveAsset}
-                  isLast={assets.length - 1 === index}
-                  isDeletedButtonVisible={assets.length - 1 > 0}
-                />
-              </div>
-            ))}
-
-            <div className="flex flex-col lg:flex-row justify-center md:justify-end gap-3 lg:gap-12">
-              <div className="flex items-center cursor-pointer gap-2 justify-center" onClick={goBack}>
-                <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
-                <p className="text-[#A0161B] font-bold">Go Back</p>
-              </div>
-
-              <input
-                type="submit"
-                className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-center md:self-end"
-                value="Next Step"
+        <div className="w-full flex justify-between">
+          <p className="font-bold text-center md:text-left">
+            Assement Management
+          </p>
+          <IoMdInformationCircle className="text-2xl hidden lg:block"></IoMdInformationCircle>
+        </div>
+        <form
+          onSubmit={(e) => {
+            handleSubmit(e);
+          }}
+          className="flex flex-col gap-10 w-full"
+        >
+          {assets.map((item, index) => (
+            <div key={index} className="px-0 w-full">
+              <InputAssets
+                item={item}
+                onChangeValues={(data) => {
+                  var assetsTemporary = [...assets];
+                  assetsTemporary[index] = data;
+                  setAssets(assetsTemporary);
+                }}
+                addNewAsset={addNewAsset}
+                handleRemoveAsset={handleRemoveAsset}
+                isLast={assets.length - 1 === index}
+                isDeletedButtonVisible={assets.length - 1 > 0}
               />
             </div>
-          </form>
-          
-          
+          ))}
+
+          <div className="flex flex-col lg:flex-row justify-center md:justify-end gap-3 lg:gap-12">
+            <div
+              className="flex items-center cursor-pointer gap-2 justify-center"
+              onClick={goBack}
+            >
+              <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
+              <p className="text-[#A0161B] font-bold">Go Back</p>
+            </div>
+
+            <input
+              type="submit"
+              className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-center md:self-end"
+              value="Next Step"
+            />
+          </div>
+        </form>
       </div>
 
-            <a href="/calculate" className="flex items-center gap-2 mt-4">
-              <img src={refresh} className="w-4 h-4"></img>
-              <p className="text-[#8A8A8E]">Back to start</p>
-            </a>
-
+      <a href="/calculate" className="flex items-center gap-2 mt-4">
+        <img src={refresh} className="w-4 h-4"></img>
+        <p className="text-[#8A8A8E]">Back to start</p>
+      </a>
     </div>
   );
 }
 
 function LiabilitiesForm({ currency, setData, goBack }) {
-
-  
   const handleSubmit = (e) => {
     e.preventDefault();
     setData({
@@ -1288,30 +1346,22 @@ function LiabilitiesForm({ currency, setData, goBack }) {
     expenses: 0.0,
     multiplierexp: 0.0,
     currencyrev: currency.toUpperCase(),
-    currencyexp: currency.toUpperCase(), 
+    currencyexp: currency.toUpperCase(),
   };
 
-  const [revexp, setRevexp] = useState([
-    initialRevenueData
-  ]);
-
+  const [revexp, setRevexp] = useState([initialRevenueData]);
 
   const initialLiabilitiesData = {
     liability: "Mortgage",
     amount: 0.0,
     liabilitymultiplier: 0.0,
-    currencyliability: currency.toUpperCase()
+    currencyliability: currency.toUpperCase(),
   };
 
-  const [liabilities, setLiability] = useState([
-    initialLiabilitiesData
-  ]);
+  const [liabilities, setLiability] = useState([initialLiabilitiesData]);
 
   const addNewLiability = () => {
-    setLiability([
-      ...liabilities,
-      initialLiabilitiesData
-    ]);
+    setLiability([...liabilities, initialLiabilitiesData]);
   };
 
   const handleRemoveLiability = (index) => {
@@ -1325,75 +1375,76 @@ function LiabilitiesForm({ currency, setData, goBack }) {
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
       <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-none lg:shadow-md">
-          <div className="w-full flex justify-between">
-            <p className="font-bold text-center md:text-left">
-              Liability Management
-            </p>
-            <IoMdInformationCircle className="text-2xl hidden lg:block"></IoMdInformationCircle>
-          </div>
+        <div className="w-full flex justify-between">
+          <p className="font-bold text-center md:text-left">
+            Liability Management
+          </p>
+          <IoMdInformationCircle className="text-2xl hidden lg:block"></IoMdInformationCircle>
+        </div>
 
-          <form
-            onSubmit={(e) => {
-              handleSubmit(e);
-            }}
-            className="flex flex-col w-5/6 md:w-full gap-10"
-          >
-            <div className="w-full border-b-g">
-              {liabilities.map((item, index) => (
-                <div key={index} className="px-0 w-full">
-                  <InputLiabilities
-                    item={item}
-                    onChangeValues={(data) => {
-                      var liabilityTemporary = [...liabilities];
-                      liabilityTemporary[index] = data;
-                      setLiability(liabilityTemporary);
-                    }}
-                    addNewLiability={addNewLiability}
-                    handleRemoveLiability={handleRemoveLiability}
-                    isLast={liabilities.length - 1 === index}
-                    isDeletedButtonVisible={liabilities.length - 1 > 0}
-                  />
-                </div>
-              ))}
-            </div>
-            
-            {revexp.map((item, index) => (
+        <form
+          onSubmit={(e) => {
+            handleSubmit(e);
+          }}
+          className="flex flex-col w-5/6 md:w-full gap-10"
+        >
+          <div className="w-full border-b-g">
+            {liabilities.map((item, index) => (
               <div key={index} className="px-0 w-full">
-                <InputRevExp
+                <InputLiabilities
                   item={item}
                   onChangeValues={(data) => {
-                    var namesTemporary = [...revexp];
-                    namesTemporary[index] = data;
-                    setRevexp(namesTemporary);
+                    var liabilityTemporary = [...liabilities];
+                    liabilityTemporary[index] = data;
+                    setLiability(liabilityTemporary);
                   }}
-                  // addNewRevExp={addNewRevExp}
-                  // handleRemoveRevExp={handleRemoveRevExp}
-                  isLast={revexp.length - 1 === index}
+                  addNewLiability={addNewLiability}
+                  handleRemoveLiability={handleRemoveLiability}
+                  isLast={liabilities.length - 1 === index}
+                  isDeletedButtonVisible={liabilities.length - 1 > 0}
                 />
               </div>
             ))}
+          </div>
 
-            <div className="flex flex-col lg:flex-row justify-end gap-3 md:gap-7">
-              <div className="flex items-center justify-center cursor-pointer gap-2" onClick={goBack}>
-                <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
-                <p className="text-[#A0161B] font-bold">Go Back</p>
-              </div>
-
-              <input
-                type="submit"
-                className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
-                value="Next Step"
-            />
+          {revexp.map((item, index) => (
+            <div key={index} className="px-0 w-full">
+              <InputRevExp
+                item={item}
+                onChangeValues={(data) => {
+                  var namesTemporary = [...revexp];
+                  namesTemporary[index] = data;
+                  setRevexp(namesTemporary);
+                }}
+                // addNewRevExp={addNewRevExp}
+                // handleRemoveRevExp={handleRemoveRevExp}
+                isLast={revexp.length - 1 === index}
+              />
             </div>
-          </form>
+          ))}
 
+          <div className="flex flex-col lg:flex-row justify-end gap-3 md:gap-7">
+            <div
+              className="flex items-center justify-center cursor-pointer gap-2"
+              onClick={goBack}
+            >
+              <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
+              <p className="text-[#A0161B] font-bold">Go Back</p>
+            </div>
+
+            <input
+              type="submit"
+              className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+              value="Next Step"
+            />
+          </div>
+        </form>
       </div>
 
-            <a href="/calculate" className="flex items-center gap-2 mt-4">
-              <img src={refresh} className="w-4 h-4"></img>
-              <p className="text-[#8A8A8E]">Back to start</p>
-            </a>
-      
+      <a href="/calculate" className="flex items-center gap-2 mt-4">
+        <img src={refresh} className="w-4 h-4"></img>
+        <p className="text-[#8A8A8E]">Back to start</p>
+      </a>
     </div>
   );
 }
@@ -1436,63 +1487,60 @@ function OtherForm({ currency, setData, goBack }) {
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
       <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-none lg:shadow-md">
-
-         <div className="w-full flex justify-between px-8 md:px-0">
-          <p className="font-bold text-center md:text-left">
-            Others
-          </p>
+        <div className="w-full flex justify-between px-8 md:px-0">
+          <p className="font-bold text-center md:text-left">Others</p>
           <IoMdInformationCircle className="text-2xl hidden lg:block"></IoMdInformationCircle>
         </div>
-          <form
-            onSubmit={(e) => {
-              handleSubmit(e);
-            }}
-            className="flex flex-col w-5/6 md:w-full gap-10"
-          >
-            {other.map((item, index) => (
-              <div key={index} className="px-0 w-full">
-                <InputOther
-                  item={item}
-                  onChangeValues={(data) => {
-                    var otherTemporary = [...other];
-                    otherTemporary[index] = data;
-                    setOther(otherTemporary);
-                  }}
-                  addNewOther={addNewOther}
-                  handleRemoveOther={handleRemoveOther}
-                  isLast={other.length - 1 === index}
-                  isDeletedButtonVisible={other.length - 1 > 0}
-                />
-              </div>
-            ))}
-
-            <div className=" w-full flex flex-col lg:flex-row justify-end gap-7">
-              <div className="flex items-center justify-center cursor-pointer gap-2" onClick={goBack}>
-                <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
-                <p className="text-[#A0161B] font-bold">Go Back</p>
-              </div>
-
-              <input
-                type="submit"
-                className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
-                value="Next Step"
+        <form
+          onSubmit={(e) => {
+            handleSubmit(e);
+          }}
+          className="flex flex-col w-5/6 md:w-full gap-10"
+        >
+          {other.map((item, index) => (
+            <div key={index} className="px-0 w-full">
+              <InputOther
+                item={item}
+                onChangeValues={(data) => {
+                  var otherTemporary = [...other];
+                  otherTemporary[index] = data;
+                  setOther(otherTemporary);
+                }}
+                addNewOther={addNewOther}
+                handleRemoveOther={handleRemoveOther}
+                isLast={other.length - 1 === index}
+                isDeletedButtonVisible={other.length - 1 > 0}
               />
             </div>
-          </form>
+          ))}
 
-          
+          <div className=" w-full flex flex-col lg:flex-row justify-end gap-7">
+            <div
+              className="flex items-center justify-center cursor-pointer gap-2"
+              onClick={goBack}
+            >
+              <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
+              <p className="text-[#A0161B] font-bold">Go Back</p>
+            </div>
+
+            <input
+              type="submit"
+              className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+              value="Next Step"
+            />
+          </div>
+        </form>
       </div>
 
-          <a href="/calculate" className="flex items-center gap-2 mt-4">
-            <img src={refresh} className="w-4 h-4"></img>
-            <p className="text-[#8A8A8E]">Back to start</p>
-          </a>
-      
+      <a href="/calculate" className="flex items-center gap-2 mt-4">
+        <img src={refresh} className="w-4 h-4"></img>
+        <p className="text-[#8A8A8E]">Back to start</p>
+      </a>
     </div>
   );
 }
 
-function Output({ currency, setData, goalData, nextTab  }) {
+function Output({ currency, setData, goalData, nextTab }) {
   const {
     firstName,
     lastName,
@@ -1508,8 +1556,6 @@ function Output({ currency, setData, goalData, nextTab  }) {
     liabilityAmount,
   } = goalData;
 
-  
-
   const revexpSum = revexp.map((object) => {
     return Number(object.revenue) - Number(object.expenses);
   });
@@ -1519,7 +1565,9 @@ function Output({ currency, setData, goalData, nextTab  }) {
   }, 0);
 
   const liabilitySum = liabilities.reduce((accumulator, object) => {
-    return accumulator + Number(object.amount) * Number(object.liabilitymultiplier);
+    return (
+      accumulator + Number(object.amount) * Number(object.liabilitymultiplier)
+    );
   }, 0);
 
   const revenueSum = revexp.map((object) => {
@@ -1530,31 +1578,29 @@ function Output({ currency, setData, goalData, nextTab  }) {
     return accumulator + Number(object.expenses) * Number(object.multiplierexp);
   }, 0);
 
-
   const totalCurrency = goalsData.map((object) => {
     return object.currency;
   });
 
   const goalsCurrency = goalsData.map((object) => {
-    return (object.currency);
+    return object.currency;
   });
 
   const assetsCurrency = assets.map((object) => {
-    return (object.currency);
+    return object.currency;
   });
 
   const liabilityCurrency = liabilities.map((object) => {
-    return (object.currencyliability);
+    return object.currencyliability;
   });
 
   const revCurrency = revexp.map((object) => {
-    return (object.currencyrev);
+    return object.currencyrev;
   });
 
   const expCurrency = revexp.map((object) => {
-    return (object.currencyexp);
+    return object.currencyexp;
   });
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -1577,7 +1623,11 @@ function Output({ currency, setData, goalData, nextTab  }) {
               <CircularProgressbar value={percentage} text={`${percentage}%`} />
             </div>
             <div>
-              <p>Lorem ipsum dolor sit amet consectetur. Turpis massa tincidunt non quam gravida porttitor sem nulla. Morbi venenatis imperdiet at vitae lectus pellentesque nisl ultricies mattis.</p>
+              <p>
+                Lorem ipsum dolor sit amet consectetur. Turpis massa tincidunt
+                non quam gravida porttitor sem nulla. Morbi venenatis imperdiet
+                at vitae lectus pellentesque nisl ultricies mattis.
+              </p>
             </div>
           </div>
 
@@ -1606,43 +1656,38 @@ function Output({ currency, setData, goalData, nextTab  }) {
               </div>
               <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
                 <p>Total Revenue:</p>
-                <p className="py-0 my-0"> 
-                  {
-                    totalCurrency
-                  }
-                   &nbsp;
-                  {revenueSum}</p>
+                <p className="py-0 my-0">
+                  {totalCurrency}
+                  &nbsp;
+                  {revenueSum}
+                </p>
               </div>
 
               <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
                 <p>Total Assets:</p>
                 <p className="py-0 my-0">
-                  {
-                    totalCurrency
-                  }
-                   &nbsp;
+                  {totalCurrency}
+                  &nbsp;
                   {assetSum}
                 </p>
               </div>
 
               <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
                 <p>Total Liabilities:</p>
-                <p className="py-0 my-0"> 
-                  {
-                    totalCurrency
-                  }
-                   &nbsp;
-                  {liabilitySum}</p>
+                <p className="py-0 my-0">
+                  {totalCurrency}
+                  &nbsp;
+                  {liabilitySum}
+                </p>
               </div>
 
               <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
                 <p>Total Expenses:</p>
-                <p className="py-0 my-0"> 
-                  {
-                    totalCurrency
-                  }
-                   &nbsp;
-                {expensesSum}</p>            
+                <p className="py-0 my-0">
+                  {totalCurrency}
+                  &nbsp;
+                  {expensesSum}
+                </p>
               </div>
 
               <form
@@ -1658,7 +1703,6 @@ function Output({ currency, setData, goalData, nextTab  }) {
                 />
               </form>
             </div>
-            
           </div>
         </div>
 
@@ -1695,16 +1739,16 @@ function CalculateForm({ goalData }) {
     goalData.assets.map((assetItem) => {
       temporaryAssetsData.push({
         ...assetItem,
-        year_one: (assetItem.amount * assetItem.assetmultiplier)* 1,
-        year_two: (assetItem.amount * assetItem.assetmultiplier) * 2,
-        year_three: (assetItem.amount * assetItem.assetmultiplier) * 3,
-        year_four: (assetItem.amount * assetItem.assetmultiplier) * 4,
-        year_five: (assetItem.amount * assetItem.assetmultiplier) * 5,
-        year_six: (assetItem.amount * assetItem.assetmultiplier) * 6,
-        year_seven: (assetItem.amount * assetItem.assetmultiplier) * 7,
-        year_eight: (assetItem.amount * assetItem.assetmultiplier) * 8,
-        year_nine: (assetItem.amount * assetItem.assetmultiplier) * 9,
-        year_ten: (assetItem.amount * assetItem.assetmultiplier) * 10,
+        year_one: assetItem.amount * assetItem.assetmultiplier * 1,
+        year_two: assetItem.amount * assetItem.assetmultiplier * 2,
+        year_three: assetItem.amount * assetItem.assetmultiplier * 3,
+        year_four: assetItem.amount * assetItem.assetmultiplier * 4,
+        year_five: assetItem.amount * assetItem.assetmultiplier * 5,
+        year_six: assetItem.amount * assetItem.assetmultiplier * 6,
+        year_seven: assetItem.amount * assetItem.assetmultiplier * 7,
+        year_eight: assetItem.amount * assetItem.assetmultiplier * 8,
+        year_nine: assetItem.amount * assetItem.assetmultiplier * 9,
+        year_ten: assetItem.amount * assetItem.assetmultiplier * 10,
       });
     });
     console.log(temporaryAssetsData);
@@ -1728,7 +1772,9 @@ function CalculateForm({ goalData }) {
       </div>
       {newAssetsData.map((assetItem) => (
         <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
-          <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1 capitalize">{assetItem.asset}</div>
+          <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1 capitalize">
+            {assetItem.asset}
+          </div>
           <div className="py-3 ">{assetItem.year_one}</div>
           <div className="py-3">{assetItem.year_two}</div>
           <div className="py-3">{assetItem.year_three}</div>
@@ -1767,16 +1813,19 @@ function CalculateLiabilityForm({ goalData }) {
     goalData.liabilities.map((liabilityItem) => {
       temporaryLiabilitiesData.push({
         ...liabilityItem,
-        year_one: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 1,
-        year_two: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 2,
-        year_three: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 3,
-        year_four: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 4,
-        year_five: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 5,
-        year_six: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 6,
-        year_seven: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 7,
-        year_eight: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 8,
-        year_nine: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 9,
-        year_ten: (liabilityItem.amount *liabilityItem. liabilitymultiplier) * 10,
+        year_one: liabilityItem.amount * liabilityItem.liabilitymultiplier * 1,
+        year_two: liabilityItem.amount * liabilityItem.liabilitymultiplier * 2,
+        year_three:
+          liabilityItem.amount * liabilityItem.liabilitymultiplier * 3,
+        year_four: liabilityItem.amount * liabilityItem.liabilitymultiplier * 4,
+        year_five: liabilityItem.amount * liabilityItem.liabilitymultiplier * 5,
+        year_six: liabilityItem.amount * liabilityItem.liabilitymultiplier * 6,
+        year_seven:
+          liabilityItem.amount * liabilityItem.liabilitymultiplier * 7,
+        year_eight:
+          liabilityItem.amount * liabilityItem.liabilitymultiplier * 8,
+        year_nine: liabilityItem.amount * liabilityItem.liabilitymultiplier * 9,
+        year_ten: liabilityItem.amount * liabilityItem.liabilitymultiplier * 10,
       });
     });
 
@@ -1800,7 +1849,9 @@ function CalculateLiabilityForm({ goalData }) {
       </div>
       {newLiabilityData.map((liabilityItem) => (
         <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
-          <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1">{liabilityItem.liability}</div>
+          <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1">
+            {liabilityItem.liability}
+          </div>
           <div className="py-3 ">{liabilityItem.year_one}</div>
           <div className="py-3">{liabilityItem.year_two}</div>
           <div className="py-3">{liabilityItem.year_three}</div>
