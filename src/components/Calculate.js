@@ -382,10 +382,6 @@ const InputGoals = ({
     onChangeInputValue("goal", searchTerm);
   };
 
-  // var result = arr.reduce(function (acc, obj) {
-  //   return acc + obj.amount;
-  // }, 0);
-
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4  ">
@@ -1942,15 +1938,6 @@ function AnnualForm({ goalData }) {
             </div>
           </div>
         </div>
-
-        {/* <div>
-          <p>Year 3</p>
-          <p>investment: {investmentYearly}</p>
-        </div>
-        <div>
-          <p>Year 3</p>
-          <p>Home: {homeYearly}</p>
-        </div> */}
       </div>
       <div className="flex justify-center">
         <a href="/calculate" className="flex text-center items-center gap-2">
