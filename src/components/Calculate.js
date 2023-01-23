@@ -900,7 +900,7 @@ const InputLiabilities = ({
                   value={value}
                   onChange={(e) => onSearch(e.target.value)}
                   className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
-                  placeholder="Asset"
+                  placeholder="Liability"
                 />
                 <select
                   className="input input-bordered w-full border-slate-400"
