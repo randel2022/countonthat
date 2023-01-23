@@ -48,6 +48,18 @@ var data = [
   { full_name: "Luxury Car" },
 ];
 
+var assetsdata = [
+  { full_name: "Home" },
+  { full_name: "Investments" },
+  { full_name: "Business Value" },
+];
+
+var liabilitiesdata = [
+  { full_name: "Mortgage" },
+  { full_name: "Credit Card" },
+  { full_name: "Student Debt" },
+];
+
 function CalculateComponent() {
   const [selectedTab, setselectedTab] = useState(0);
   const [goalData, setgoalData] = useState({});
@@ -421,6 +433,7 @@ const InputGoals = ({
                   value={value}
                   onChange={(e) => onSearch(e.target.value)}
                   className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
+                  placeholder="Goal"
                 />
                 <select
                   className="input input-bordered w-full border-slate-400"
@@ -1105,7 +1118,7 @@ function PersonalForm({ setData }) {
 
   const initialGoalState = {
     amount: 0.0,
-    goal: "savings",
+    goal: "",
     currency: personalDetails.currency.toUpperCase(),
   };
 
@@ -1592,9 +1605,7 @@ function Output({ currency, setData, goalData, nextTab }) {
     return accumulator + Number(object.expenses) * Number(object.multiplierexp);
   }, 0);
 
-  const totalCurrency = goalsData.map((object) => {
-    return object.currency;
-  });
+  const totalCurrency = goalsData[0].currency;
 
   const goalsCurrency = goalsData.map((object) => {
     return object.currency;
