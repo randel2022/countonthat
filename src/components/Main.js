@@ -247,75 +247,49 @@ function Main() {
         </a>
       </div>
 
-      {/* <form
-        className="flex flex-col items-center gap-10 rounded-md py-5 px-5 shadow-lg mainbox fadeInDown"
-        onSubmit={handleSubmit}
-      >
-        <div className="flex flex-col flex-wrap justify-center items-center px-0 w-full">
-          {inputNameFields.map((item, index) => (
-            <div key={index} className="px-0 w-full">
-              <InputNames
-                inputNameFields={inputNameFields}
-                index={index}
-                item={item}
-                handleChangeName={handleChangeName}
-                handleAddName={handleAddName}
-                handleRemoveName={handleRemoveName}
-              />
-            </div>
-          ))}
-        </div>
-
-        <div className="flex flex-col flex-wrap justify-center items-center px-0 w-full">
-          {inputFields.map((item, index) => (
-            <div key={index} className="px-0 w-full">
-              <InputRow
-                inputFields={inputFields}
-                index={index}
-                item={item}
-                handleAdd={handleAdd}
-                handleRemove={handleRemove}
-              />
-            </div>
-          ))}
-        </div>
-
-        <button
-          className="py-3 px-12 self-start rounded-md bg-[#A0161B] text-white cursor-default"
-          // href="/assets"
-        >
-          Next Step
-        </button>
-      </form> */}
-      <div className="bg-[#A0161B] rounded-md">
+      <div className="bg-[#A0161B] rounded-md lg:mx-24">
         <img src={hero}></img>
       </div>
 
       <div className="flex flex-col w-full md:w-3/4 gap-14">
-          <h2 className="text-5xl font-bold">How it works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 w-full gap-7">
-                <div className="flex flex-col items-start gap-3 pr-0 md:pr-32">
-                  <img src={personal} className="w-12 md:w-16"></img>
-                  <h3 className="font-bold text-lg md:text-2xl">Personal Info Assement</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
-                </div>
-                <div className="flex flex-col items-start gap-3 pr-0 md:pr-32">
-                  <img src={asset} className="w-12 md:w-16"></img>
-                  <h3 className="font-bold text-lg md:text-2xl">Asset Info Assement</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
-                </div>
-                <div className="flex flex-col items-start gap-3 pr-0 md:pr-32">
-                  <img src={asset} className="w-12 md:w-16"></img>
-                  <h3 className="font-bold text-lg md:text-2xl">Liability Info Assement</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
-                </div>
+        <h2 className="text-5xl font-bold">How it works</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 w-full gap-7">
+          <div className="flex flex-col items-start gap-3 pr-0 md:pr-32">
+            <img src={personal} className="w-12 md:w-16"></img>
+            <h3 className="font-bold text-lg md:text-2xl">
+              Personal Info Assement
+            </h3>
+            <p>
+              Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
+              commodo ligula eget dolor.
+            </p>
           </div>
+          <div className="flex flex-col items-start gap-3 pr-0 md:pr-32">
+            <img src={asset} className="w-12 md:w-16"></img>
+            <h3 className="font-bold text-lg md:text-2xl">
+              Asset Info Assement
+            </h3>
+            <p>
+              Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
+              commodo ligula eget dolor.
+            </p>
+          </div>
+          <div className="flex flex-col items-start gap-3 pr-0 md:pr-32">
+            <img src={asset} className="w-12 md:w-16"></img>
+            <h3 className="font-bold text-lg md:text-2xl">
+              Liability Info Assement
+            </h3>
+            <p>
+              Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
+              commodo ligula eget dolor.
+            </p>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 w-full md:w-3/4">
         <div className="flex flex-col justify-center px-5 gap-4">
           <div>
-           
             <h2 className="text-2xl md:text-5xl font-bold">
               Personal Information <br></br>Assessment
             </h2>
@@ -326,22 +300,21 @@ function Main() {
             viverra ornare, eros dolor interdum nulla, ut commodo diam libero
             vitae erat.
           </p>
-        
         </div>
         <div className="">
           <img src={step1}></img>
         </div>
       </div>
       <div className="flex flex-col-reverse md:grid col-start-1 grid-cols-1 md:grid-cols-2 w-full md:w-3/4">
-        
         <div className="">
           <img src={step2}></img>
         </div>
 
         <div className="flex flex-col justify-center px-5 gap-4">
           <div>
-        
-            <h2 className="text-2xl md:text-5xl font-bold">Asset Information Assessment</h2>
+            <h2 className="text-2xl md:text-5xl font-bold">
+              Asset Information Assessment
+            </h2>
           </div>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
@@ -349,13 +322,11 @@ function Main() {
             viverra ornare, eros dolor interdum nulla, ut commodo diam libero
             vitae erat.
           </p>
-         
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 w-full md:w-3/4">
         <div className="flex flex-col justify-center px-5 gap-4">
           <div>
-
             <h2 className="text-2xl md:text-5xl font-bold">
               Liabilities Information Assessment
             </h2>
@@ -366,24 +337,19 @@ function Main() {
             viverra ornare, eros dolor interdum nulla, ut commodo diam libero
             vitae erat.
           </p>
-         
         </div>
         <div className="">
           <img src={step3}></img>
         </div>
       </div>
       <div className="flex flex-col-reverse md:grid grid-cols-1 md:grid-cols-2 w-full md:w-3/4">
-        
         <div className="">
           <img src={step4}></img>
         </div>
 
         <div className="flex flex-col justify-center px-5 gap-4">
           <div>
-        
-            <h2 className="text-2xl md:text-5xl font-bold">
-              Calculated Dream
-            </h2>
+            <h2 className="text-2xl md:text-5xl font-bold">Calculated Dream</h2>
           </div>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
@@ -391,7 +357,6 @@ function Main() {
             viverra ornare, eros dolor interdum nulla, ut commodo diam libero
             vitae erat.
           </p>
-         
         </div>
       </div>
     </div>
