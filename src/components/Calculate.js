@@ -385,7 +385,7 @@ const InputGoals = ({
         <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
           <div className="w-full lg:w-1/2">
             <label className="my-3 ">Goals</label>
-            {/* <div className="relative">
+            <div className="relative">
               <input
                 className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                 type="text"
@@ -410,56 +410,6 @@ const InputGoals = ({
                   Luxury Car
                 </option>
               </select>
-            </div> */}
-            <div className="search-container relative">
-              <div className="search-inner relative">
-                <input
-                  type="text"
-                  value={value}
-                  onChange={(e) => onSearch(e.target.value)}
-                  className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
-                />
-                <select
-                  className="input input-bordered w-full border-slate-400"
-                  value={item.goal}
-                  onChange={(e) => onSearch(e.target.value)}
-                  required
-                >
-                  <option disabled> Choose a Goal </option>
-                  <option value="savings" className="capitalize">
-                    Savings
-                  </option>
-                  <option value="house" className="capitalize">
-                    House
-                  </option>
-                  <option value="car" className="capitalize">
-                    Luxury Car
-                  </option>
-                </select>
-              </div>
-              <div className="dropdown absolute">
-                {data
-                  .filter((item) => {
-                    const searchTerm = value.toLowerCase();
-                    const fullName = item.full_name.toLowerCase();
-
-                    return (
-                      searchTerm &&
-                      fullName.startsWith(searchTerm) &&
-                      fullName !== searchTerm
-                    );
-                  })
-                  .slice(0, 10)
-                  .map((item) => (
-                    <div
-                      onClick={() => onSearch(item.full_name)}
-                      className="dropdown-row"
-                      key={item.full_name}
-                    >
-                      {item.full_name}
-                    </div>
-                  ))}
-              </div>
             </div>
           </div>
 
@@ -509,6 +459,57 @@ const InputGoals = ({
             </div>
           </div>
         )}
+
+        <div className="search-container relative">
+          <div className="search-inner">
+            <input
+              type="text"
+              value={value}
+              onChange={onChange}
+              className="input input-bordered w-full border-slate-400 focus:outline-none"
+            />
+          </div>
+          <div className="dropdown absolute">
+            {data
+              .filter((item) => {
+                const searchTerm = value.toLowerCase();
+                const fullName = item.full_name.toLowerCase();
+
+                return (
+                  searchTerm &&
+                  fullName.startsWith(searchTerm) &&
+                  fullName !== searchTerm
+                );
+              })
+              .slice(0, 10)
+              .map((item) => (
+                <div
+                  onClick={() => onSearch(item.full_name)}
+                  className="dropdown-row"
+                  key={item.full_name}
+                >
+                  {item.full_name}
+                </div>
+              ))}
+            <select
+              className="input input-bordered w-full border-slate-400"
+              value={item.goal}
+              onChange={(e) => onSearch(e.target.value)}
+              required
+            >
+              <option disabled> Choose a Goal </option>
+              <option value="savings" className="capitalize">
+                Savings
+              </option>
+              <option value="house" className="capitalize">
+                House
+              </option>
+              <option value="car" className="capitalize">
+                Luxury Car
+              </option>
+            </select>
+          </div>
+        </div>
       </div>
     </>
   );
