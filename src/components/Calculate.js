@@ -201,7 +201,30 @@ const InputNames = ({
       <div className="flex flex-col justify-between w-full gap-3 pb-8 border-b-g">
         <div className="flex justify-between">
           <p className="font-bold">Personal Info</p>
-          <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block"></IoMdInformationCircle>
+          <label htmlFor="my-modal-3" className="">
+            <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
+          </label>
+        </div>
+
+        <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box relative">
+            <label
+              htmlFor="my-modal-3"
+              className="btn btn-sm btn-circle absolute right-2 top-2"
+            >
+              ✕
+            </label>
+            <h3 className="text-lg font-bold text-center">
+              Lorem ipsum dolor sit amet
+            </h3>
+            <p className="py-4 text-center">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat.
+            </p>
+          </div>
         </div>
         <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center ">
           <div className="w-full lg:w-1/3">
@@ -241,6 +264,10 @@ const InputNames = ({
               onChange={(e) => onChangeInputValue("agenew", e.target.value)}
               required
               max={99}
+              min={1}
+              onKeyDown={(e) =>
+                ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+              }
             />
           </div>
           {isDeletedButtonVisible && (
@@ -394,20 +421,15 @@ const InputGoals = ({
     onChangeInputValue("goal", searchTerm);
   };
 
+  console.log(value);
+
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4  ">
         <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
           <div className="w-full lg:w-1/2">
             <label className="my-3 ">Goals</label>
-            <div className="relative">
-              <input
-                className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
-                type="text"
-                value={item.goal}
-                onChange={(e) => onChangeInputValue("goal", e.target.value)}
-                required
-              />
+            {/* <div className="relative">
               <select
                 className="input input-bordered w-full border-slate-400"
                 value={item.goal}
@@ -425,8 +447,6 @@ const InputGoals = ({
                   Luxury Car
                 </option>
               </select>
-<<<<<<< HEAD
-=======
             </div> */}
             <div className="search-container relative">
               <div className="search-inner relative">
@@ -439,10 +459,13 @@ const InputGoals = ({
                 />
                 <select
                   className="input input-bordered w-full border-slate-400"
-                  value={item.goal}
+                  value={value}
                   onChange={(e) => onSearch(e.target.value)}
                 >
-                  <option disabled> Choose a Goal </option>
+                  <option value="" disabled>
+                    {" "}
+                    Choose a Goal{" "}
+                  </option>
                   <option value="savings" className="capitalize">
                     Savings
                   </option>
@@ -477,7 +500,6 @@ const InputGoals = ({
                     </div>
                   ))}
               </div>
->>>>>>> 3004f6b8802bbf046d97d6095c4c942891e5783a
             </div>
           </div>
 
@@ -494,6 +516,9 @@ const InputGoals = ({
                 value={item.amount}
                 onChange={(e) => onChangeInputValue("amount", e.target.value)}
                 required
+                onKeyDown={(e) =>
+                  ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                }
               />
 
               {isDeletedButtonVisible && (
@@ -574,25 +599,7 @@ const InputAssets = ({
         <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
           <div className="w-full lg:w-1/2">
             <label>Asset</label>
-            {/* <div className="relative">
-              <input
-                className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
-                value={item.asset}
-                onChange={(e) => onChangeInputValue("asset", e.target.value)}
-                required
-              />
-              <select
-                className="input input-bordered w-full border-slate-400"
-                value={item.asset}
-                onChange={(e) => onChangeInputValue("asset", e.target.value)}
-                required
-              >
-                <option disabled>Choose an Asset</option>
-                <option value="home">Home</option>
-                <option value="investment">Investments</option>
-                <option value="business">Busines Value</option>
-              </select>
-            </div> */}
+
             <div className="search-container relative">
               <div className="search-inner relative">
                 <input
@@ -607,7 +614,10 @@ const InputAssets = ({
                   value={item.asset}
                   onChange={(e) => onSearch(e.target.value)}
                 >
-                  <option disabled> Choose a Goal </option>
+                  <option disabled value="">
+                    {" "}
+                    Choose a Goal{" "}
+                  </option>
                   <option value="home" className="capitalize">
                     Home
                   </option>
@@ -659,6 +669,10 @@ const InputAssets = ({
                     onChangeInputValue("assetmultiplier", e.target.value)
                   }
                   max={100}
+                  min={0}
+                  onKeyDown={(e) =>
+                    ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                  }
                 />
               </div>
             </div>
@@ -675,6 +689,10 @@ const InputAssets = ({
                   value={item.amount}
                   onChange={(e) => onChangeInputValue("amount", e.target.value)}
                   required
+                  min={0}
+                  onKeyDown={(e) =>
+                    ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                  }
                 />
 
                 {isDeletedButtonVisible && (
@@ -707,57 +725,6 @@ const InputAssets = ({
             <p className="text-sm text-[#A0161B]">Add Another Asset</p>
           </div>
         )}
-
-        <div className="search-container relative">
-          <div className="search-inner">
-            <input
-              type="text"
-              value={value}
-              onChange={onChange}
-              className="input input-bordered w-full border-slate-400 focus:outline-none"
-            />
-          </div>
-          <div className="dropdown absolute">
-            {data
-              .filter((item) => {
-                const searchTerm = value.toLowerCase();
-                const fullName = item.full_name.toLowerCase();
-
-                return (
-                  searchTerm &&
-                  fullName.startsWith(searchTerm) &&
-                  fullName !== searchTerm
-                );
-              })
-              .slice(0, 10)
-              .map((item) => (
-                <div
-                  onClick={() => onSearch(item.full_name)}
-                  className="dropdown-row"
-                  key={item.full_name}
-                >
-                  {item.full_name}
-                </div>
-              ))}
-            <select
-              className="input input-bordered w-full border-slate-400"
-              value={item.goal}
-              onChange={(e) => onSearch(e.target.value)}
-              required
-            >
-              <option disabled> Choose a Goal </option>
-              <option value="savings" className="capitalize">
-                Savings
-              </option>
-              <option value="house" className="capitalize">
-                House
-              </option>
-              <option value="car" className="capitalize">
-                Luxury Car
-              </option>
-            </select>
-          </div>
-        </div>
       </div>
     </>
   );
@@ -826,6 +793,9 @@ const InputDependents = ({
                   lastnamedependent: item.lastnamedependent,
                   agedependent: e.target.value,
                 })
+              }
+              onKeyDown={(e) =>
+                ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
               }
             />
           </div>
@@ -938,7 +908,10 @@ const InputLiabilities = ({
                   value={item.liability}
                   onChange={(e) => onSearch(e.target.value)}
                 >
-                  <option disabled> Choose a Goal </option>
+                  <option value="" disabled>
+                    {" "}
+                    Choose a Goal{" "}
+                  </option>
                   <option value="Mortgage" className="capitalize">
                     Mortgage
                   </option>
@@ -990,6 +963,10 @@ const InputLiabilities = ({
                     onChangeInputValue("liabilitymultiplier", e.target.value)
                   }
                   max={100}
+                  min={0}
+                  onKeyDown={(e) =>
+                    ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                  }
                 />
               </div>
             </div>
@@ -1007,6 +984,10 @@ const InputLiabilities = ({
                   value={item.amount}
                   onChange={(e) => onChangeInputValue("amount", e.target.value)}
                   required
+                  min={0}
+                  onKeyDown={(e) =>
+                    ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                  }
                 />
 
                 {isDeletedButtonVisible && (
@@ -1084,7 +1065,10 @@ const InputRevExp = ({
                       onChangeInputValue("multiplierrev", e.target.value)
                     }
                     max={100}
-                    required
+                    min={0}
+                    onKeyDown={(e) =>
+                      ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                    }
                   />
                 </div>
               </div>
@@ -1104,7 +1088,10 @@ const InputRevExp = ({
                     onChange={(e) =>
                       onChangeInputValue("revenue", e.target.value)
                     }
-                    required
+                    min={0}
+                    onKeyDown={(e) =>
+                      ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                    }
                   />
                 </div>
               </div>
@@ -1126,8 +1113,11 @@ const InputRevExp = ({
                     onChange={(e) =>
                       onChangeInputValue("multiplierexp", e.target.value)
                     }
-                    required
                     max={100}
+                    min={0}
+                    onKeyDown={(e) =>
+                      ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                    }
                   />
                 </div>
               </div>
@@ -1148,6 +1138,10 @@ const InputRevExp = ({
                       onChangeInputValue("expenses", e.target.value)
                     }
                     required
+                    min={0}
+                    onKeyDown={(e) =>
+                      ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                    }
                   />
                 </div>
               </div>
@@ -1176,7 +1170,6 @@ const InputOther = ({
               <label>Account title</label>
               <div className="flex items-center border-slate-400 w-full">
                 <input
-                  placeholder="0"
                   name="account"
                   type="text"
                   className="input w-full input-bordered border-slate-400"
@@ -1208,7 +1201,9 @@ const InputOther = ({
                         plan: item.plan,
                       })
                     }
-                    required
+                    onKeyDown={(e) =>
+                      ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                    }
                   />
                 </div>
               </div>
@@ -1430,7 +1425,7 @@ function PersonalForm({ setData }) {
 
 function AssetsForm({ currency, setData, goBack }) {
   const initialAssetData = {
-    asset: "home",
+    asset: "",
     amount: 0.0,
     assetmultiplier: 0.0,
     currency: currency.toUpperCase(),
@@ -1464,8 +1459,33 @@ function AssetsForm({ currency, setData, goBack }) {
           <p className="font-bold text-center md:text-left">
             Assement Management
           </p>
-          <IoMdInformationCircle className="text-2xl hidden lg:block"></IoMdInformationCircle>
+
+          <label htmlFor="my-modal-3">
+            <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
+          </label>
         </div>
+
+        <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box relative">
+            <label
+              htmlFor="my-modal-3"
+              className="btn btn-sm btn-circle absolute right-2 top-2"
+            >
+              ✕
+            </label>
+            <h3 className="text-lg font-bold text-center">
+              Lorem ipsum dolor sit amet
+            </h3>
+            <p className="py-4 text-center">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat.
+            </p>
+          </div>
+        </div>
+
         <form
           onSubmit={(e) => {
             handleSubmit(e);
@@ -1536,7 +1556,7 @@ function LiabilitiesForm({ currency, setData, goBack }) {
   const [revexp, setRevexp] = useState([initialRevenueData]);
 
   const initialLiabilitiesData = {
-    liability: "Mortgage",
+    liability: "",
     amount: 0.0,
     liabilitymultiplier: 0.0,
     currencyliability: currency.toUpperCase(),
@@ -1563,7 +1583,30 @@ function LiabilitiesForm({ currency, setData, goBack }) {
           <p className="font-bold text-center md:text-left">
             Liability Management
           </p>
-          <IoMdInformationCircle className="text-2xl hidden lg:block"></IoMdInformationCircle>
+          <label htmlFor="my-modal-3" className="">
+            <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
+          </label>
+        </div>
+
+        <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box relative">
+            <label
+              htmlFor="my-modal-3"
+              className="btn btn-sm btn-circle absolute right-2 top-2"
+            >
+              ✕
+            </label>
+            <h3 className="text-lg font-bold text-center">
+              Lorem ipsum dolor sit amet
+            </h3>
+            <p className="py-4 text-center">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat.
+            </p>
+          </div>
         </div>
 
         <form
@@ -1673,8 +1716,32 @@ function OtherForm({ currency, setData, goBack }) {
       <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-none lg:shadow-md">
         <div className="w-full flex justify-between px-8 md:px-0">
           <p className="font-bold text-center md:text-left">Others</p>
-          <IoMdInformationCircle className="text-2xl hidden lg:block"></IoMdInformationCircle>
+          <label htmlFor="my-modal-3" className="">
+            <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
+          </label>
         </div>
+
+        <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box relative">
+            <label
+              htmlFor="my-modal-3"
+              className="btn btn-sm btn-circle absolute right-2 top-2"
+            >
+              ✕
+            </label>
+            <h3 className="text-lg font-bold text-center">
+              Lorem ipsum dolor sit amet
+            </h3>
+            <p className="py-4 text-center">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat.
+            </p>
+          </div>
+        </div>
+
         <form
           onSubmit={(e) => {
             handleSubmit(e);
@@ -1796,9 +1863,38 @@ function Output({ currency, setData, goalData, nextTab }) {
       <div className="flex flex-col gap-5 w-5/6 lg:w-3/5">
         <div className="flex flex-col lg:flex-row gap-10">
           <div className="px-0 flex flex-col w-full lg:w-2/5 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
-            <div className="flex justify-between items-center">
-              <h2 className="font-bold text-xl">Realistically Towards Dream</h2>
-              <IoMdInformationCircle className="text-2xl md:text-6xl lg:text-2xl"></IoMdInformationCircle>
+            <div className="flex justify-between py-0 ">
+              <h2 className="font-bold text-xl my-0">
+                Realistically Towards Dream
+              </h2>
+              <label htmlFor="towards-dream" className="py-0 ">
+                <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
+              </label>
+            </div>
+
+            <input
+              type="checkbox"
+              id="towards-dream"
+              className="modal-toggle"
+            />
+            <div className="modal">
+              <div className="modal-box relative">
+                <label
+                  htmlFor="towards-dream"
+                  className="btn btn-sm btn-circle absolute right-2 top-2"
+                >
+                  ✕
+                </label>
+                <h3 className="text-lg font-bold text-center my-0">
+                  Realistically Towards Dream
+                </h3>
+                <p className="py-4 text-center">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                  laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+              </div>
             </div>
 
             <div className="p-10 md:p-20 lg:p-10">
@@ -1815,9 +1911,32 @@ function Output({ currency, setData, goalData, nextTab }) {
 
           <div className="flex flex-col gap-7 w-full lg:w-3/5">
             <div className="flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
-              <div className="flex flex-row gap-2 justify-between">
-                <p className="font-bold">Financially Towards Dream 40%</p>
-                <IoMdInformationCircle className="text-2xl md:text-6xl lg:text-2xl"></IoMdInformationCircle>
+              <div className="flex flex-row gap-2 item-center justify-between">
+                <p className="font-bold my-0">Financially Towards Dream 40%</p>
+                <label htmlFor="finacial" className="">
+                  <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
+                </label>
+              </div>
+
+              <input type="checkbox" id="finacial" className="modal-toggle" />
+              <div className="modal">
+                <div className="modal-box relative">
+                  <label
+                    htmlFor="finacial"
+                    className="btn btn-sm btn-circle absolute right-2 top-2"
+                  >
+                    ✕
+                  </label>
+                  <h3 className="text-lg font-bold text-center">
+                    Financially Towards Dream
+                  </h3>
+                  <p className="py-4 text-center">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  </p>
+                </div>
               </div>
 
               <div>
@@ -1832,9 +1951,31 @@ function Output({ currency, setData, goalData, nextTab }) {
             </div>
 
             <div className="flex flex-col gap-4 md:gap-6 shadow-gray-400 px-7 py-7 rounded-lg shadow-md h-full">
-              <div className="flex justify-between">
-                <p className="font-bold">Total Calculation</p>
-                <IoMdInformationCircle className="text-2xl md:text-6xl lg:text-2xl"></IoMdInformationCircle>
+              <div className="flex justify-between items-center ">
+                <p className="font-bold my-0">Total Calculation</p>
+                <label htmlFor="my-modal-3" className="">
+                  <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
+                </label>
+              </div>
+              <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+              <div className="modal">
+                <div className="modal-box relative">
+                  <label
+                    htmlFor="my-modal-3"
+                    className="btn btn-sm btn-circle absolute right-2 top-2"
+                  >
+                    ✕
+                  </label>
+                  <h3 className="text-lg font-bold text-center">
+                    Total Calculation
+                  </h3>
+                  <p className="py-4 text-center">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  </p>
+                </div>
               </div>
               <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
                 <p>Total Revenue:</p>
@@ -2077,7 +2218,28 @@ function AnnualForm({ goalData }) {
             <h2 className="font-bold text-lg text-center md:text-left">
               Assets
             </h2>
-            <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
+            <label htmlFor="assets" className="">
+              <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
+            </label>
+          </div>
+
+          <input type="checkbox" id="assets" className="modal-toggle" />
+          <div className="modal">
+            <div className="modal-box relative">
+              <label
+                htmlFor="assets"
+                className="btn btn-sm btn-circle absolute right-2 top-2"
+              >
+                ✕
+              </label>
+              <h3 className="text-lg font-bold text-center">Assets</h3>
+              <p className="py-4 text-center">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat.
+              </p>
+            </div>
           </div>
 
           <div className="w-full grid ">
@@ -2094,8 +2256,29 @@ function AnnualForm({ goalData }) {
             <h2 className="font-bold text-lg text-center md:text-left">
               Liabilities
             </h2>
-            <IoMdInformationCircle className="text-2xl"></IoMdInformationCircle>
+            <label htmlFor="liability" className="">
+              <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
+            </label>
           </div>
+          <input type="checkbox" id="liability" className="modal-toggle" />
+          <div className="modal">
+            <div className="modal-box relative">
+              <label
+                htmlFor="liability"
+                className="btn btn-sm btn-circle absolute right-2 top-2"
+              >
+                ✕
+              </label>
+              <h3 className="text-lg font-bold text-center">Liabilities</h3>
+              <p className="py-4 text-center">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat.
+              </p>
+            </div>
+          </div>
+
           <div className="w-full grid ">
             <div className="flex flex-col">
               <div className="text-center shadow-gray-400 rounded-lg shadow-md">
