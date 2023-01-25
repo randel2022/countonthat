@@ -9,7 +9,7 @@ function Header() {
       </a>
       <a
         href="/calculate"
-        className="py-3 px-7 rounded-lg font-bold hidden md:block  rounded-3xl bg-[#A0161B] text-white"
+        className="py-3 px-7 rounded-lg font-bold text-white hidden md:block delay-150 rounded-3xl bg-[#A0161B] hover:text-gray-400"
       >
         Calculate Your Dream
       </a>
