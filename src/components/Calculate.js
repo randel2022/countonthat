@@ -1479,7 +1479,7 @@ function AssetsForm({ currency, setData, goBack }) {
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3 ">
-      <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-none lg:shadow-md">
+      <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400  px-7 py-7 rounded-lg shadow-none lg:shadow-md">
         <div className="w-full flex justify-between">
           <p className="font-bold text-center md:text-left">
             Assement Management
@@ -1515,7 +1515,7 @@ function AssetsForm({ currency, setData, goBack }) {
           onSubmit={(e) => {
             handleSubmit(e);
           }}
-          className="flex flex-col gap-10 w-full"
+          className="flex flex-col w-5/6 md:w-full gap-10"
         >
           {assets.map((item, index) => (
             <div key={index} className="px-0 w-full">
