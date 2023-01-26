@@ -28,7 +28,7 @@
 }
 
 .CircularProgressbar .CircularProgressbar-trail {
-  stroke: #ffd2d2;
+  stroke: #F9E8E8;
 }
 
 @media only screen and (max-width: 767px) {

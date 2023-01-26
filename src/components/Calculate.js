@@ -158,6 +158,7 @@ function CalculateComponent() {
         ></OtherForm>
       ) : selectedTab === 4 ? (
         <Output
+          goBack={() => setselectedTab(selectedTab - 1)}
           currency={goalData.names.currency}
           nextTab={() => {
             setselectedTab(selectedTab + 1);
@@ -420,42 +421,15 @@ const InputGoals = ({
     // our api to fetch the search result
     onChangeInputValue("goal", searchTerm);
   };
-<<<<<<< HEAD
-  console.log(value);
-=======
 
   console.log(value);
 
->>>>>>> b8690a36cb8fb072e761064011084410ee0efa29
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4  ">
         <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
           <div className="w-full lg:w-1/2">
             <label className="my-3 ">Goals</label>
-<<<<<<< HEAD
-
-=======
-            {/* <div className="relative">
-              <select
-                className="input input-bordered w-full border-slate-400"
-                value={item.goal}
-                onChange={(e) => onChangeInputValue("goal", e.target.value)}
-                required
-              >
-                <option disabled> Choose a Goal </option>
-                <option value="savings" className="capitalize">
-                  Savings
-                </option>
-                <option value="house" className="capitalize">
-                  House
-                </option>
-                <option value="car" className="capitalize">
-                  Luxury Car
-                </option>
-              </select>
-            </div> */}
->>>>>>> b8690a36cb8fb072e761064011084410ee0efa29
             <div className="search-container relative">
               <div className="search-inner relative">
                 <input
@@ -1790,7 +1764,7 @@ function OtherForm({ currency, setData, goBack }) {
   );
 }
 
-function Output({ currency, setData, goalData, nextTab }) {
+function Output({ currency, setData, goalData, nextTab, goBack }) {
   const {
     firstName,
     lastName,
@@ -1942,7 +1916,7 @@ function Output({ currency, setData, goalData, nextTab }) {
                 <ProgressBar
                   completed={40}
                   bgColor={"#D35055"}
-                  baseBgColor={"#FFD2D2"}
+                  baseBgColor={"#F9E8E8"}
                   isLabelVisible={false}
                   borderRadius={10}
                 />
@@ -1976,7 +1950,7 @@ function Output({ currency, setData, goalData, nextTab }) {
                   </p>
                 </div>
               </div>
-              <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
+              <div className="flex justify-between flex-row gap-2 bg-[#F9E8E8] px-3 py-3 rounded-md">
                 <p>Total Revenue:</p>
                 <p className="py-0 my-0">
                   {totalCurrency}
@@ -1985,7 +1959,7 @@ function Output({ currency, setData, goalData, nextTab }) {
                 </p>
               </div>
 
-              <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
+              <div className="flex justify-between flex-row gap-2 bg-[#F9E8E8] px-3 py-3 rounded-md">
                 <p>Total Assets:</p>
                 <p className="py-0 my-0">
                   {totalCurrency}
@@ -1994,7 +1968,7 @@ function Output({ currency, setData, goalData, nextTab }) {
                 </p>
               </div>
 
-              <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
+              <div className="flex justify-between flex-row gap-2 bg-[#F9E8E8] px-3 py-3 rounded-md">
                 <p>Total Liabilities:</p>
                 <p className="py-0 my-0">
                   {totalCurrency}
@@ -2003,7 +1977,7 @@ function Output({ currency, setData, goalData, nextTab }) {
                 </p>
               </div>
 
-              <div className="flex justify-between flex-row gap-2 bg-[#FFE0E0] px-3 py-3 rounded-md">
+              <div className="flex justify-between flex-row gap-2 bg-[#F9E8E8] px-3 py-3 rounded-md">
                 <p>Total Expenses:</p>
                 <p className="py-0 my-0">
                   {totalCurrency}
@@ -2012,18 +1986,28 @@ function Output({ currency, setData, goalData, nextTab }) {
                 </p>
               </div>
 
-              <form
-                onSubmit={(e) => {
-                  handleSubmit(e);
-                }}
-                className="flex bg-green-400 bg-green-400 w-full gap-10 "
-              >
-                <input
-                  type="submit"
-                  className="py-3 w-full rounded-md bg-[#A0161B] text-white cursor-pointer"
-                  value="See Details"
-                />
-              </form>
+              <div className="flex gap-3">
+                <div
+                  className="flex items-center rounded-md justify-center shadow-md cursor-pointer gap-2 w-1/2"
+                  onClick={goBack}
+                >
+                  <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
+                  <p className="text-[#A0161B] font-bold">Go Back</p>
+                </div>
+
+                <form
+                  onSubmit={(e) => {
+                    handleSubmit(e);
+                  }}
+                  className="flex bg-green-400 bg-green-400 w-1/2 gap-10 "
+                >
+                  <input
+                    type="submit"
+                    className="py-3 w-full rounded-md bg-[#A0161B] text-white cursor-pointer"
+                    value="See Details"
+                  />
+                </form>
+              </div>
             </div>
           </div>
         </div>
@@ -2218,7 +2202,7 @@ function AnnualForm({ goalData }) {
               Assets
             </h2>
             <label htmlFor="assets" className="">
-              <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
+              <IoMdInformationCircle className="text-2xl md:text-4xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
             </label>
           </div>
 
@@ -2256,7 +2240,7 @@ function AnnualForm({ goalData }) {
               Liabilities
             </h2>
             <label htmlFor="liability" className="">
-              <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
+              <IoMdInformationCircle className="text-2xl md:text-4xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
             </label>
           </div>
           <input type="checkbox" id="liability" className="modal-toggle" />
