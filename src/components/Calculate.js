@@ -1400,7 +1400,7 @@ function AssetsForm({ currency, setData, goBack }) {
   const initialAssetData = {
     asset: "",
     amount: 0.0,
-    assetmultiplier: 0.0,
+    assetmultiplier: 1,
     currency: currency.toUpperCase(),
   };
 
@@ -1519,9 +1519,9 @@ function LiabilitiesForm({ currency, setData, goBack }) {
 
   const initialRevenueData = {
     revenue: 0.0,
-    multiplierrev: 0.0,
+    multiplierrev: 1,
     expenses: 0.0,
-    multiplierexp: 0.0,
+    multiplierexp: 1,
     currencyrev: currency.toUpperCase(),
     currencyexp: currency.toUpperCase(),
   };
@@ -1531,7 +1531,7 @@ function LiabilitiesForm({ currency, setData, goBack }) {
   const initialLiabilitiesData = {
     liability: "",
     amount: 0.0,
-    liabilitymultiplier: 0.0,
+    liabilitymultiplier: 1,
     currencyliability: currency.toUpperCase(),
   };
 
