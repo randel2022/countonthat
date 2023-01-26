@@ -393,41 +393,14 @@ const InputGoals = ({
     // our api to fetch the search result
     onChangeInputValue("goal", searchTerm);
   };
-
+  console.log(value);
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4  ">
         <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
           <div className="w-full lg:w-1/2">
             <label className="my-3 ">Goals</label>
-            <div className="relative">
-              <input
-                className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
-                type="text"
-                value={item.goal}
-                onChange={(e) => onChangeInputValue("goal", e.target.value)}
-                required
-              />
-              <select
-                className="input input-bordered w-full border-slate-400"
-                value={item.goal}
-                onChange={(e) => onChangeInputValue("goal", e.target.value)}
-                required
-              >
-                <option disabled> Choose a Goal </option>
-                <option value="savings" className="capitalize">
-                  Savings
-                </option>
-                <option value="house" className="capitalize">
-                  House
-                </option>
-                <option value="car" className="capitalize">
-                  Luxury Car
-                </option>
-              </select>
-<<<<<<< HEAD
-=======
-            </div> */}
+
             <div className="search-container relative">
               <div className="search-inner relative">
                 <input
@@ -439,7 +412,7 @@ const InputGoals = ({
                 />
                 <select
                   className="input input-bordered w-full border-slate-400"
-                  value={item.goal}
+                  value={value}
                   onChange={(e) => onSearch(e.target.value)}
                 >
                   <option disabled> Choose a Goal </option>
@@ -477,7 +450,6 @@ const InputGoals = ({
                     </div>
                   ))}
               </div>
->>>>>>> 3004f6b8802bbf046d97d6095c4c942891e5783a
             </div>
           </div>
 
@@ -1316,14 +1288,6 @@ function PersonalForm({ setData }) {
     ]);
   };
 
-  const handleRemoveName = (index) => {
-    // if (names.length !== 1) {
-    //   const values = [...names];
-    //   values.splice(index, 1);
-    //   setNames(values);
-    // }
-  };
-
   const handleRemoveNameDependent = (index) => {
     if (dependents.length !== 1) {
       const values = [...dependents];
@@ -1369,7 +1333,6 @@ function PersonalForm({ setData }) {
                 setpersonalDetails(data);
               }}
               addNewName={addNewName}
-              handleRemoveName={handleRemoveName}
             />
           </div>
 
