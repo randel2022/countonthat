@@ -557,6 +557,8 @@ const InputAssets = ({
       amount: item.amount,
       assetmultiplier: item.assetmultiplier,
       currency: item.currency,
+      revmultiplier: item.revmultiplier,
+      revamount: item.revamount,
     };
     currentValue[key] = value;
     onChangeValues(currentValue);
@@ -576,8 +578,8 @@ const InputAssets = ({
   };
 
   return (
-    <>
-      <div className="flex flex-col justify-between w-full gap-4">
+    <div className="flex gap-10 flex-col">
+      <div className="flex flex-col justify-between w-full gap-4 pb-6 border-b-g">
         <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
           <div className="w-full lg:w-1/2">
             <label>Asset</label>
@@ -637,7 +639,7 @@ const InputAssets = ({
             </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-3 lg:gap-10 w-full lg:w-1/2">
+          <div className="flex flex-col lg:flex-row gap-3 lg:gap-10 w-full lg:w-1/2 ">
             <div className="w-full lg:w-1/4">
               <label>Multiplier</label>
               <div className="flex items-center border-slate-400 w-full">
@@ -708,7 +710,55 @@ const InputAssets = ({
           </div>
         )}
       </div>
-    </>
+
+      <div className="w-full flex-col lg:flex-col gap-2 flex lg:w-full ">
+        <p className="font-bold my-0">Monthly Revenue</p>
+        <div className="flex flex-col md:flex-row w-full gap-2 lg:gap-10 ">
+          <div className="w-full lg:w-1/2">
+            <label>Multiplier</label>
+            <div className="flex items-center border-slate-400 w-full">
+              <input
+                placeholder="0"
+                name="liabilitymultiplier"
+                type="number"
+                className="input w-full input-bordered border-slate-400"
+                value={item.revmultiplier}
+                onChange={(e) =>
+                  onChangeInputValue("revmultiplier", e.target.value)
+                }
+                max={100}
+                min={0}
+                onKeyDown={(e) =>
+                  ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                }
+              />
+            </div>
+          </div>
+
+          <div className="w-full lg:w-1/2">
+            <label>Monthly Revenue</label>
+            <div className="flex items-center border-slate-400">
+              <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
+                <p className="text-center">{item.currency}</p>
+              </div>
+              <input
+                name="amount"
+                type="number"
+                className="input input-bordered w-3/4 rounded-l-none border-slate-400"
+                value={item.revamount}
+                onChange={(e) =>
+                  onChangeInputValue("revamount", e.target.value)
+                }
+                min={0}
+                onKeyDown={(e) =>
+                  ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -1031,7 +1081,7 @@ const InputRevExp = ({
     <>
       <div className="flex flex-col justify-between w-full gap-4">
         <div className="flex flex-col  w-full gap-2 md:gap-5 lg:gap-10 items-center">
-          <div className="flex flex-col w-full gap-2 pb-8 border-b-g">
+          {/* <div className="flex flex-col w-full gap-2 pb-8 border-b-g">
             <p className="font-bold my-0">Monthly Revenue</p>
             <div className="flex flex-col lg:flex-row w-full gap-3 lg:gap-10">
               <div className="w-full lg:w-1/2">
@@ -1078,7 +1128,7 @@ const InputRevExp = ({
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="flex flex-col w-full gap-2">
             <p className="font-bold my-0">Monthly Expenses</p>
@@ -1402,6 +1452,8 @@ function AssetsForm({ currency, setData, goBack }) {
     amount: 0.0,
     assetmultiplier: 1,
     currency: currency.toUpperCase(),
+    revmultiplier: 1,
+    revamount: 0.0,
   };
 
   const handleSubmit = (e) => {
@@ -1794,8 +1846,8 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
     );
   }, 0);
 
-  const revenueSum = revexp.map((object) => {
-    return Number(object.revenue) * Number(object.multiplierrev);
+  const revenueSum = assets.map((object) => {
+    return Number(object.revmultiplier) * Number(object.revamount);
   });
 
   const expensesSum = revexp.reduce((accumulator, object) => {
