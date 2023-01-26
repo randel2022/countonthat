@@ -241,7 +241,7 @@ function Main() {
         </p>
         <a
           href="/calculate"
-          className="py-3 px-3 rounded-lg bg-[#A0161B] text-white font-bold hover:bg-[#6b0f12]"
+          className="py-3 px-7 rounded-lg bg-[#A0161B] text-white font-bold hover:text-gray-400 delay-150"
         >
           Calculate Your Dream
         </a>
