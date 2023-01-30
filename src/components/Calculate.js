@@ -658,7 +658,6 @@ const InputAssets = ({
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
-                  required={value}
                 />
               </div>
             </div>
@@ -674,11 +673,11 @@ const InputAssets = ({
                   className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
                   onChange={(e) => onChangeInputValue("amount", e.target.value)}
-                  required
                   min={0}
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
+                  required={value ? true : false}
                 />
 
                 {isDeletedButtonVisible && (
