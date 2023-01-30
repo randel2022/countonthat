@@ -438,6 +438,7 @@ const InputGoals = ({
                   onChange={(e) => onSearch(e.target.value)}
                   className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                   placeholder="Goal"
+                  required={goalSum}
                 />
                 <select
                   className="input input-bordered w-full border-slate-400"
@@ -497,10 +498,10 @@ const InputGoals = ({
                 className="input input-bordered w-3/4 rounded-l-none border-slate-400 focus:outline-none"
                 value={item.amount}
                 onChange={(e) => onChangeInputValue("amount", e.target.value)}
-                required
                 onKeyDown={(e) =>
                   ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                 }
+                required={value}
               />
 
               {isDeletedButtonVisible && (
@@ -655,6 +656,7 @@ const InputAssets = ({
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
+                  required={value}
                 />
               </div>
             </div>
@@ -1270,6 +1272,8 @@ function PersonalForm({ setData }) {
   const goalSum = goals.reduce((accumulator, item) => {
     return accumulator + Number(item.amount);
   }, 0);
+
+  const [goalsum, setGoalSum] = useState(0);
 
   console.log(goalSum);
 
