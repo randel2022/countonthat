@@ -394,6 +394,7 @@ const InputGoals = ({
   handleRemoveGoal,
   isDeletedButtonVisible,
   goalSum,
+  alertGoalinput,
 }) => {
   const onChangeInputValue = (key, value) => {
     console.log("onchange");
@@ -438,7 +439,7 @@ const InputGoals = ({
                   onChange={(e) => onSearch(e.target.value)}
                   className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                   placeholder="Goal"
-                  required={goalSum}
+                  onAlert={alertGoalinput}
                 />
                 <select
                   className="input input-bordered w-full border-slate-400"
@@ -498,10 +499,10 @@ const InputGoals = ({
                 className="input input-bordered w-3/4 rounded-l-none border-slate-400 focus:outline-none"
                 value={item.amount}
                 onChange={(e) => onChangeInputValue("amount", e.target.value)}
+                required
                 onKeyDown={(e) =>
                   ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                 }
-                required={value}
               />
 
               {isDeletedButtonVisible && (
@@ -593,13 +594,11 @@ const InputAssets = ({
                   onChange={(e) => onSearch(e.target.value)}
                   className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                   placeholder="Asset"
-                  required={item.amount > 0}
                 />
                 <select
                   className="input input-bordered w-full border-slate-400"
                   value={item.asset}
                   onChange={(e) => onSearch(e.target.value)}
-                  required={item.amount > 0}
                 >
                   <option disabled value="">
                     {" "}
@@ -660,7 +659,6 @@ const InputAssets = ({
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
-                  required
                 />
               </div>
             </div>
@@ -676,11 +674,11 @@ const InputAssets = ({
                   className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
                   onChange={(e) => onChangeInputValue("amount", e.target.value)}
-                  min={value === "" ? 0 : 1}
+                  required
+                  min={0}
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
-                  required
                 />
 
                 {isDeletedButtonVisible && (
@@ -1295,6 +1293,8 @@ function PersonalForm({ setData }) {
     });
   };
 
+  const alertGoalinput = goals.map((item) => {});
+
   const [personalDetails, setpersonalDetails] = useState({
     firstname: "",
     lastname: "",
@@ -1324,8 +1324,6 @@ function PersonalForm({ setData }) {
   const goalSum = goals.reduce((accumulator, item) => {
     return accumulator + Number(item.amount);
   }, 0);
-
-  const [goalsum, setGoalSum] = useState(0);
 
   console.log(goalSum);
 
@@ -1413,6 +1411,7 @@ function PersonalForm({ setData }) {
                   isDeletedButtonVisible={goals.length - 1 > 0}
                   isLast={goals.length - 1 === index}
                   goalSum={goalSum}
+                  alertGoalinput={alertGoalinput}
                 />
               </div>
             ))}
