@@ -394,7 +394,6 @@ const InputGoals = ({
   handleRemoveGoal,
   isDeletedButtonVisible,
   goalSum,
-  alertGoalinput,
 }) => {
   const onChangeInputValue = (key, value) => {
     console.log("onchange");
@@ -439,7 +438,7 @@ const InputGoals = ({
                   onChange={(e) => onSearch(e.target.value)}
                   className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                   placeholder="Goal"
-                  onAlert={alertGoalinput}
+                  required={goalSum}
                 />
                 <select
                   className="input input-bordered w-full border-slate-400"
@@ -499,10 +498,10 @@ const InputGoals = ({
                 className="input input-bordered w-3/4 rounded-l-none border-slate-400 focus:outline-none"
                 value={item.amount}
                 onChange={(e) => onChangeInputValue("amount", e.target.value)}
-                required
                 onKeyDown={(e) =>
                   ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                 }
+                required={value}
               />
 
               {isDeletedButtonVisible && (
@@ -599,6 +598,7 @@ const InputAssets = ({
                   className="input input-bordered w-full border-slate-400"
                   value={item.asset}
                   onChange={(e) => onSearch(e.target.value)}
+                  required
                 >
                   <option disabled value="">
                     {" "}
@@ -663,7 +663,7 @@ const InputAssets = ({
               </div>
             </div>
             <div className="w-full lg:w-3/4">
-              <label>Amounts</label>
+              <label>Amount</label>
               <div className="flex items-center border-slate-400 w-full items-center">
                 <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
                   <p className="text-center">{item.currency}</p>
@@ -674,11 +674,11 @@ const InputAssets = ({
                   className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
                   onChange={(e) => onChangeInputValue("amount", e.target.value)}
-                  required
-                  min={0}
+                  min={1}
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
+                  required={value}
                 />
 
                 {isDeletedButtonVisible && (
@@ -1006,7 +1006,7 @@ const InputLiabilities = ({
             </div>
 
             <div className="w-full lg:w-3/4">
-              <label>Amount</label>
+              <label>Amounts</label>
               <div className="flex items-center border-slate-400">
                 <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
                   <p className="text-center">{item.currencyliability}</p>
@@ -1293,8 +1293,6 @@ function PersonalForm({ setData }) {
     });
   };
 
-  const alertGoalinput = goals.map((item) => {});
-
   const [personalDetails, setpersonalDetails] = useState({
     firstname: "",
     lastname: "",
@@ -1324,6 +1322,8 @@ function PersonalForm({ setData }) {
   const goalSum = goals.reduce((accumulator, item) => {
     return accumulator + Number(item.amount);
   }, 0);
+
+  const [goalsum, setGoalSum] = useState(0);
 
   console.log(goalSum);
 
@@ -1411,7 +1411,6 @@ function PersonalForm({ setData }) {
                   isDeletedButtonVisible={goals.length - 1 > 0}
                   isLast={goals.length - 1 === index}
                   goalSum={goalSum}
-                  alertGoalinput={alertGoalinput}
                 />
               </div>
             ))}
