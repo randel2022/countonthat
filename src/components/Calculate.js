@@ -92,7 +92,7 @@ function CalculateComponent() {
             <li className={liStyle(0)}>Personal</li>
             <li className={liStyle(1)}>Assets</li>
             <li className={liStyle(2)}>Liabilities</li>
-            <li className={liStyle(3)}>Other</li>
+            {/* <li className={liStyle(3)}>Other</li> */}
           </ul>
         </>
       ) : (
@@ -143,19 +143,27 @@ function CalculateComponent() {
           }}
         ></LiabilitiesForm>
       ) : selectedTab === 3 ? (
-        <OtherForm
+        // <OtherForm
+        //   goBack={() => setselectedTab(selectedTab - 1)}
+        //   setData={(value) => {
+        //     if (value.other) {
+        //       /// if all values have data then go to next Tabs
+        //       setselectedTab(selectedTab + 1);
+        //       setgoalData((previousGoalData) => ({
+        //         ...previousGoalData,
+        //         ...value,
+        //       }));
+        //     }
+        //   }}
+        // ></OtherForm>
+        <Output
           goBack={() => setselectedTab(selectedTab - 1)}
-          setData={(value) => {
-            if (value.other) {
-              /// if all values have data then go to next Tabs
-              setselectedTab(selectedTab + 1);
-              setgoalData((previousGoalData) => ({
-                ...previousGoalData,
-                ...value,
-              }));
-            }
+          currency={goalData.names.currency}
+          nextTab={() => {
+            setselectedTab(selectedTab + 1);
           }}
-        ></OtherForm>
+          goalData={goalData}
+        ></Output>
       ) : selectedTab === 4 ? (
         <Output
           goBack={() => setselectedTab(selectedTab - 1)}
@@ -600,8 +608,6 @@ const InputAssets = ({
                   value={item.asset}
                   onChange={(e) => onSearch(e.target.value)}
                   required={item.amount > 0}
-                  required
-
                 >
                   <option disabled value="">
                     {" "}
@@ -678,19 +684,11 @@ const InputAssets = ({
                   className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
                   onChange={(e) => onChangeInputValue("amount", e.target.value)}
-<<<<<<< HEAD
                   min={value === "" ? 0 : 1}
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
-                  required
-=======
-                  min={1}
-                  onKeyDown={(e) =>
-                    ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
-                  }
                   required={value}
->>>>>>> dcc4c1a4c4ff3accd9afc524abd463ee4274bf9f
                 />
 
                 {isDeletedButtonVisible && (
@@ -948,6 +946,7 @@ const InputLiabilities = ({
                   onChange={(e) => onSearch(e.target.value)}
                   className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                   placeholder="Liability"
+                  required={item.amount > 0}
                 />
                 <select
                   className="input input-bordered w-full border-slate-400"
@@ -1029,8 +1028,8 @@ const InputLiabilities = ({
                   className="input input-bordered w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
                   onChange={(e) => onChangeInputValue("amount", e.target.value)}
-                  required
-                  min={0}
+                  required={value}
+                  min={value === "" ? 0 : 1}
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
