@@ -439,11 +439,7 @@ const InputGoals = ({
                   onChange={(e) => onSearch(e.target.value)}
                   className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                   placeholder="Goal"
-<<<<<<< HEAD
                   onAlert={alertGoalinput}
-=======
-                  required={goalSum}
->>>>>>> fdf7efbc70a18277d0ef4303620e74b9dbaa7f65
                 />
                 <select
                   className="input input-bordered w-full border-slate-400"
