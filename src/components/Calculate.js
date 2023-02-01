@@ -665,7 +665,7 @@ const InputAssets = ({
               </div>
             </div>
             <div className="w-full lg:w-3/4">
-              <label>Amount</label>
+              <label>Amounts</label>
               <div className="flex items-center border-slate-400 w-full items-center">
                 <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
                   <p className="text-center">{item.currency}</p>
