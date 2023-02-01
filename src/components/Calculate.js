@@ -394,7 +394,6 @@ const InputGoals = ({
   handleRemoveGoal,
   isDeletedButtonVisible,
   goalSum,
-  alertGoalinput,
 }) => {
   const onChangeInputValue = (key, value) => {
     console.log("onchange");
@@ -600,7 +599,11 @@ const InputAssets = ({
                   className="input input-bordered w-full border-slate-400"
                   value={item.asset}
                   onChange={(e) => onSearch(e.target.value)}
+<<<<<<< HEAD
                   required={item.amount > 0}
+=======
+                  required
+>>>>>>> dcc4c1a4c4ff3accd9afc524abd463ee4274bf9f
                 >
                   <option disabled value="">
                     {" "}
@@ -677,11 +680,19 @@ const InputAssets = ({
                   className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
                   onChange={(e) => onChangeInputValue("amount", e.target.value)}
+<<<<<<< HEAD
                   min={value === "" ? 0 : 1}
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
                   required
+=======
+                  min={1}
+                  onKeyDown={(e) =>
+                    ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                  }
+                  required={value}
+>>>>>>> dcc4c1a4c4ff3accd9afc524abd463ee4274bf9f
                 />
 
                 {isDeletedButtonVisible && (
@@ -1296,8 +1307,6 @@ function PersonalForm({ setData }) {
     });
   };
 
-  const alertGoalinput = goals.map((item) => {});
-
   const [personalDetails, setpersonalDetails] = useState({
     firstname: "",
     lastname: "",
@@ -1416,7 +1425,6 @@ function PersonalForm({ setData }) {
                   isDeletedButtonVisible={goals.length - 1 > 0}
                   isLast={goals.length - 1 === index}
                   goalSum={goalSum}
-                  alertGoalinput={alertGoalinput}
                 />
               </div>
             ))}
