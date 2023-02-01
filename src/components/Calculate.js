@@ -599,11 +599,9 @@ const InputAssets = ({
                   className="input input-bordered w-full border-slate-400"
                   value={item.asset}
                   onChange={(e) => onSearch(e.target.value)}
-<<<<<<< HEAD
                   required={item.amount > 0}
-=======
                   required
->>>>>>> dcc4c1a4c4ff3accd9afc524abd463ee4274bf9f
+
                 >
                   <option disabled value="">
                     {" "}
