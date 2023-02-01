@@ -1006,7 +1006,7 @@ const InputLiabilities = ({
             </div>
 
             <div className="w-full lg:w-3/4">
-              <label>Amounts</label>
+              <label>Amount</label>
               <div className="flex items-center border-slate-400">
                 <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
                   <p className="text-center">{item.currencyliability}</p>
