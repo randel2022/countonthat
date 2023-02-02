@@ -1605,6 +1605,8 @@ function LiabilitiesForm({ currency, setData, goBack }) {
     }
   };
 
+  console.log(liabilities);
+
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
       <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-none lg:shadow-md">
