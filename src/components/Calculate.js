@@ -86,7 +86,7 @@ function CalculateComponent() {
 
   return (
     <div className="flex-col relative h-auto w-full flex justify-center items-center gap-12 py-5 md:py-36">
-      {selectedTab <= 3 ? (
+      {selectedTab <= 2 ? (
         <>
           <ul className="steps steps-horizontal w-full md:w-2/5 lg:steps-horizontal relative md:absolute md:top-7">
             <li className={liStyle(0)}>Personal</li>
@@ -165,15 +165,16 @@ function CalculateComponent() {
           goalData={goalData}
         ></Output>
       ) : selectedTab === 4 ? (
-        <Output
-          goBack={() => setselectedTab(selectedTab - 1)}
-          currency={goalData.names.currency}
-          nextTab={() => {
-            setselectedTab(selectedTab + 1);
-          }}
-          goalData={goalData}
-        ></Output>
-      ) : selectedTab === 5 ? (
+        <AnnualForm goalData={goalData}></AnnualForm>
+      ) : // <Output
+      //   goBack={() => setselectedTab(selectedTab - 1)}
+      //   currency={goalData.names.currency}
+      //   nextTab={() => {
+      //     setselectedTab(selectedTab + 1);
+      //   }}
+      //   goalData={goalData}
+      // ></Output>
+      selectedTab === 5 ? (
         <AnnualForm goalData={goalData}></AnnualForm>
       ) : (
         <></>
