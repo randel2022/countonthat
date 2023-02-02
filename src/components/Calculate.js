@@ -86,13 +86,13 @@ function CalculateComponent() {
 
   return (
     <div className="flex-col relative h-auto w-full flex justify-center items-center gap-12 py-5 md:py-36">
-      {selectedTab <= 3 ? (
+      {selectedTab <= 2 ? (
         <>
           <ul className="steps steps-horizontal w-full md:w-2/5 lg:steps-horizontal relative md:absolute md:top-7">
             <li className={liStyle(0)}>Personal</li>
             <li className={liStyle(1)}>Assets</li>
             <li className={liStyle(2)}>Liabilities</li>
-            <li className={liStyle(3)}>Other</li>
+            {/* <li className={liStyle(3)}>Other</li> */}
           </ul>
         </>
       ) : (
@@ -143,20 +143,19 @@ function CalculateComponent() {
           }}
         ></LiabilitiesForm>
       ) : selectedTab === 3 ? (
-        <OtherForm
-          goBack={() => setselectedTab(selectedTab - 1)}
-          setData={(value) => {
-            if (value.other) {
-              /// if all values have data then go to next Tabs
-              setselectedTab(selectedTab + 1);
-              setgoalData((previousGoalData) => ({
-                ...previousGoalData,
-                ...value,
-              }));
-            }
-          }}
-        ></OtherForm>
-      ) : selectedTab === 4 ? (
+        // <OtherForm
+        //   goBack={() => setselectedTab(selectedTab - 1)}
+        //   setData={(value) => {
+        //     if (value.other) {
+        //       /// if all values have data then go to next Tabs
+        //       setselectedTab(selectedTab + 1);
+        //       setgoalData((previousGoalData) => ({
+        //         ...previousGoalData,
+        //         ...value,
+        //       }));
+        //     }
+        //   }}
+        // ></OtherForm>
         <Output
           goBack={() => setselectedTab(selectedTab - 1)}
           currency={goalData.names.currency}
@@ -165,7 +164,17 @@ function CalculateComponent() {
           }}
           goalData={goalData}
         ></Output>
-      ) : selectedTab === 5 ? (
+      ) : selectedTab === 4 ? (
+        <AnnualForm goalData={goalData}></AnnualForm>
+      ) : // <Output
+      //   goBack={() => setselectedTab(selectedTab - 1)}
+      //   currency={goalData.names.currency}
+      //   nextTab={() => {
+      //     setselectedTab(selectedTab + 1);
+      //   }}
+      //   goalData={goalData}
+      // ></Output>
+      selectedTab === 5 ? (
         <AnnualForm goalData={goalData}></AnnualForm>
       ) : (
         <></>
@@ -593,12 +602,13 @@ const InputAssets = ({
                   onChange={(e) => onSearch(e.target.value)}
                   className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                   placeholder="Asset"
+                  required={item.amount > 0}
                 />
                 <select
                   className="input input-bordered w-full border-slate-400"
                   value={item.asset}
                   onChange={(e) => onSearch(e.target.value)}
-                  required
+                  required={item.amount > 0}
                 >
                   <option disabled value="">
                     {" "}
@@ -659,6 +669,7 @@ const InputAssets = ({
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
+                  required
                 />
               </div>
             </div>
@@ -674,7 +685,7 @@ const InputAssets = ({
                   className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
                   onChange={(e) => onChangeInputValue("amount", e.target.value)}
-                  min={1}
+                  min={value === "" ? 0 : 1}
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
@@ -936,6 +947,7 @@ const InputLiabilities = ({
                   onChange={(e) => onSearch(e.target.value)}
                   className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                   placeholder="Liability"
+                  required={item.amount > 0}
                 />
                 <select
                   className="input input-bordered w-full border-slate-400"
@@ -1017,8 +1029,8 @@ const InputLiabilities = ({
                   className="input input-bordered w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
                   onChange={(e) => onChangeInputValue("amount", e.target.value)}
-                  required
-                  min={0}
+                  required={value}
+                  min={value === "" ? 0 : 1}
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
