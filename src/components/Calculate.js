@@ -1665,21 +1665,21 @@ function LiabilitiesForm({ currency, setData, goBack }) {
     setLiability([...liabilities, initialLiabilitiesData]);
   };
 
-  // const handleRemoveLiability = (index) => {
-  //   if (liabilities.length !== 1) {
-  //     const values = [...liabilities];
-  //     values.splice(index, 1);
-  //     setLiability(values);
-  //   }
-  // };
-
-  const handleRemoveLiability = (id) => {
-    setLiability((item) => {
-      return item.filter((myItem, index) => {
-        return index !== id;
-      });
-    });
+  const handleRemoveLiability = (index) => {
+    if (liabilities.length !== 1) {
+      const values = [...liabilities];
+      values.splice(index, 1);
+      setLiability(values);
+    }
   };
+
+  // const handleRemoveLiability = (id) => {
+  //   setLiability((item) => {
+  //     return item.filter((myItem, index) => {
+  //       return index !== id;
+  //     });
+  //   });
+  // };
 
   console.log(liabilities);
 
