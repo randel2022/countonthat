@@ -83,7 +83,7 @@ function CalculateComponent() {
     }`;
     return style;
   };
-
+  console.log(goalData?.names?.currency);
   return (
     <div className="flex-col relative h-auto w-full flex justify-center items-center gap-12 py-5 md:py-36">
       {selectedTab <= 2 ? (
@@ -98,8 +98,7 @@ function CalculateComponent() {
       ) : (
         <></>
       )}
-
-      {selectedTab === 0 ? (
+      <div className={`${selectedTab === 0 ? "flex  w-full" : "hidden"}`}>
         <PersonalForm
           setData={(value) => {
             if (value.names && value.goalsData) {
@@ -109,9 +108,10 @@ function CalculateComponent() {
             }
           }}
         ></PersonalForm>
-      ) : selectedTab === 1 ? (
+      </div>
+      <div className={`${selectedTab === 1 ? "flex  w-full" : "hidden"}`}>
         <AssetsForm
-          currency={goalData.names.currency}
+          currency={goalData?.names?.currency}
           goBack={() => setselectedTab(selectedTab - 1)}
           setData={(value) => {
             if (value.assets) {
@@ -127,9 +127,10 @@ function CalculateComponent() {
             }
           }}
         ></AssetsForm>
-      ) : selectedTab === 2 ? (
+      </div>
+      <div className={`${selectedTab === 2 ? "flex  w-full" : "hidden"}`}>
         <LiabilitiesForm
-          currency={goalData.names.currency}
+          currency={goalData?.names?.currency}
           goBack={() => setselectedTab(selectedTab - 1)}
           setData={(value) => {
             if (value.liabilities && value.revexp) {
@@ -142,8 +143,9 @@ function CalculateComponent() {
             }
           }}
         ></LiabilitiesForm>
-      ) : selectedTab === 3 ? (
-        // <OtherForm
+      </div>
+      <div className={`${selectedTab === 3 ? "flex  w-full" : "hidden"}`}>
+        {/* // <OtherForm
         //   goBack={() => setselectedTab(selectedTab - 1)}
         //   setData={(value) => {
         //     if (value.other) {
@@ -155,29 +157,19 @@ function CalculateComponent() {
         //       }));
         //     }
         //   }}
-        // ></OtherForm>
+        // ></OtherForm> */}
         <Output
           goBack={() => setselectedTab(selectedTab - 1)}
-          currency={goalData.names.currency}
+          currency={goalData?.names?.currency}
           nextTab={() => {
             setselectedTab(selectedTab + 1);
           }}
           goalData={goalData}
         ></Output>
-      ) : selectedTab === 4 ? (
-        <Output
-          goBack={() => setselectedTab(selectedTab - 1)}
-          currency={goalData.names.currency}
-          nextTab={() => {
-            setselectedTab(selectedTab + 1);
-          }}
-          goalData={goalData}
-        ></Output>
-      ) : selectedTab === 5 ? (
+      </div>
+      <div className={`${selectedTab === 4 ? "flex w-full" : "hidden"}`}>
         <AnnualForm goalData={goalData}></AnnualForm>
-      ) : (
-        <></>
-      )}
+      </div>
     </div>
   );
 }
@@ -404,9 +396,6 @@ const InputGoals = ({
   goalSum,
 }) => {
   const onChangeInputValue = (key, value) => {
-    console.log("onchange");
-    console.log(key, value);
-
     const currentValue = {
       goal: item.goal,
       amount: item.amount,
@@ -417,20 +406,9 @@ const InputGoals = ({
     onChangeValues(currentValue);
   };
 
-  const [value, setValue] = useState("");
-
-  const onChange = (event) => {
-    setValue(event.target.value);
-  };
-
   const onSearch = (searchTerm) => {
-    console.log("search ", searchTerm);
-    setValue(searchTerm);
-    // our api to fetch the search result
     onChangeInputValue("goal", searchTerm);
   };
-
-  console.log(value);
 
   return (
     <>
@@ -442,7 +420,7 @@ const InputGoals = ({
               <div className="search-inner relative">
                 <input
                   type="text"
-                  value={value}
+                  value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
                   className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                   placeholder="Goal"
@@ -450,7 +428,7 @@ const InputGoals = ({
                 />
                 <select
                   className="input input-bordered w-full border-slate-400"
-                  value={value}
+                  value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
                 >
                   <option value="" disabled>
@@ -470,10 +448,9 @@ const InputGoals = ({
               </div>
               <div className="dropdown relative">
                 {data
-                  .filter((item) => {
-                    const searchTerm = value.toLowerCase();
-                    const fullName = item.full_name.toLowerCase();
-
+                  .filter((goalItem) => {
+                    const searchTerm = item?.goal?.toLowerCase();
+                    const fullName = goalItem.full_name.toLowerCase();
                     return (
                       searchTerm &&
                       fullName.startsWith(searchTerm) &&
@@ -481,13 +458,13 @@ const InputGoals = ({
                     );
                   })
                   .slice(0, 10)
-                  .map((item) => (
+                  .map((goalItem) => (
                     <div
-                      onClick={() => onSearch(item.full_name)}
+                      onClick={() => onSearch(goalItem.full_name)}
                       className="dropdown-row absolute"
-                      key={item.full_name}
+                      key={goalItem.full_name}
                     >
-                      {item.full_name}
+                      {goalItem.full_name}
                     </div>
                   ))}
               </div>
@@ -509,7 +486,7 @@ const InputGoals = ({
                 onKeyDown={(e) =>
                   ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                 }
-                required={value}
+                required={item.goal}
               />
 
               {isDeletedButtonVisible && (
@@ -582,16 +559,7 @@ const InputAssets = ({
     onChangeValues(currentValue);
   };
 
-  const [value, setValue] = useState("");
-
-  const onChange = (event) => {
-    setValue(event.target.value);
-  };
-
   const onSearch = (searchTerm) => {
-    console.log("search ", searchTerm);
-    setValue(searchTerm);
-    // our api to fetch the search result
     onChangeInputValue("asset", searchTerm);
   };
 
@@ -606,7 +574,7 @@ const InputAssets = ({
               <div className="search-inner relative">
                 <input
                   type="text"
-                  value={value}
+                  value={item.asset}
                   onChange={(e) => onSearch(e.target.value)}
                   className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                   placeholder="Asset"
@@ -635,9 +603,9 @@ const InputAssets = ({
               </div>
               <div className="dropdown relative">
                 {assetsdata
-                  .filter((item) => {
-                    const searchTerm = value.toLowerCase();
-                    const fullName = item.full_name.toLowerCase();
+                  .filter((assetItem) => {
+                    const searchTerm = item?.asset?.toLowerCase();
+                    const fullName = assetItem.full_name.toLowerCase();
 
                     return (
                       searchTerm &&
@@ -646,13 +614,13 @@ const InputAssets = ({
                     );
                   })
                   .slice(0, 10)
-                  .map((item) => (
+                  .map((assetItem) => (
                     <div
-                      onClick={() => onSearch(item.full_name)}
+                      onClick={() => onSearch(assetItem.full_name)}
                       className="dropdown-row absolute"
-                      key={item.full_name}
+                      key={assetItem.full_name}
                     >
-                      {item.full_name}
+                      {assetItem.full_name}
                     </div>
                   ))}
               </div>
@@ -685,7 +653,7 @@ const InputAssets = ({
               <label>Amount</label>
               <div className="flex items-center border-slate-400 w-full items-center">
                 <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                  <p className="text-center">{item.currency}</p>
+                  <p className="text-center">{item?.currency}</p>
                 </div>
                 <input
                   name="amount"
@@ -693,11 +661,11 @@ const InputAssets = ({
                   className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
                   onChange={(e) => onChangeInputValue("amount", e.target.value)}
-                  min={value === "" ? 0 : 1}
+                  min={item.asset === "" ? 0 : 1}
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
-                  required={value}
+                  required={item.asset}
                 />
 
                 {isDeletedButtonVisible && (
@@ -927,16 +895,7 @@ const InputLiabilities = ({
     onChangeValues(currentValue);
   };
 
-  const [value, setValue] = useState("");
-
-  const onChange = (event) => {
-    setValue(event.target.value);
-  };
-
   const onSearch = (searchTerm) => {
-    console.log("search ", searchTerm);
-    setValue(searchTerm);
-    // our api to fetch the search result
     onChangeInputValue("liability", searchTerm);
   };
 
@@ -951,7 +910,7 @@ const InputLiabilities = ({
               <div className="search-inner relative">
                 <input
                   type="text"
-                  value={value}
+                  value={item.liability}
                   onChange={(e) => onSearch(e.target.value)}
                   className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                   placeholder="Liability"
@@ -979,9 +938,9 @@ const InputLiabilities = ({
               </div>
               <div className="dropdown relative">
                 {liabilitiesdata
-                  .filter((item) => {
-                    const searchTerm = value.toLowerCase();
-                    const fullName = item.full_name.toLowerCase();
+                  .filter((liability) => {
+                    const searchTerm = item?.liability?.toLowerCase();
+                    const fullName = liability.full_name.toLowerCase();
 
                     return (
                       searchTerm &&
@@ -990,13 +949,13 @@ const InputLiabilities = ({
                     );
                   })
                   .slice(0, 10)
-                  .map((item) => (
+                  .map((liability) => (
                     <div
-                      onClick={() => onSearch(item.full_name)}
+                      onClick={() => onSearch(liability.full_name)}
                       className="dropdown-row absolute"
-                      key={item.full_name}
+                      key={liability.full_name}
                     >
-                      {item.full_name}
+                      {liability.full_name}
                     </div>
                   ))}
               </div>
@@ -1037,8 +996,8 @@ const InputLiabilities = ({
                   className="input input-bordered w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
                   onChange={(e) => onChangeInputValue("amount", e.target.value)}
-                  required={value}
-                  min={value === "" ? 0 : 1}
+                  required={item.liability}
+                  min={item.liability === "" ? 0 : 1}
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
@@ -1351,7 +1310,7 @@ function PersonalForm({ setData }) {
   const initialGoalState = {
     amount: 0.0,
     goal: "",
-    currency: personalDetails.currency.toUpperCase(),
+    currency: personalDetails.currency?.toUpperCase(),
   };
 
   const [dependents, setDependents] = useState([
@@ -1417,7 +1376,7 @@ function PersonalForm({ setData }) {
   useEffect(() => {
     const temporaryGoalsArray = [...goals];
     temporaryGoalsArray.map(
-      (goal, index) => (goal.currency = personalDetails.currency.toUpperCase())
+      (goal, index) => (goal.currency = personalDetails.currency?.toUpperCase())
     );
     setGoals(temporaryGoalsArray);
   }, [personalDetails]);
@@ -1449,11 +1408,11 @@ function PersonalForm({ setData }) {
                   onChangeValues={(data) => {
                     var goalsTemporary = [...goals];
                     goalsTemporary[index] = data;
-                    console.log(goalsTemporary);
+                    console.log(goalsTemporary, "goalsTemporary");
                     setGoals(goalsTemporary);
                   }}
                   addNewGoal={addNewGoal}
-                  handleRemoveGoal={handleRemoveGoal}
+                  handleRemoveGoal={() => handleRemoveGoal(index)}
                   isDeletedButtonVisible={goals.length - 1 > 0}
                   isLast={goals.length - 1 === index}
                   goalSum={goalSum}
@@ -1472,7 +1431,9 @@ function PersonalForm({ setData }) {
                   setDependents(dependentsTemporary);
                 }}
                 addNewNameDependent={addNewNameDependent}
-                handleRemoveNameDependent={handleRemoveNameDependent}
+                handleRemoveNameDependent={() =>
+                  handleRemoveNameDependent(index)
+                }
                 isDeletedButtonVisible={dependents.length - 1 > 0}
                 isLast={dependents.length - 1 === index}
                 goalSum={goalSum}
@@ -1501,10 +1462,12 @@ function AssetsForm({ currency, setData, goBack }) {
     asset: "",
     amount: 0.0,
     assetmultiplier: 1,
-    currency: currency.toUpperCase(),
+    currency: currency?.toUpperCase(),
     revmultiplier: 1,
     revamount: 0.0,
   };
+
+  console.log(currency);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -1516,10 +1479,23 @@ function AssetsForm({ currency, setData, goBack }) {
 
   const [assets, setAssets] = useState([initialAssetData]);
 
+  useEffect(() => {
+    setAssets((prevAssets) => {
+      const tempAssets = [...prevAssets];
+      tempAssets.map((e) => (e.currency = currency?.toUpperCase()));
+      return tempAssets;
+    });
+    setRevexp((prevRev) => {
+      const tempRev = [...prevRev];
+      tempRev.map((e) => (e.currency = currency?.toUpperCase()));
+      return tempRev;
+    });
+  }, [currency]);
+
   const initialRevenueData = {
     revenue: 0.0,
     multiplierrev: 1,
-    currency: currency.toUpperCase(),
+    currency: currency?.toUpperCase(),
   };
 
   const [rev, setRevexp] = useState([initialRevenueData]);
@@ -1586,7 +1562,7 @@ function AssetsForm({ currency, setData, goBack }) {
                   setAssets(assetsTemporary);
                 }}
                 addNewAsset={addNewAsset}
-                handleRemoveAsset={handleRemoveAsset}
+                handleRemoveAsset={() => handleRemoveAsset(index)}
                 isLast={assets.length - 1 === index}
                 isDeletedButtonVisible={assets.length - 1 > 0}
               />
@@ -1647,7 +1623,7 @@ function LiabilitiesForm({ currency, setData, goBack }) {
   const initialRevenueData = {
     expenses: 0.0,
     multiplierexp: 1,
-    currency: currency.toUpperCase(),
+    currency: currency?.toUpperCase(),
   };
 
   const [revexp, setRevexp] = useState([initialRevenueData]);
@@ -1656,10 +1632,23 @@ function LiabilitiesForm({ currency, setData, goBack }) {
     liability: "",
     amount: 0.0,
     liabilitymultiplier: 1,
-    currencyliability: currency.toUpperCase(),
+    currencyliability: currency?.toUpperCase(),
   };
 
   const [liabilities, setLiability] = useState([initialLiabilitiesData]);
+
+  useEffect(() => {
+    setLiability((prevLiability) => {
+      const tempLiability = [...prevLiability];
+      tempLiability.map((e) => (e.currencyliability = currency?.toUpperCase()));
+      return tempLiability;
+    });
+    setRevexp((prevRev) => {
+      const tempRev = [...prevRev];
+      tempRev.map((e) => (e.currency = currency?.toUpperCase()));
+      return tempRev;
+    });
+  }, [currency]);
 
   const addNewLiability = () => {
     setLiability([...liabilities, initialLiabilitiesData]);
@@ -1733,7 +1722,7 @@ function LiabilitiesForm({ currency, setData, goBack }) {
                     setLiability(liabilityTemporary);
                   }}
                   addNewLiability={addNewLiability}
-                  handleRemoveLiability={handleRemoveLiability}
+                  handleRemoveLiability={() => handleRemoveLiability(index)}
                   isLast={liabilities.length - 1 === index}
                   isDeletedButtonVisible={liabilities.length - 1 > 0}
                 />
@@ -1915,48 +1904,48 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
     liabilityAmount,
   } = goalData;
 
-  const revexpSum = revexp.map((object) => {
+  const revexpSum = revexp?.map((object) => {
     return Number(object.revenue) - Number(object.expenses);
   });
 
-  const assetSum = assets.reduce((accumulator, object) => {
+  const assetSum = assets?.reduce((accumulator, object) => {
     return accumulator + Number(object.amount) * Number(object.assetmultiplier);
   }, 0);
 
-  const liabilitySum = liabilities.reduce((accumulator, object) => {
+  const liabilitySum = liabilities?.reduce((accumulator, object) => {
     return (
       accumulator + Number(object.amount) * Number(object.liabilitymultiplier)
     );
   }, 0);
 
-  const revenueSum = rev.map((object) => {
+  const revenueSum = rev?.map((object) => {
     return Number(object.multiplierrev) * Number(object.revenue);
     // return console.log(object);
   });
 
-  const expensesSum = revexp.reduce((accumulator, object) => {
+  const expensesSum = revexp?.reduce((accumulator, object) => {
     return accumulator + Number(object.expenses) * Number(object.multiplierexp);
   }, 0);
 
-  const totalCurrency = goalsData[0].currency;
+  const totalCurrency = goalsData ? goalsData[0]?.currency : 0;
 
-  const goalsCurrency = goalsData.map((object) => {
+  const goalsCurrency = goalsData?.map((object) => {
     return object.currency;
   });
 
-  const assetsCurrency = assets.map((object) => {
+  const assetsCurrency = assets?.map((object) => {
     return object.currency;
   });
 
-  const liabilityCurrency = liabilities.map((object) => {
+  const liabilityCurrency = liabilities?.map((object) => {
     return object.currencyliability;
   });
 
-  const revCurrency = revexp.map((object) => {
+  const revCurrency = revexp?.map((object) => {
     return object.currencyrev;
   });
 
-  const expCurrency = revexp.map((object) => {
+  const expCurrency = revexp?.map((object) => {
     return object.currencyexp;
   });
 
@@ -2091,7 +2080,7 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
                 <p className="py-0 my-0">
                   {totalCurrency}
                   &nbsp;
-                  {revenueSum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  {revenueSum?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </p>
               </div>
 
@@ -2100,7 +2089,7 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
                 <p className="py-0 my-0">
                   {totalCurrency}
                   &nbsp;
-                  {assetSum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  {assetSum?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </p>
               </div>
 
@@ -2110,7 +2099,7 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
                   {totalCurrency}
                   &nbsp;
                   {liabilitySum
-                    .toString()
+                    ?.toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </p>
               </div>
@@ -2120,7 +2109,9 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
                 <p className="py-0 my-0">
                   {totalCurrency}
                   &nbsp;
-                  {expensesSum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  {expensesSum
+                    ?.toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </p>
               </div>
 
@@ -2180,7 +2171,7 @@ function CalculateForm({ goalData }) {
 
   useEffect(() => {
     const temporaryAssetsData = [];
-    goalData.assets.map((assetItem) => {
+    goalData.assets?.map((assetItem) => {
       temporaryAssetsData.push({
         ...assetItem,
         year_one: assetItem.amount * assetItem.assetmultiplier * 1,
@@ -2214,7 +2205,7 @@ function CalculateForm({ goalData }) {
         <div className="">9th Year</div>
         <div className="">10th Year</div>
       </div>
-      {newAssetsData.map((assetItem) => (
+      {newAssetsData?.map((assetItem) => (
         <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
           <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1 capitalize">
             {assetItem.asset}
@@ -2254,7 +2245,7 @@ function CalculateLiabilityForm({ goalData }) {
 
   useEffect(() => {
     const temporaryLiabilitiesData = [];
-    goalData.liabilities.map((liabilityItem) => {
+    goalData.liabilities?.map((liabilityItem) => {
       temporaryLiabilitiesData.push({
         ...liabilityItem,
         year_one: liabilityItem.amount * liabilityItem.liabilitymultiplier * 1,
@@ -2291,7 +2282,7 @@ function CalculateLiabilityForm({ goalData }) {
         <div className="">9th Year</div>
         <div className="">10th Year</div>
       </div>
-      {newLiabilityData.map((liabilityItem) => (
+      {newLiabilityData?.map((liabilityItem) => (
         <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
           <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1">
             {liabilityItem.liability}
@@ -2327,9 +2318,12 @@ function AnnualForm({ goalData }) {
     liabilityAmount,
   } = goalData;
 
-  const assetsAnuallytotal = goalData.assets.reduce((accumulator, goalData) => {
-    return accumulator * goalData.amount;
-  }, 1);
+  const assetsAnuallytotal = goalData.assets?.reduce(
+    (accumulator, goalData) => {
+      return accumulator * goalData.amount;
+    },
+    1
+  );
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-8 ">
