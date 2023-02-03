@@ -165,16 +165,15 @@ function CalculateComponent() {
           goalData={goalData}
         ></Output>
       ) : selectedTab === 4 ? (
-        <AnnualForm goalData={goalData}></AnnualForm>
-      ) : // <Output
-      //   goBack={() => setselectedTab(selectedTab - 1)}
-      //   currency={goalData.names.currency}
-      //   nextTab={() => {
-      //     setselectedTab(selectedTab + 1);
-      //   }}
-      //   goalData={goalData}
-      // ></Output>
-      selectedTab === 5 ? (
+        <Output
+          goBack={() => setselectedTab(selectedTab - 1)}
+          currency={goalData.names.currency}
+          nextTab={() => {
+            setselectedTab(selectedTab + 1);
+          }}
+          goalData={goalData}
+        ></Output>
+      ) : selectedTab === 5 ? (
         <AnnualForm goalData={goalData}></AnnualForm>
       ) : (
         <></>
@@ -544,7 +543,16 @@ const InputGoals = ({
             </div>
 
             <div>
-              <p className="text-sm">Total Goal Amount: {goalSum}</p>
+              <p className="text-sm">
+                Total Goal Amount:
+                {item.currency == "USD" ? "$" : <></>}
+                {item.currency == "EUR" ? "€" : <></>}
+                {item.currency == "CAD" ? "C$" : <></>}
+                {item.currency == "GBP" ? "£" : <></>}
+                {item.currency == "BHD" ? "فلس" : <></>}
+                {item.currency == "KWD" ? "د.ك" : <></>}
+                {goalSum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+              </p>
             </div>
           </div>
         )}
@@ -724,7 +732,7 @@ const InputAssets = ({
         )}
       </div>
 
-      <div className="w-full flex-col lg:flex-col gap-2 flex lg:w-full ">
+      {/* <div className="w-full flex-col lg:flex-col gap-2 flex lg:w-full ">
         <p className="font-bold my-0">Monthly Revenue</p>
         <div className="flex flex-col md:flex-row w-full gap-2 lg:gap-10 ">
           <div className="w-full lg:w-1/2">
@@ -770,7 +778,7 @@ const InputAssets = ({
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
@@ -1071,7 +1079,7 @@ const InputLiabilities = ({
   );
 };
 
-const InputRevExp = ({
+const InputExp = ({
   isLast,
   item,
   onChangeValues,
@@ -1080,12 +1088,9 @@ const InputRevExp = ({
 }) => {
   const onChangeInputValue = (key, value) => {
     const currentValue = {
-      multiplierrev: item.multiplierrev,
-      revenue: item.revenue,
-      currencyrev: item.currencyrev,
       expenses: item.expenses,
       multiplierexp: item.multiplierexp,
-      currencyexp: item.currencyexp,
+      currency: item.currency,
     };
     currentValue[key] = value;
     onChangeValues(currentValue);
@@ -1095,55 +1100,6 @@ const InputRevExp = ({
     <>
       <div className="flex flex-col justify-between w-full gap-4">
         <div className="flex flex-col  w-full gap-2 md:gap-5 lg:gap-10 items-center">
-          {/* <div className="flex flex-col w-full gap-2 pb-8 border-b-g">
-            <p className="font-bold my-0">Monthly Revenue</p>
-            <div className="flex flex-col lg:flex-row w-full gap-3 lg:gap-10">
-              <div className="w-full lg:w-1/2">
-                <label>Multiplier</label>
-                <div className="flex items-center border-slate-400">
-                  <input
-                    name="multiplierrev"
-                    type="number"
-                    className="input input-bordered w-full border-slate-400"
-                    placeholder="0"
-                    value={item.multiplierrev}
-                    onChange={(e) =>
-                      onChangeInputValue("multiplierrev", e.target.value)
-                    }
-                    max={100}
-                    min={0}
-                    onKeyDown={(e) =>
-                      ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
-                    }
-                  />
-                </div>
-              </div>
-
-              <div className="w-full lg:w-1/2">
-                <label>Monthly Revenue</label>
-                <div className="flex items-center border-slate-400">
-                  <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                    {item.currencyrev}
-                  </div>
-                  <input
-                    name="revenue"
-                    type="number"
-                    className="input w-full rounded-l-none border-slate-400"
-                    placeholder="0"
-                    value={item.revenue}
-                    onChange={(e) =>
-                      onChangeInputValue("revenue", e.target.value)
-                    }
-                    min={0}
-                    onKeyDown={(e) =>
-                      ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-          </div> */}
-
           <div className="flex flex-col w-full gap-2">
             <p className="font-bold my-0">Monthly Expenses</p>
             <div className="flex flex-col lg:flex-row gap-3 lg:gap-10">
@@ -1172,7 +1128,7 @@ const InputRevExp = ({
                 <label>Monthly Expenses</label>
                 <div className="flex items-center border-slate-400">
                   <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                    {item.currencyexp}
+                    {item.currency}
                   </div>
                   <input
                     name="expenses"
@@ -1184,6 +1140,84 @@ const InputRevExp = ({
                       onChangeInputValue("expenses", e.target.value)
                     }
                     required
+                    min={0}
+                    onKeyDown={(e) =>
+                      ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+const InputRev = ({
+  isLast,
+  item,
+  onChangeValues,
+  addNewRevExp,
+  handleRemoveRevExp,
+}) => {
+  const onChangeInputValue = (key, value) => {
+    const currentValue = {
+      multiplierrev: item.multiplierrev,
+      revenue: item.revenue,
+      currency: item.currency,
+      expenses: item.expenses,
+      multiplierexp: item.multiplierexp,
+      currencyexp: item.currencyexp,
+    };
+    currentValue[key] = value;
+    onChangeValues(currentValue);
+  };
+
+  return (
+    <>
+      <div className="flex flex-col justify-between w-full gap-4">
+        <div className="flex flex-col  w-full gap-2 md:gap-5 lg:gap-10 items-center">
+          <div className="flex flex-col w-full gap-2 pb-8">
+            <p className="font-bold my-0">Monthly Revenue</p>
+            <div className="flex flex-col lg:flex-row w-full gap-3 lg:gap-10">
+              <div className="w-full lg:w-1/2">
+                <label>Multiplier</label>
+                <div className="flex items-center border-slate-400">
+                  <input
+                    name="multiplierrev"
+                    type="number"
+                    className="input input-bordered w-full border-slate-400"
+                    placeholder="0"
+                    value={item.multiplierrev}
+                    onChange={(e) =>
+                      onChangeInputValue("multiplierrev", e.target.value)
+                    }
+                    max={100}
+                    min={0}
+                    onKeyDown={(e) =>
+                      ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="w-full lg:w-1/2">
+                <label>Monthly Revenue</label>
+                <div className="flex items-center border-slate-400">
+                  <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
+                    {item.currency}
+                  </div>
+                  <input
+                    name="revenue"
+                    type="number"
+                    className="input w-full rounded-l-none border-slate-400"
+                    placeholder="0"
+                    value={item.revenue}
+                    onChange={(e) =>
+                      onChangeInputValue("revenue", e.target.value)
+                    }
                     min={0}
                     onKeyDown={(e) =>
                       ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
@@ -1476,10 +1510,19 @@ function AssetsForm({ currency, setData, goBack }) {
     e.preventDefault();
     setData({
       assets: assets,
+      rev: rev,
     });
   };
 
   const [assets, setAssets] = useState([initialAssetData]);
+
+  const initialRevenueData = {
+    revenue: 0.0,
+    multiplierrev: 1,
+    currency: currency.toUpperCase(),
+  };
+
+  const [rev, setRevexp] = useState([initialRevenueData]);
 
   const addNewAsset = () => {
     setAssets([...assets, initialAssetData]);
@@ -1550,6 +1593,22 @@ function AssetsForm({ currency, setData, goBack }) {
             </div>
           ))}
 
+          {rev.map((item, index) => (
+            <div key={index} className="px-0 w-full">
+              <InputRev
+                item={item}
+                onChangeValues={(data) => {
+                  var namesTemporary = [...rev];
+                  namesTemporary[index] = data;
+                  setRevexp(namesTemporary);
+                }}
+                // addNewRevExp={addNewRevExp}
+                // handleRemoveRevExp={handleRemoveRevExp}
+                isLast={rev.length - 1 === index}
+              />
+            </div>
+          ))}
+
           <div className="flex flex-col lg:flex-row justify-center md:justify-end gap-3 lg:gap-12">
             <div
               className="flex items-center cursor-pointer gap-2 justify-center"
@@ -1586,12 +1645,9 @@ function LiabilitiesForm({ currency, setData, goBack }) {
   };
 
   const initialRevenueData = {
-    revenue: 0.0,
-    multiplierrev: 1,
     expenses: 0.0,
     multiplierexp: 1,
-    currencyrev: currency.toUpperCase(),
-    currencyexp: currency.toUpperCase(),
+    currency: currency.toUpperCase(),
   };
 
   const [revexp, setRevexp] = useState([initialRevenueData]);
@@ -1609,12 +1665,20 @@ function LiabilitiesForm({ currency, setData, goBack }) {
     setLiability([...liabilities, initialLiabilitiesData]);
   };
 
-  const handleRemoveLiability = (index) => {
-    if (liabilities.length !== 1) {
-      const values = [...liabilities];
-      values.splice(index, 1);
-      setLiability(values);
-    }
+  // const handleRemoveLiability = (index) => {
+  //   if (liabilities.length !== 1) {
+  //     const values = [...liabilities];
+  //     values.splice(index, 1);
+  //     setLiability(values);
+  //   }
+  // };
+
+  const handleRemoveLiability = (id) => {
+    setLiability((item) => {
+      return item.filter((myItem, index) => {
+        return index !== id;
+      });
+    });
   };
 
   return (
@@ -1677,7 +1741,7 @@ function LiabilitiesForm({ currency, setData, goBack }) {
 
           {revexp.map((item, index) => (
             <div key={index} className="px-0 w-full">
-              <InputRevExp
+              <InputExp
                 item={item}
                 onChangeValues={(data) => {
                   var namesTemporary = [...revexp];
@@ -1841,6 +1905,7 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
     goalsData,
     assets,
     revexp,
+    rev,
     assetName,
     assetAmount,
     liabilityName,
@@ -1862,8 +1927,9 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
     );
   }, 0);
 
-  const revenueSum = assets.map((object) => {
-    return Number(object.revmultiplier) * Number(object.revamount);
+  const revenueSum = rev.map((object) => {
+    return Number(object.multiplierrev) * Number(object.revenue);
+    // return console.log(object);
   });
 
   const expensesSum = revexp.reduce((accumulator, object) => {
@@ -2019,11 +2085,11 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
                 </div>
               </div>
               <div className="flex justify-between flex-row gap-2 bg-[#F9E8E8] px-3 py-3 rounded-md">
-                <p>Total Revenue:</p>
+                <p>Total Net worth:</p>
                 <p className="py-0 my-0">
                   {totalCurrency}
                   &nbsp;
-                  {revenueSum}
+                  {revenueSum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </p>
               </div>
 
@@ -2032,7 +2098,7 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
                 <p className="py-0 my-0">
                   {totalCurrency}
                   &nbsp;
-                  {assetSum}
+                  {assetSum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </p>
               </div>
 
@@ -2041,7 +2107,9 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
                 <p className="py-0 my-0">
                   {totalCurrency}
                   &nbsp;
-                  {liabilitySum}
+                  {liabilitySum
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </p>
               </div>
 
@@ -2050,7 +2118,7 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
                 <p className="py-0 my-0">
                   {totalCurrency}
                   &nbsp;
-                  {expensesSum}
+                  {expensesSum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </p>
               </div>
 
