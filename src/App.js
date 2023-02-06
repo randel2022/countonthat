@@ -10,15 +10,14 @@ import CalculateComponent from "./components/Calculate";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
         <Header />
-        <div className="flex flex-col h-full md:h-auto py-0 space-between">
+        <div className="flex flex-col h-full md:h-auto py-0 space-between bg-white">
           <Routes>
             <Route
               path="/"
@@ -67,7 +66,6 @@ function App() {
         <Footer />
       </Router>
     </QueryClientProvider>
-    
   );
 }
 

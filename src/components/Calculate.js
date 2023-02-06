@@ -487,6 +487,7 @@ const InputGoals = ({
                   ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                 }
                 required={item.goal}
+                min={0}
               />
 
               {isDeletedButtonVisible && (
@@ -818,6 +819,7 @@ const InputDependents = ({
               onKeyDown={(e) =>
                 ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
               }
+              min={0}
             />
           </div>
           {isDeletedButtonVisible && (
