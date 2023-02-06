@@ -1447,6 +1447,7 @@ function PersonalForm({ setData }) {
             type="submit"
             className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
             value="Next Step"
+            onKeyDown={(e) => (e.key === "Enter" ? handleSubmit : "")}
           />
         </form>
       </div>
@@ -1600,6 +1601,7 @@ function AssetsForm({ currency, setData, goBack }) {
               type="submit"
               className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-center md:self-end"
               value="Next Step"
+              onKeyDown={(e) => (e.key === "Enter" ? handleSubmit : "")}
             />
           </div>
         </form>
@@ -1761,6 +1763,7 @@ function LiabilitiesForm({ currency, setData, goBack }) {
               type="submit"
               className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
               value="Next Step"
+              onKeyDown={(e) => (e.key === "Enter" ? handleSubmit : "")}
             />
           </div>
         </form>
