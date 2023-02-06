@@ -28,7 +28,7 @@
 }
 
 .CircularProgressbar .CircularProgressbar-trail {
-  stroke: #F9E8E8;
+  stroke: #f9e8e8;
 }
 
 @media only screen and (max-width: 767px) {
@@ -128,4 +128,19 @@
 
 .search-inner {
   display: flex;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="text"] {
+  background-color: white !important;
+}
+.input {
+  background-color: white !important;
+}
+
+button,
+select {
+  background-color: white !important;
 }
