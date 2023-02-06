@@ -231,7 +231,7 @@ const InputNames = ({
           <div className="w-full lg:w-1/3">
             <label>First Name</label>
             <input
-              className="input input-bordered w-full border-slate-400"
+              className="input input-bordered w-full border-slate-400 "
               placeholder="First Name"
               name="firstname"
               type="text"
