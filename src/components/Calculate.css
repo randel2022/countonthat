@@ -136,6 +136,11 @@ input[type="search"],
 input[type="text"] {
   background-color: white !important;
 }
+
+input:focus {
+  background-color: white !important;
+}
+
 .input {
   background-color: white !important;
 }
