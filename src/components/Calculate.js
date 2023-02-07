@@ -1523,16 +1523,16 @@ function AssetsForm({ currency, setData, goBack }) {
             Assement Management
           </p>
 
-          <label htmlFor="my-modal-3">
+          <label htmlFor="asset">
             <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
           </label>
         </div>
 
-        <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+        <input type="checkbox" id="asset" className="modal-toggle" />
         <div className="modal">
           <div className="modal-box relative">
             <label
-              htmlFor="my-modal-3"
+              htmlFor="asset"
               className="btn btn-sm btn-circle absolute right-2 top-2"
             >
               ✕
@@ -1683,16 +1683,16 @@ function LiabilitiesForm({ currency, setData, goBack }) {
           <p className="font-bold text-center md:text-left">
             Liability Management
           </p>
-          <label htmlFor="my-modal-3" className="">
+          <label htmlFor="liability" className="">
             <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
           </label>
         </div>
 
-        <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+        <input type="checkbox" id="liability" className="modal-toggle" />
         <div className="modal">
           <div className="modal-box relative">
             <label
-              htmlFor="my-modal-3"
+              htmlFor="liability"
               className="btn btn-sm btn-circle absolute right-2 top-2"
             >
               ✕
@@ -2054,17 +2054,21 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
             </div>
 
             <div className="flex flex-col gap-4 md:gap-6 shadow-gray-400 px-7 py-7 rounded-lg shadow-md h-full">
-              <div className="flex justify-between items-center ">
+              <div className="flex justify-between items-center">
                 <p className="font-bold my-0">Total Calculation</p>
-                <label htmlFor="my-modal-3" className="">
+                <label htmlFor="calculation" className="">
                   <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
                 </label>
               </div>
-              <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+              <input
+                type="checkbox"
+                id="calculation"
+                className="modal-toggle"
+              />
               <div className="modal">
                 <div className="modal-box relative">
                   <label
-                    htmlFor="my-modal-3"
+                    htmlFor="calculation"
                     className="btn btn-sm btn-circle absolute right-2 top-2"
                   >
                     ✕
@@ -2376,15 +2380,15 @@ function AnnualForm({ goalData }) {
             <h2 className="font-bold text-lg text-center md:text-left">
               Liabilities
             </h2>
-            <label htmlFor="liability" className="">
+            <label htmlFor="liable" className="">
               <IoMdInformationCircle className="text-2xl md:text-4xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
             </label>
           </div>
-          <input type="checkbox" id="liability" className="modal-toggle" />
+          <input type="checkbox" id="liable" className="modal-toggle" />
           <div className="modal">
             <div className="modal-box relative">
               <label
-                htmlFor="liability"
+                htmlFor="liable"
                 className="btn btn-sm btn-circle absolute right-2 top-2"
               >
                 ✕
