@@ -140,6 +140,22 @@ input[type="text"] {
   background-color: white !important;
 }
 
+.input[type="email"] {
+  background-color: white !important;
+}
+
+.input[type="password"] {
+  background-color: white !important;
+}
+
+.input[type="search"] {
+  background-color: white !important;
+}
+
+.input[type="text"] {
+  background-color: white !important;
+}
+
 button,
 select {
   background-color: white !important;
