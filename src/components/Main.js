@@ -237,7 +237,8 @@ function Main() {
           step. Understanding your goal and outlining the steps to get there are
           crucial to becoming successful. DreamWalk is guided by the philosophy
           of getting into a business mindset. You tell us your dreams, then we
-          quantify them and
+          quantify them and walk them back to today so you know how far away
+          your dream is to help you better plan for them.
         </p>
         <a
           href="/calculate"

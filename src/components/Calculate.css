@@ -141,6 +141,10 @@ input:focus {
   background-color: white !important;
 }
 
+.input:focus {
+  background-color: white !important;
+}
+
 .input {
   background-color: white !important;
 }
