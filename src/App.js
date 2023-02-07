@@ -1,6 +1,7 @@
 import logo from "./logo.svg";
 import "./App.css";
 import Header from "./components/Header";
+import Headercalc from "./components/Headercalc";
 import Footer from "./components/Footer";
 import Main from "./components/Main";
 import Assets from "./components/Assets";
@@ -16,13 +17,13 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <Header />
         <div className="flex flex-col h-full md:h-auto py-0 space-between bg-white">
           <Routes>
             <Route
               path="/"
               element={
                 <>
+                  <Header />
                   <Main />
                   {/* <Calculate /> */}
                 </>
@@ -33,6 +34,7 @@ function App() {
               element={
                 <>
                   {/* <Main /> */}
+                  <Headercalc />
                   <CalculateComponent />
                 </>
               }
@@ -41,6 +43,7 @@ function App() {
               path="/assets"
               element={
                 <>
+                  <Headercalc />
                   <Assets />
                 </>
               }
@@ -49,6 +52,7 @@ function App() {
               path="/liabilities"
               element={
                 <>
+                  <Headercalc />
                   <Liabilities />
                 </>
               }
@@ -57,6 +61,7 @@ function App() {
               path="/output"
               element={
                 <>
+                  <Headercalc />
                   <Output />
                 </>
               }
