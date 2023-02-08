@@ -178,11 +178,13 @@ export default CalculateComponent;
 
 const InputNames = ({
   isLast,
+  errors,
   item,
   onChangeValues,
   addNewName,
   isDeletedButtonVisible,
   handleRemoveName,
+  checkEmail,
 }) => {
   const onChangeInputValue = (key, value) => {
     const currentValue = {
@@ -237,8 +239,10 @@ const InputNames = ({
               type="text"
               value={item.firstname}
               onChange={(e) => onChangeInputValue("firstname", e.target.value)}
-              required
             />
+            {errors.firstname && (
+              <span className="text-red-600">{errors.firstname}</span>
+            )}
           </div>
 
           <div className="w-full lg:w-1/3">
@@ -250,8 +254,10 @@ const InputNames = ({
               type="text"
               value={item.lastname}
               onChange={(e) => onChangeInputValue("lastname", e.target.value)}
-              required
             />
+            {errors.lastname && (
+              <span className="text-red-600">{errors.lastname}</span>
+            )}
           </div>
 
           <div className="w-full lg:w-1/3">
@@ -263,13 +269,15 @@ const InputNames = ({
               className="input input-bordered w-full border-slate-400"
               value={item.agenew}
               onChange={(e) => onChangeInputValue("agenew", e.target.value)}
-              required
               max={99}
               min={1}
               onKeyDown={(e) =>
                 ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
               }
             />
+            {errors.agenew && (
+              <span className="text-red-600">{errors.agenew}</span>
+            )}
           </div>
           {isDeletedButtonVisible && (
             <span
@@ -292,7 +300,11 @@ const InputNames = ({
               value={item.email}
               onChange={(e) => onChangeInputValue("email", e.target.value)}
               required
+              checkEmail={checkEmail}
             />
+            {errors.email && (
+              <span className="text-red-600">{errors.email}</span>
+            )}
           </div>
 
           <div className="w-full lg:w-1/3">
@@ -304,8 +316,10 @@ const InputNames = ({
               type="number"
               value={item.contact}
               onChange={(e) => onChangeInputValue("contact", e.target.value)}
-              required
             />
+            {errors.contact && (
+              <span className="text-red-600">{errors.contact}</span>
+            )}
           </div>
           <div className="w-full lg:w-1/3">
             <label>Currency</label>
@@ -314,7 +328,6 @@ const InputNames = ({
                 className="w-full focus:outline-none"
                 value={item.currency}
                 onChange={(e) => onChangeInputValue("currency", e.target.value)}
-                required
               >
                 <option disabled> Choose Currency </option>
                 <option value="usd">USD</option>
@@ -763,7 +776,6 @@ const InputDependents = ({
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-3">
-        <p className="font-bold">Dependents</p>
         <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
           <div className="w-full lg:w-1/3">
             <label>First Name</label>
@@ -1291,19 +1303,57 @@ const InputOther = ({
 };
 
 function PersonalForm({ setData }) {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setData({
-      names: personalDetails,
-      dependents: dependents,
-      goalsData: goals,
-    });
+  const handleSubmit = () => {
+    try {
+      const tempErrors = {
+        firstname:
+          personalDetails.firstname === "" ? "First Name is required" : "",
+        lastname:
+          personalDetails.lastname === "" ? "Last Name is required" : "",
+        agenew: personalDetails.agenew === "" ? "Age is required" : "",
+        email: personalDetails.email === "" ? "Email is required" : "",
+        contact: personalDetails.contact === "" ? "Contact is required" : "",
+      };
+      console.log(tempErrors);
+      console.log(personalDetails);
+      setErrors(tempErrors);
+      const isEmpty = Object.values(tempErrors).every(
+        (x) => x === null || x === ""
+      );
+      if (isEmpty) {
+        setData({
+          names: personalDetails,
+          dependents: dependents,
+          goalsData: goals,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  function checkEmail(email) {
+    let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+    if (email.match(regex)) return console.log("email valid");
+    else return console.log("email not valid");
+  }
+
+  const [errors, setErrors] = useState({
+    firstname: "",
+    lastname: "",
+    agenew: "",
+    email: "",
+    contact: "",
+    currency: "",
+  });
+
+  console.log(errors);
 
   const [personalDetails, setpersonalDetails] = useState({
     firstname: "",
     lastname: "",
-    agenew: "not filled",
+    agenew: "",
     email: "",
     contact: "",
     currency: "USD",
@@ -1315,14 +1365,7 @@ function PersonalForm({ setData }) {
     currency: personalDetails.currency?.toUpperCase(),
   };
 
-  const [dependents, setDependents] = useState([
-    {
-      firstnamedependent: "",
-      lastnamedependent: "",
-      agedependent: "not filled",
-      relationship: "",
-    },
-  ]);
+  const [dependents, setDependents] = useState([]);
 
   const [goals, setGoals] = useState([initialGoalState]);
 
@@ -1355,11 +1398,9 @@ function PersonalForm({ setData }) {
   };
 
   const handleRemoveNameDependent = (index) => {
-    if (dependents.length !== 1) {
-      const values = [...dependents];
-      values.splice(index, 1);
-      setDependents(values);
-    }
+    const values = [...dependents];
+    values.splice(index, 1);
+    setDependents(values);
     console.log("remove dependents");
   };
 
@@ -1383,73 +1424,112 @@ function PersonalForm({ setData }) {
     setGoals(temporaryGoalsArray);
   }, [personalDetails]);
 
+  useEffect(() => {
+    const keyDownHandler = (event) => {
+      console.log("User pressed: ", event.key);
+
+      if (event.key === "Enter") {
+        event.preventDefault();
+
+        // 👇️ your logic here
+        handleSubmit();
+      }
+    };
+
+    document.addEventListener("keydown", keyDownHandler);
+
+    return () => {
+      document.removeEventListener("keydown", keyDownHandler);
+    };
+  }, []);
+
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3 ">
       <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-0 md:px-7 py-7 rounded-lg shadow-none lg:shadow-md">
-        <form
-          onSubmit={(e) => {
-            handleSubmit(e);
-          }}
-          className="gap-10 flex flex-col w-5/6	md:w-full"
-        >
-          <div className="px-0 w-full">
-            <InputNames
-              item={personalDetails}
-              onChangeValues={(data) => {
-                setpersonalDetails(data);
-              }}
-              addNewName={addNewName}
-            />
-          </div>
-
-          <div className="w-full pb-6 border-b-g">
-            {goals.map((item, index) => (
-              <div key={index} className="px-0 w-full mb-3">
-                <InputGoals
+        <div className="px-0 w-full">
+          <InputNames
+            item={personalDetails}
+            errors={errors}
+            onChangeValues={(data) => {
+              const tempErrors = {
+                firstname:
+                  data.firstname === "" ? "First Name is required" : "",
+                lastname: data.lastname === "" ? "Last Name is required" : "",
+                agenew: data.agenew === "" ? "Age is required" : "",
+                email: data.email === "" ? "Email is required" : "",
+                contact: data.contact === "" ? "Contact is required" : "",
+              };
+              setErrors(tempErrors);
+              setpersonalDetails(data);
+            }}
+            addNewName={addNewName}
+          />
+        </div>
+        <div className="w-full pb-6 border-b-g">
+          {goals.map((item, index) => (
+            <div key={index} className="px-0 w-full mb-3">
+              <InputGoals
+                item={item}
+                onChangeValues={(data) => {
+                  var goalsTemporary = [...goals];
+                  goalsTemporary[index] = data;
+                  console.log(goalsTemporary, "goalsTemporary");
+                  setGoals(goalsTemporary);
+                }}
+                addNewGoal={addNewGoal}
+                handleRemoveGoal={() => handleRemoveGoal(index)}
+                isDeletedButtonVisible={goals.length - 1 > 0}
+                isLast={goals.length - 1 === index}
+                goalSum={goalSum}
+              />
+            </div>
+          ))}
+        </div>
+        {dependents.length > 0 ? (
+          <div className="w-full">
+            <p className="font-bold">Dependents</p>
+            {dependents.map((item, index) => (
+              <div key={index} className="px-0 w-full">
+                <InputDependents
                   item={item}
                   onChangeValues={(data) => {
-                    var goalsTemporary = [...goals];
-                    goalsTemporary[index] = data;
-                    console.log(goalsTemporary, "goalsTemporary");
-                    setGoals(goalsTemporary);
+                    var dependentsTemporary = [...dependents];
+                    dependentsTemporary[index] = data;
+                    setDependents(dependentsTemporary);
                   }}
-                  addNewGoal={addNewGoal}
-                  handleRemoveGoal={() => handleRemoveGoal(index)}
-                  isDeletedButtonVisible={goals.length - 1 > 0}
-                  isLast={goals.length - 1 === index}
+                  addNewNameDependent={addNewNameDependent}
+                  handleRemoveNameDependent={() =>
+                    handleRemoveNameDependent(index)
+                  }
+                  isDeletedButtonVisible={true}
+                  isLast={dependents.length - 1 === index}
                   goalSum={goalSum}
                 />
               </div>
             ))}
           </div>
-
-          {dependents.map((item, index) => (
-            <div key={index} className="px-0 w-full">
-              <InputDependents
-                item={item}
-                onChangeValues={(data) => {
-                  var dependentsTemporary = [...dependents];
-                  dependentsTemporary[index] = data;
-                  setDependents(dependentsTemporary);
-                }}
-                addNewNameDependent={addNewNameDependent}
-                handleRemoveNameDependent={() =>
-                  handleRemoveNameDependent(index)
-                }
-                isDeletedButtonVisible={dependents.length - 1 > 0}
-                isLast={dependents.length - 1 === index}
-                goalSum={goalSum}
-              />
+        ) : (
+          <div className="w-full">
+            <p className="font-bold">Dependents</p>
+            <div
+              className="flex items-center cursor-pointer mt-2"
+              onClick={addNewNameDependent}
+            >
+              <div className="flex items-center gap-2 border-b">
+                <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
+                <p className="text-sm text-[#A0161B]">Add Another Dependent</p>
+              </div>
             </div>
-          ))}
+          </div>
+        )}
 
-          <input
-            type="submit"
-            className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
-            value="Next Step"
-            onKeyDown={(e) => (e.key === "Enter" ? handleSubmit : "")}
-          />
-        </form>
+        <button
+          onClick={() => handleSubmit()}
+          className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-center md:self-end"
+        >
+          {" "}
+          Next Step
+        </button>
       </div>
 
       <a href="/calculate" className="flex items-center gap-2 mt-4">
@@ -2137,7 +2217,7 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
                   onSubmit={(e) => {
                     handleSubmit(e);
                   }}
-                  className="flex bg-green-400 bg-green-400 w-1/2 gap-10 "
+                  className="flex w-1/2 gap-10 "
                 >
                   <input
                     type="submit"
