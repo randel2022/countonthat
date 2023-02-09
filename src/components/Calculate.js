@@ -1444,7 +1444,7 @@ function PersonalForm({ setData }) {
   }, []);
 
   return (
-    <div className="w-full justify-center items-center flex flex-col gap-3 ">
+    <div className="w-full justify-center items-center flex flex-col gap-3 px-16">
       <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-0 md:px-7 py-7 rounded-lg shadow-none lg:shadow-md">
         <div className="px-0 w-full">
           <InputNames
@@ -2258,6 +2258,8 @@ function CalculateForm({ goalData }) {
 
   const [newAssetsData, setNewAssetsData] = useState([]);
 
+  console.log(newAssetsData);
+
   useEffect(() => {
     const temporaryAssetsData = [];
     goalData.assets?.map((assetItem) => {
@@ -2281,7 +2283,7 @@ function CalculateForm({ goalData }) {
 
   return (
     <div className="overflow-x-auto w-25 lg:w-full">
-      <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
+      <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div ">
         <div className="capitalize text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1 "></div>
         <div className="">1st Year</div>
         <div className="">2nd Year</div>
@@ -2296,7 +2298,7 @@ function CalculateForm({ goalData }) {
       </div>
       {newAssetsData?.map((assetItem) => (
         <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
-          <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1 capitalize">
+          <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1 capitalize ">
             {assetItem.asset}
           </div>
           <div className="py-3 ">{assetItem.year_one}</div>
@@ -2358,7 +2360,7 @@ function CalculateLiabilityForm({ goalData }) {
 
   return (
     <div className="overflow-x-auto w-25 lg:w-full">
-      <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full ">
+      <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full bg-red-400 h-5">
         <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1"></div>
         <div className="">1st Year</div>
         <div className="">2nd Year</div>
@@ -2372,7 +2374,7 @@ function CalculateLiabilityForm({ goalData }) {
         <div className="">10th Year</div>
       </div>
       {newLiabilityData?.map((liabilityItem) => (
-        <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
+        <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div h-15">
           <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1">
             {liabilityItem.liability}
           </div>
@@ -2446,9 +2448,9 @@ function AnnualForm({ goalData }) {
             </div>
           </div>
 
-          <div className="w-full grid ">
+          <div className="w-full grid bg-green-400">
             <div className="flex flex-col md:w-full">
-              <div className="text-center shadow-gray-400 rounded-lg shadow-md">
+              <div className="text-center shadow-gray-400 rounded-lg shadow-md h-12 ">
                 <CalculateForm goalData={goalData}></CalculateForm>
               </div>
             </div>
@@ -2485,7 +2487,7 @@ function AnnualForm({ goalData }) {
 
           <div className="w-full grid ">
             <div className="flex flex-col">
-              <div className="text-center shadow-gray-400 rounded-lg shadow-md">
+              <div className="text-center shadow-gray-400 rounded-lg shadow-md h-12">
                 <CalculateLiabilityForm
                   goalData={goalData}
                 ></CalculateLiabilityForm>
