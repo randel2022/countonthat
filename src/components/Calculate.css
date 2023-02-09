@@ -152,3 +152,8 @@ input:focus {
 select {
   background-color: white !important;
 }
+
+.required {
+  margin-top: 40px;
+  left: 15px;
+}

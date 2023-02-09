@@ -229,8 +229,8 @@ const InputNames = ({
             </p>
           </div>
         </div>
-        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center ">
-          <div className="w-full lg:w-1/3">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
+          <div className="w-full lg:w-1/3 relative">
             <label>First Name</label>
             <input
               className="input input-bordered w-full border-slate-400 "
@@ -241,11 +241,13 @@ const InputNames = ({
               onChange={(e) => onChangeInputValue("firstname", e.target.value)}
             />
             {errors.firstname && (
-              <span className="text-red-600">{errors.firstname}</span>
+              <span className="text-red-600 absolute w-full required">
+                {errors.firstname}
+              </span>
             )}
           </div>
 
-          <div className="w-full lg:w-1/3">
+          <div className="w-full lg:w-1/3 relative">
             <label>Last Name</label>
             <input
               className="input input-bordered w-full border-slate-400"
@@ -256,11 +258,13 @@ const InputNames = ({
               onChange={(e) => onChangeInputValue("lastname", e.target.value)}
             />
             {errors.lastname && (
-              <span className="text-red-600">{errors.lastname}</span>
+              <span className="text-red-600 absolute w-full required">
+                {errors.lastname}
+              </span>
             )}
           </div>
 
-          <div className="w-full lg:w-1/3">
+          <div className="w-full lg:w-1/3 relative">
             <label>Age</label>
             <input
               name="agenew"
@@ -276,7 +280,9 @@ const InputNames = ({
               }
             />
             {errors.agenew && (
-              <span className="text-red-600">{errors.agenew}</span>
+              <span className="text-red-600 absolute w-full required">
+                {errors.agenew}
+              </span>
             )}
           </div>
           {isDeletedButtonVisible && (
@@ -289,8 +295,8 @@ const InputNames = ({
           )}
         </div>
 
-        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
-          <div className="w-full lg:w-1/3">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center mt-0 md:mt-3">
+          <div className="w-full lg:w-1/3 relative ">
             <label>Email Address</label>
             <input
               className="input input-bordered w-full border-slate-400"
@@ -303,11 +309,13 @@ const InputNames = ({
               checkEmail={checkEmail}
             />
             {errors.email && (
-              <span className="text-red-600">{errors.email}</span>
+              <span className="text-red-600 absolute w-full required">
+                {errors.email}
+              </span>
             )}
           </div>
 
-          <div className="w-full lg:w-1/3">
+          <div className="w-full lg:w-1/3 relative">
             <label>Contact Number</label>
             <input
               className="input input-bordered w-full border-slate-400 contact-field"
@@ -318,7 +326,9 @@ const InputNames = ({
               onChange={(e) => onChangeInputValue("contact", e.target.value)}
             />
             {errors.contact && (
-              <span className="text-red-600">{errors.contact}</span>
+              <span className="text-red-600 absolute w-full required">
+                {errors.contact}
+              </span>
             )}
           </div>
           <div className="w-full lg:w-1/3">
@@ -430,7 +440,7 @@ const InputGoals = ({
           <div className="w-full lg:w-1/2">
             <label className="my-3 ">Goals</label>
             <div className="search-container relative">
-              <div className="search-inner relative">
+              <div className="search-inner relative ">
                 <input
                   type="text"
                   value={item.goal}
@@ -440,7 +450,7 @@ const InputGoals = ({
                   required={goalSum}
                 />
                 <select
-                  className="input input-bordered w-full border-slate-400"
+                  className="input input-bordered w-full border-slate-400 bg-red-400"
                   value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
                 >
@@ -459,7 +469,7 @@ const InputGoals = ({
                   </option>
                 </select>
               </div>
-              <div className="dropdown relative">
+              <div className="dropdown relative ">
                 {data
                   .filter((goalItem) => {
                     const searchTerm = item?.goal?.toLowerCase();
