@@ -149,26 +149,6 @@ input:focus {
   background-color: white !important;
 }
 
-<<<<<<< HEAD
-button,
-=======
-.input[type="email"] {
-  background-color: white !important;
-}
-
-.input[type="password"] {
-  background-color: white !important;
-}
-
-.input[type="search"] {
-  background-color: white !important;
-}
-
-.input[type="text"] {
-  background-color: white !important;
-}
-
->>>>>>> 0bcd534c92cca7757bfa37246ea0c7e1ada8801a
 select {
   background-color: white !important;
 }
