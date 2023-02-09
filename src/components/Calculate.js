@@ -229,7 +229,7 @@ const InputNames = ({
             </p>
           </div>
         </div>
-        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-5 md:gap-2 lg:gap-10 items-center">
           <div className="w-full lg:w-1/3 relative">
             <label>First Name</label>
             <input
@@ -241,7 +241,7 @@ const InputNames = ({
               onChange={(e) => onChangeInputValue("firstname", e.target.value)}
             />
             {errors.firstname && (
-              <span className="text-red-600 absolute w-full required">
+              <span className="text-red-600 text-sm absolute w-full required">
                 {errors.firstname}
               </span>
             )}
@@ -258,7 +258,7 @@ const InputNames = ({
               onChange={(e) => onChangeInputValue("lastname", e.target.value)}
             />
             {errors.lastname && (
-              <span className="text-red-600 absolute w-full required">
+              <span className="text-red-600 text-sm absolute w-full required">
                 {errors.lastname}
               </span>
             )}
@@ -280,7 +280,7 @@ const InputNames = ({
               }
             />
             {errors.agenew && (
-              <span className="text-red-600 absolute w-full required">
+              <span className="text-red-600 text-sm absolute w-full required">
                 {errors.agenew}
               </span>
             )}
@@ -295,7 +295,7 @@ const InputNames = ({
           )}
         </div>
 
-        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center mt-0 md:mt-3">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-5 md:gap-2 lg:gap-10 items-center mt-0 md:mt-3 pt-2 md:pt-0">
           <div className="w-full lg:w-1/3 relative ">
             <label>Email Address</label>
             <input
@@ -309,7 +309,7 @@ const InputNames = ({
               checkEmail={checkEmail}
             />
             {errors.email && (
-              <span className="text-red-600 absolute w-full required">
+              <span className="text-red-600 absolute w-full required text-sm">
                 {errors.email}
               </span>
             )}
@@ -326,7 +326,7 @@ const InputNames = ({
               onChange={(e) => onChangeInputValue("contact", e.target.value)}
             />
             {errors.contact && (
-              <span className="text-red-600 absolute w-full required">
+              <span className="text-red-600 absolute w-full required text-sm">
                 {errors.contact}
               </span>
             )}
@@ -334,7 +334,7 @@ const InputNames = ({
 
           <div className="w-full lg:w-1/3">
             <label>Currency</label>
-            <div className="flex justify-center border-slate-400 input input-bordered  items-center">
+            <div className="flex justify-center border-slate-400 input input-bordered pl-3 pr-0 items-center">
               <select
                 className="w-full focus:outline-none"
                 value={item.currency}
@@ -441,17 +441,17 @@ const InputGoals = ({
           <div className="w-full lg:w-1/2">
             <label className="my-3 ">Goals</label>
             <div className="search-container relative">
-              <div className="search-inner relative input input-bordered border-slate-400 px-4">
+              <div className="search-inner relative input input-bordered border-slate-400 px-0">
                 <input
                   type="text"
                   value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
-                  className="absolute w-3/4 h-full ml-1"
+                  className="absolute w-3/4 h-full ml-4 focus:outline-none"
                   placeholder="Goal"
                   required={goalSum}
                 />
                 <select
-                  className="input border-none w-full bg-red-400 mx-0 h-full"
+                  className="input border-none focus:outline-none w-full bg-red-400 mx-0 h-full"
                   value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
                 >
@@ -789,8 +789,8 @@ const InputDependents = ({
 }) => {
   return (
     <>
-      <div className="flex flex-col justify-between w-full gap-3">
-        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
+      <div className="flex flex-col justify-between w-full gap-3 mb-7">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center ">
           <div className="w-full lg:w-1/3">
             <label>First Name</label>
             <input
