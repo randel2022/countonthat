@@ -331,6 +331,7 @@ const InputNames = ({
               </span>
             )}
           </div>
+
           <div className="w-full lg:w-1/3">
             <label>Currency</label>
             <div className="flex justify-center border-slate-400 input input-bordered  items-center">
@@ -435,22 +436,22 @@ const InputGoals = ({
 
   return (
     <>
-      <div className="flex flex-col justify-between w-full gap-4  ">
+      <div className="flex flex-col justify-between w-full gap-4">
         <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
           <div className="w-full lg:w-1/2">
             <label className="my-3 ">Goals</label>
             <div className="search-container relative">
-              <div className="search-inner relative ">
+              <div className="search-inner relative input input-bordered border-slate-400 px-4">
                 <input
                   type="text"
                   value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
-                  className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
+                  className="absolute w-3/4 h-full ml-1"
                   placeholder="Goal"
                   required={goalSum}
                 />
                 <select
-                  className="input input-bordered w-full border-slate-400 bg-red-400"
+                  className="input border-none w-full bg-red-400 mx-0 h-full"
                   value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
                 >
