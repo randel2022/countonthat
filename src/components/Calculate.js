@@ -552,7 +552,10 @@ const InputGoals = ({
                 {item.currency == "GBP" ? "£" : <></>}
                 {item.currency == "BHD" ? "فلس" : <></>}
                 {item.currency == "KWD" ? "د.ك" : <></>}
-                {goalSum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                {goalSum
+                  .toFixed(2)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
               </p>
             </div>
           </div>
