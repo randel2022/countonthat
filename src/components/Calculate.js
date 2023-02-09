@@ -335,7 +335,7 @@ const InputNames = ({
           <div className="w-full lg:w-1/3">
             <label>Currency</label>
             <div className="flex justify-center border-slate-400 input input-bordered px-0 items-center relative">
-              <label className="absolute bg-white mt-3 uppercase w-16 left-0 text-center self-start">
+              <label className="absolute bg-white mt-3 uppercase w-16 left-0 text-center self-start ">
                 {item.currency}
               </label>
               <select
