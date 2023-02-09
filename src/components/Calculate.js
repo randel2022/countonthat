@@ -1311,7 +1311,7 @@ function PersonalForm({ setData }) {
         lastname:
           personalDetails.lastname === "" ? "Last Name is required" : "",
         agenew: personalDetails.agenew === "" ? "Age is required" : "",
-        email: personalDetails.email === "" ? "Email is required" : "",
+        email: checkEmail(personalDetails.email),
         contact: personalDetails.contact === "" ? "Contact is required" : "",
       };
       console.log(tempErrors);
@@ -1335,8 +1335,11 @@ function PersonalForm({ setData }) {
   function checkEmail(email) {
     let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-    if (email.match(regex)) return console.log("email valid");
-    else return console.log("email not valid");
+    if (email === "") {
+      return "Email is Required";
+    }
+    if (email.match(regex)) return "";
+    else return "Email not valid ";
   }
 
   const [errors, setErrors] = useState({
@@ -1441,7 +1444,7 @@ function PersonalForm({ setData }) {
     return () => {
       document.removeEventListener("keydown", keyDownHandler);
     };
-  }, []);
+  }, [errors]);
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3 px-16">
@@ -1452,12 +1455,11 @@ function PersonalForm({ setData }) {
             errors={errors}
             onChangeValues={(data) => {
               const tempErrors = {
-                firstname:
-                  data.firstname === "" ? "First Name is required" : "",
-                lastname: data.lastname === "" ? "Last Name is required" : "",
-                agenew: data.agenew === "" ? "Age is required" : "",
-                email: data.email === "" ? "Email is required" : "",
-                contact: data.contact === "" ? "Contact is required" : "",
+                firstname: "",
+                lastname: "",
+                agenew: "",
+                email: "",
+                contact: "",
               };
               setErrors(tempErrors);
               setpersonalDetails(data);
@@ -2360,7 +2362,7 @@ function CalculateLiabilityForm({ goalData }) {
 
   return (
     <div className="overflow-x-auto w-25 lg:w-full">
-      <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full bg-red-400 h-5">
+      <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full">
         <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1"></div>
         <div className="">1st Year</div>
         <div className="">2nd Year</div>
@@ -2429,7 +2431,7 @@ function AnnualForm({ goalData }) {
             </label>
           </div>
 
-          <input type="checkbox" id="assets" className="modal-toggle" />
+          {/* <input type="checkbox" id="assets" className="modal-toggle" />
           <div className="modal">
             <div className="modal-box relative">
               <label
@@ -2446,9 +2448,9 @@ function AnnualForm({ goalData }) {
                 nisi ut aliquip ex ea commodo consequat.
               </p>
             </div>
-          </div>
+          </div> */}
 
-          <div className="w-full grid bg-green-400">
+          <div className="w-full grid ">
             <div className="flex flex-col md:w-full">
               <div className="text-center shadow-gray-400 rounded-lg shadow-md h-12 ">
                 <CalculateForm goalData={goalData}></CalculateForm>
@@ -2466,7 +2468,8 @@ function AnnualForm({ goalData }) {
               <IoMdInformationCircle className="text-2xl md:text-4xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
             </label>
           </div>
-          <input type="checkbox" id="liable" className="modal-toggle" />
+
+          {/* <input type="checkbox" id="liable" className="modal-toggle" />
           <div className="modal">
             <div className="modal-box relative">
               <label
@@ -2483,7 +2486,7 @@ function AnnualForm({ goalData }) {
                 nisi ut aliquip ex ea commodo consequat.
               </p>
             </div>
-          </div>
+          </div> */}
 
           <div className="w-full grid ">
             <div className="flex flex-col">
