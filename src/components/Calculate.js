@@ -2431,7 +2431,7 @@ function AnnualForm({ goalData }) {
             </label>
           </div>
 
-          {/* <input type="checkbox" id="assets" className="modal-toggle" />
+          <input type="checkbox" id="assets" className="modal-toggle" />
           <div className="modal">
             <div className="modal-box relative">
               <label
@@ -2448,7 +2448,7 @@ function AnnualForm({ goalData }) {
                 nisi ut aliquip ex ea commodo consequat.
               </p>
             </div>
-          </div> */}
+          </div>
 
           <div className="w-full grid ">
             <div className="flex flex-col md:w-full">
@@ -2469,7 +2469,7 @@ function AnnualForm({ goalData }) {
             </label>
           </div>
 
-          {/* <input type="checkbox" id="liable" className="modal-toggle" />
+          <input type="checkbox" id="liable" className="modal-toggle" />
           <div className="modal">
             <div className="modal-box relative">
               <label
@@ -2486,7 +2486,7 @@ function AnnualForm({ goalData }) {
                 nisi ut aliquip ex ea commodo consequat.
               </p>
             </div>
-          </div> */}
+          </div>
 
           <div className="w-full grid ">
             <div className="flex flex-col">
