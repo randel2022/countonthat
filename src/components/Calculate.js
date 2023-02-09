@@ -2067,7 +2067,7 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
                 Realistically Towards Dream
               </h2>
               <label htmlFor="towards-dream" className="py-0 ">
-                <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
+                <IoMdInformationCircle className="text-2xl cursor-pointer  md:block text-[#011013]"></IoMdInformationCircle>
               </label>
             </div>
 
@@ -2113,7 +2113,7 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
               <div className="flex flex-row gap-2 item-center justify-between">
                 <p className="font-bold my-0">Financially Towards Dream 40%</p>
                 <label htmlFor="finacial" className="">
-                  <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
+                  <IoMdInformationCircle className="text-2xl cursor-pointer block text-[#011013]"></IoMdInformationCircle>
                 </label>
               </div>
 
@@ -2153,7 +2153,7 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
               <div className="flex justify-between items-center">
                 <p className="font-bold my-0">Total Calculation</p>
                 <label htmlFor="calculation" className="">
-                  <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
+                  <IoMdInformationCircle className="text-2xl cursor-pointer block text-[#011013]"></IoMdInformationCircle>
                 </label>
               </div>
               <input
