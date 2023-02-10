@@ -334,9 +334,12 @@ const InputNames = ({
 
           <div className="w-full lg:w-1/3">
             <label>Currency</label>
-            <div className="flex justify-center border-slate-400 input input-bordered px-0 items-center">
+            <div className="flex justify-center border-slate-400 input input-bordered px-0 items-center relative">
+              <label className="absolute bg-white mt-3 uppercase w-16 left-0 text-center self-start ">
+                {item.currency}
+              </label>
               <select
-                className="w-full focus:outline-none ml-3"
+                className="w-full focus:outline-none bg-red-400"
                 value={item.currency}
                 onChange={(e) => onChangeInputValue("currency", e.target.value)}
               >
