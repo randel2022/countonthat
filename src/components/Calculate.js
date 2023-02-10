@@ -98,7 +98,7 @@ function CalculateComponent() {
       ) : (
         <></>
       )}
-      <div className={`${selectedTab === 0 ? "flex  w-full" : "hidden"}`}>
+      <div className={`${selectedTab === 0 ? "flex w-full" : "hidden"}`}>
         <PersonalForm
           setData={(value) => {
             if (value.names && value.goalsData) {
@@ -339,19 +339,32 @@ const InputNames = ({
                 {item.currency}
               </label>
               <select
-                className="w-full focus:outline-none bg-red-400"
+                className="w-full focus:outline-none "
                 value={item.currency}
                 onChange={(e) => onChangeInputValue("currency", e.target.value)}
               >
-                <option disabled> Choose Currency </option>
-                <option value="usd" className="text-sm">
+                <option disabled className="">
+                  {" "}
+                  Choose Currency{" "}
+                </option>
+                <option value="usd" className="currency">
                   USD
                 </option>
-                <option value="eur">EUR</option>
-                <option value="cad">CAD</option>
-                <option value="gbp">GBP</option>
-                <option value="bhd">BHD</option>
-                <option value="kwd">KWD</option>
+                <option value="eur" className="currency">
+                  EUR
+                </option>
+                <option value="cad" className="currency">
+                  CAD
+                </option>
+                <option value="gbp" className="currency">
+                  GBP
+                </option>
+                <option value="bhd" className="currency">
+                  BHD
+                </option>
+                <option value="kwd" className="currency">
+                  KWD
+                </option>
               </select>
             </div>
           </div>
@@ -451,9 +464,10 @@ const InputGoals = ({
                   type="text"
                   value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
-                  className="absolute w-3/4 h-full ml-4 focus:outline-none"
+                  className="absolute w-3/4 h-full ml-4 focus:outline-none capitalize"
                   placeholder="Goal"
-                  required={goalSum}
+                  // required={goalSum}
+                  required={item.amount < 0 ? true : false}
                 />
                 <select
                   className="input border-none focus:outline-none w-full bg-red-400 mx-0 h-full"
@@ -515,8 +529,8 @@ const InputGoals = ({
                 onKeyDown={(e) =>
                   ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                 }
+                min={item.goal === "" ? 0 : 1}
                 required={item.goal}
-                min={0}
               />
 
               {isDeletedButtonVisible && (
@@ -1548,7 +1562,6 @@ function PersonalForm({ setData }) {
           onClick={() => handleSubmit()}
           className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-center md:self-end"
         >
-          {" "}
           Next Step
         </button>
       </div>
