@@ -456,7 +456,7 @@ const InputGoals = ({
     <>
       <div className="flex flex-col justify-between w-full gap-4">
         <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
-          <div className="w-full lg:w-1/2">
+          <div className="w-full lg:w-2/3">
             <label className="my-3 ">Goals</label>
             <div className="search-container relative">
               <div className="search-inner relative input input-bordered border-slate-400 px-0">
@@ -513,10 +513,10 @@ const InputGoals = ({
             </div>
           </div>
 
-          <div className="w-full lg:w-1/2">
+          <div className="w-full lg:w-1/3">
             <label>Amount</label>
             <div className="flex items-center border-slate-400">
-              <div className="flex justify-center rounded-r-none w-1/3 md:w-1/4 input input-bordered border-black items-center">
+              <div className="flex justify-center rounded-r-none w-1/3 md:w-1/4 input input-bordered border-black items-center ">
                 <p className="text-center">{item.currency}</p>
               </div>
               <input
