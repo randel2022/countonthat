@@ -464,9 +464,8 @@ const InputGoals = ({
                   type="text"
                   value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
-                  className="absolute w-3/4 h-full ml-4 focus:outline-none capitalize"
+                  className="absolute w-3/4 h-full pl-4 focus:outline-none capitalize bg-white"
                   placeholder="Goal"
-                  // required={goalSum}
                   required={item.amount < 0 ? true : false}
                 />
                 <select
