@@ -465,7 +465,7 @@ const InputGoals = ({
                   type="text"
                   value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
-                  className="absolute bg-red-400 w-3/4 md:w-3/4 h-full ml-4 md:ml-4 border-slate-400 focus:outline-none capitalize mr-4 md:mr-2"
+                  className="absolute bg-red-400 w-3/4 md:w-3/4 h-full ml-2 md:ml-4 border-slate-400 focus:outline-none capitalize mr-4 md:mr-2 test"
                   placeholder="Goal"
                   required={item.amount}
                 />
