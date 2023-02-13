@@ -464,9 +464,8 @@ const InputGoals = ({
                   type="text"
                   value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
-                  className="absolute w-3/4 h-full ml-4 focus:outline-none capitalize"
+                  className="absolute w-3/4 h-full pl-4 focus:outline-none capitalize bg-white"
                   placeholder="Goal"
-                  // required={goalSum}
                   required={item.amount < 0 ? true : false}
                 />
                 <select
@@ -517,7 +516,7 @@ const InputGoals = ({
           <div className="w-full lg:w-1/3">
             <label>Amount</label>
             <div className="flex items-center border-slate-400">
-              <div className="flex justify-center rounded-r-none w-1/3 md:w-1/4 input input-bordered border-black items-center">
+              <div className="flex justify-center rounded-r-none w-1/3 md:w-1/4 input input-bordered border-black items-center ">
                 <p className="text-center">{item.currency}</p>
               </div>
               <input
