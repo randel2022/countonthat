@@ -456,7 +456,7 @@ const InputGoals = ({
     <>
       <div className="flex flex-col justify-between w-full gap-4">
         <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
-          <div className="w-full lg:w-1/2">
+          <div className="w-full lg:w-2/3">
             <label className="my-3 ">Goals</label>
             <div className="search-container relative">
               <div className="search-inner relative input input-bordered border-slate-400 px-0">
@@ -470,7 +470,7 @@ const InputGoals = ({
                   required={item.amount < 0 ? true : false}
                 />
                 <select
-                  className="input border-none focus:outline-none w-full bg-red-400 mx-0 h-full"
+                  className="input border-none focus:outline-none w-full mx-0 h-full"
                   value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
                 >
@@ -514,7 +514,7 @@ const InputGoals = ({
             </div>
           </div>
 
-          <div className="w-full lg:w-1/2">
+          <div className="w-full lg:w-1/3">
             <label>Amount</label>
             <div className="flex items-center border-slate-400">
               <div className="flex justify-center rounded-r-none w-1/3 md:w-1/4 input input-bordered border-black items-center">
@@ -611,10 +611,10 @@ const InputAssets = ({
   };
 
   return (
-    <div className="flex gap-10 flex-col">
-      <div className="flex flex-col justify-between w-full gap-4 pb-6 border-b-g">
+    <div className="flex gap-10 flex-col ">
+      <div className="flex flex-col justify-between w-full gap-4 ">
         <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
-          <div className="w-full lg:w-1/2">
+          <div className="w-full lg:w-1/2 ">
             <label>Asset</label>
 
             <div className="search-container relative">
@@ -1183,8 +1183,8 @@ const InputRev = ({
 
   return (
     <>
-      <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col  w-full gap-2 md:gap-5 lg:gap-10 items-center">
+      <div className="flex flex-col justify-between w-full gap-4 bordertop">
+        <div className="flex flex-col  w-full gap-2 md:gap-5 lg:gap-10 items-center mt-10">
           <div className="flex flex-col w-full gap-2 pb-8">
             <p className="font-bold my-0">Monthly Revenue</p>
             <div className="flex flex-col lg:flex-row w-full gap-3 lg:gap-10">
@@ -1544,13 +1544,13 @@ function PersonalForm({ setData }) {
             ))}
           </div>
         ) : (
-          <div className="w-full">
+          <div className="w-full flex items-start gap-7">
             <p className="font-bold">Dependents</p>
             <div
-              className="flex items-center cursor-pointer mt-2"
+              className="flex items-start cursor-pointer  py-0 "
               onClick={addNewNameDependent}
             >
-              <div className="flex items-center gap-2 border-b">
+              <div className="flex items-center gap-2 border-b py-0">
                 <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
                 <p className="text-sm text-[#A0161B]">Add Another Dependent</p>
               </div>
@@ -1667,10 +1667,10 @@ function AssetsForm({ currency, setData, goBack }) {
           onSubmit={(e) => {
             handleSubmit(e);
           }}
-          className="flex flex-col w-5/6 md:w-full gap-10"
+          className="flex flex-col w-5/6 md:w-full gap-6"
         >
           {assets.map((item, index) => (
-            <div key={index} className="px-0 w-full">
+            <div key={index} className="px-0 w-full ">
               <InputAssets
                 item={item}
                 onChangeValues={(data) => {
