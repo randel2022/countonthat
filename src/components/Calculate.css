@@ -66,6 +66,10 @@
   .currency {
     font-size: 12px;
   }
+
+  .w77 {
+    width: 100% !important;
+  }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
@@ -175,5 +179,10 @@ select {
 }
 
 .w77 {
-  width: 71% !important;
+  width: 71%;
+  /* background-color: red !important; */
+}
+
+.agediv {
+  -webkit-appearance: none !important;
 }

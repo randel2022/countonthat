@@ -270,14 +270,14 @@ const InputNames = ({
               name="agenew"
               type="number"
               placeholder="Age"
-              className="input input-bordered w-full border-slate-400"
+              className="input input-bordered w-full border-slate-400 appearance-none agediv"
               value={item.agenew}
               onChange={(e) => onChangeInputValue("agenew", e.target.value)}
-              max={99}
-              min={1}
               onKeyDown={(e) =>
                 ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
               }
+              min={1}
+              max={99}
             />
             {errors.agenew && (
               <span className="text-red-600 text-sm absolute w-full required">
@@ -436,6 +436,7 @@ const InputGoals = ({
   handleRemoveGoal,
   isDeletedButtonVisible,
   goalSum,
+  errors,
 }) => {
   const onChangeInputValue = (key, value) => {
     const currentValue = {
@@ -455,7 +456,7 @@ const InputGoals = ({
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-5 md:gap-2 lg:gap-10 items-center">
           <div className="w-full w77">
             <label className="my-3 ">Goals</label>
             <div className="search-container relative ">
@@ -464,10 +465,11 @@ const InputGoals = ({
                   type="text"
                   value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
-                  className="absolute w-3/4 h-full ml-4 focus:outline-none capitalize mr-2"
+                  className="absolute w-3/4 md:w-3/4 h-full ml-4 md:ml-4 border-slate-400 focus:outline-none capitalize mr-2 md:mr-2"
                   placeholder="Goal"
-                  required={item.amount < 0 ? true : false}
+                  required={item.amount}
                 />
+
                 <select
                   className="input border-none focus:outline-none w-full mx-0 h-full"
                   value={item.goal}
@@ -483,11 +485,16 @@ const InputGoals = ({
                   <option value="house" className="capitalize">
                     House
                   </option>
-                  <option value="car" className="capitalize">
+                  <option value="luxury car" className="capitalize">
                     Luxury Car
                   </option>
                 </select>
               </div>
+              {errors?.goal && (
+                <span className="text-red-600 top-px text-sm absolute w-full required">
+                  {errors?.goal}
+                </span>
+              )}
               <div className="dropdown relative ">
                 {data
                   .filter((goalItem) => {
@@ -515,7 +522,7 @@ const InputGoals = ({
 
           <div className="w-full lg:w-1/3">
             <label>Amount</label>
-            <div className="flex items-center border-slate-400">
+            <div className="flex items-center border-slate-400 relative">
               <div className="flex justify-center rounded-r-none w-1/3 md:w-1/4 input input-bordered border-black items-center ">
                 <p className="text-center">{item.currency}</p>
               </div>
@@ -528,9 +535,13 @@ const InputGoals = ({
                 onKeyDown={(e) =>
                   ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                 }
-                min={item.goal === "" ? 0 : 1}
-                required={item.goal}
+                min={0}
               />
+              {errors?.amount && (
+                <span className="text-red-600 text-sm absolute top-px w-full required">
+                  {errors?.amount}
+                </span>
+              )}
 
               {isDeletedButtonVisible && (
                 <span
@@ -554,7 +565,7 @@ const InputGoals = ({
         </div>
         {isLast && (
           <div
-            className="flex items-center justify-between cursor-pointer "
+            className="flex flex-col gap-3 md:flex-row items-start md:items-center justify-between cursor-pointer mt-2 "
             onClick={addNewGoal}
           >
             <div className="flex items-center gap-2 border-b">
@@ -562,8 +573,8 @@ const InputGoals = ({
               <p className="text-sm text-[#A0161B]">Add Another Goal</p>
             </div>
 
-            <div>
-              <p className="text-sm">
+            <div className="flex ">
+              <p className="text-sm ">
                 Total Goal Amount:
                 {item.currency == "USD" ? "$" : <></>}
                 {item.currency == "EUR" ? "€" : <></>}
@@ -863,7 +874,8 @@ const InputDependents = ({
               onKeyDown={(e) =>
                 ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
               }
-              min={0}
+              min={1}
+              max={99}
             />
           </div>
           {isDeletedButtonVisible && (
@@ -1342,17 +1354,42 @@ function PersonalForm({ setData }) {
           personalDetails.firstname === "" ? "First Name is required" : "",
         lastname:
           personalDetails.lastname === "" ? "Last Name is required" : "",
-        agenew: personalDetails.agenew === "" ? "Age is required" : "",
+        agenew: checkAge(personalDetails.agenew),
         email: checkEmail(personalDetails.email),
         contact: personalDetails.contact === "" ? "Contact is required" : "",
       };
-      console.log(tempErrors);
+      /// validating and setting error message for goals array
+      const tempGoalsErrorsArray = [];
+      /// loop first
+      for (const goal of goals) {
+        /// set goal error object
+        const tempGoalsErrors = {
+          amount: checkAmount(goal.amount, goal.goal),
+          goal:
+            goal.goal === "" && (!goal.amount === "" || goal.amount > 0)
+              ? "Goal is required"
+              : "",
+          currency: goal.currency === "" ? "Currency is required" : "",
+        };
+        /// and push on temporary array
+        tempGoalsErrorsArray.push(tempGoalsErrors);
+      }
+      console.log(tempGoalsErrorsArray);
       console.log(personalDetails);
+      /// set errors to usestates
+      setGoalsErrors(tempGoalsErrorsArray);
       setErrors(tempErrors);
-      const isEmpty = Object.values(tempErrors).every(
+      const isEmptyPersonalDetails = Object.values(tempErrors).every(
         (x) => x === null || x === ""
       );
-      if (isEmpty) {
+      const isEmptyGoals = tempGoalsErrorsArray
+        .map((tempGoalsErrorsData) =>
+          Object.values(tempGoalsErrorsData).every(
+            (x) => x === null || x === ""
+          )
+        )
+        .every((x) => x === true);
+      if (isEmptyPersonalDetails && isEmptyGoals) {
         setData({
           names: personalDetails,
           dependents: dependents,
@@ -1363,6 +1400,25 @@ function PersonalForm({ setData }) {
       console.log(error);
     }
   };
+
+  function checkAmount(amount, goal) {
+    /// criteria
+    /// goal w/ value && amount empty and 0 = required
+    /// goal w/o value && amount empty = success
+    if ((amount === "" || amount <= 0) && goal !== "") {
+      return "Amount is required";
+    } else {
+      return "";
+    }
+  }
+
+  function checkAge(age) {
+    if (age === "") {
+      return "Age is Required";
+    } else if (age <= 0) return "Age is must be greater than 0";
+    else if (age > 100) return "Age is must be lesser than 100";
+    else return "";
+  }
 
   function checkEmail(email) {
     let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -1382,6 +1438,14 @@ function PersonalForm({ setData }) {
     contact: "",
     currency: "",
   });
+
+  const [goalsErrors, setGoalsErrors] = useState([
+    {
+      amount: "",
+      goal: "",
+      currency: "",
+    },
+  ]);
 
   console.log(errors);
 
@@ -1509,12 +1573,22 @@ function PersonalForm({ setData }) {
                   goalsTemporary[index] = data;
                   console.log(goalsTemporary, "goalsTemporary");
                   setGoals(goalsTemporary);
+                  const tempGoalsErrorsArray = [];
+                  goalsTemporary.map((e) =>
+                    tempGoalsErrorsArray.push({
+                      goal: "",
+                      amount: "",
+                      currency: "",
+                    })
+                  );
+                  setGoalsErrors(tempGoalsErrorsArray);
                 }}
                 addNewGoal={addNewGoal}
                 handleRemoveGoal={() => handleRemoveGoal(index)}
                 isDeletedButtonVisible={goals.length - 1 > 0}
                 isLast={goals.length - 1 === index}
                 goalSum={goalSum}
+                errors={goalsErrors[index]}
               />
             </div>
           ))}
