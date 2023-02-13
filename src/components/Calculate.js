@@ -456,15 +456,15 @@ const InputGoals = ({
     <>
       <div className="flex flex-col justify-between w-full gap-4">
         <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
-          <div className="w-full lg:w-2/3">
+          <div className="w-full w77">
             <label className="my-3 ">Goals</label>
-            <div className="search-container relative">
+            <div className="search-container relative ">
               <div className="search-inner relative input input-bordered border-slate-400 px-0">
                 <input
                   type="text"
                   value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
-                  className="absolute w-3/4 h-full pl-4 focus:outline-none capitalize bg-white"
+                  className="absolute w-3/4 h-full ml-4 focus:outline-none capitalize mr-2"
                   placeholder="Goal"
                   required={item.amount < 0 ? true : false}
                 />
