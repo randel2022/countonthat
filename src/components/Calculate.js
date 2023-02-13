@@ -465,7 +465,7 @@ const InputGoals = ({
                   type="text"
                   value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
-                  className="absolute w-3/4 md:w-3/4 h-full ml-4 md:ml-4 border-slate-400 focus:outline-none capitalize mr-2 md:mr-2"
+                  className="absolute bg-red-400 w-3/4 md:w-3/4 h-full ml-4 md:ml-4 border-slate-400 focus:outline-none capitalize mr-4 md:mr-2"
                   placeholder="Goal"
                   required={item.amount}
                 />
@@ -545,7 +545,7 @@ const InputGoals = ({
 
               {isDeletedButtonVisible && (
                 <span
-                  className="cursor-pointer ml-4 md:mt-5 block md:hidden"
+                  className="cursor-pointer ml-4 md:mt-5 block md:hidden "
                   onClick={handleRemoveGoal}
                 >
                   <BsTrash className="text-[#A0161B]"></BsTrash>
@@ -556,7 +556,7 @@ const InputGoals = ({
 
           {isDeletedButtonVisible && (
             <span
-              className="cursor-pointer -mt-6 md:mt-5 hidden md:block"
+              className="cursor-pointer -mt-6 md:mt-5 hidden md:block "
               onClick={handleRemoveGoal}
             >
               <BsTrash className="text-[#A0161B]"></BsTrash>
