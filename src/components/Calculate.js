@@ -1196,7 +1196,7 @@ const InputRev = ({
     <>
       <div className="flex flex-col justify-between w-full gap-4 bordertop ">
         <div className="flex flex-col  w-full gap-2 md:gap-5 lg:gap-10 items-center mt-10">
-          <div className="flex flex-col w-full gap-2 pb-8   pr-10">
+          <div className="flex flex-col w-full gap-2 pb-8 pr-0 md:pr-10">
             <p className="font-bold my-0">Monthly Revenue</p>
             <div className="flex flex-col lg:flex-row w-full gap-3 lg:gap-10">
               <div className="w-full lg:w-1/2">
