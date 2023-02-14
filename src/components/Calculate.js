@@ -623,7 +623,7 @@ const InputAssets = ({
   return (
     <div className="flex gap-10 flex-col ">
       <div className="flex flex-col justify-between w-full gap-4 ">
-        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center  pr-0 md:pr-10 relative">
           <div className="w-full lg:w-1/2 ">
             <label>Asset</label>
 
@@ -739,7 +739,7 @@ const InputAssets = ({
 
           {isDeletedButtonVisible && (
             <span
-              className="cursor-pointer hidden lg:block -mt-6 md:mt-5"
+              className="cursor-pointer hidden lg:block -mt-6 md:mt-5 absolute delbutton ml-7"
               onClick={handleRemoveAsset}
             >
               <BsTrash className="text-[#A0161B]"></BsTrash>
@@ -959,8 +959,8 @@ const InputLiabilities = ({
 
   return (
     <>
-      <div className="flex flex-col justify-between w-full gap-4  pb-6">
-        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center ">
+      <div className="flex flex-col justify-between w-full gap-4 pb-6 ">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center relative pr-0 md:pr-10">
           <div className="w-full lg:w-1/2 ">
             <label>Liabilities</label>
 
@@ -1075,7 +1075,7 @@ const InputLiabilities = ({
 
           {isDeletedButtonVisible && (
             <span
-              className="cursor-pointer -mt-6 md:mt-5 hidden lg:block"
+              className="cursor-pointer -mt-6 md:mt-5 hidden lg:block  absolute delbutton ml-7"
               onClick={handleRemoveLiability}
             >
               <BsTrash className="text-[#A0161B]"></BsTrash>
@@ -1194,9 +1194,9 @@ const InputRev = ({
 
   return (
     <>
-      <div className="flex flex-col justify-between w-full gap-4 bordertop">
+      <div className="flex flex-col justify-between w-full gap-4 bordertop ">
         <div className="flex flex-col  w-full gap-2 md:gap-5 lg:gap-10 items-center mt-10">
-          <div className="flex flex-col w-full gap-2 pb-8">
+          <div className="flex flex-col w-full gap-2 pb-8   pr-10">
             <p className="font-bold my-0">Monthly Revenue</p>
             <div className="flex flex-col lg:flex-row w-full gap-3 lg:gap-10">
               <div className="w-full lg:w-1/2">
