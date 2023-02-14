@@ -456,7 +456,7 @@ const InputGoals = ({
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-5 md:gap-2 lg:gap-10 items-center">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-5 md:gap-2 lg:gap-10 items-center relative pr-0 md:pr-20 ">
           <div className="w-full w77">
             <label className="my-3 ">Goals</label>
             <div className="search-container relative ">
@@ -465,7 +465,7 @@ const InputGoals = ({
                   type="text"
                   value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
-                  className="absolute bg-red-400 w-3/4 md:w-3/4 h-full ml-4 md:ml-4 border-slate-400 focus:outline-none capitalize mr-4 md:mr-2 test"
+                  className="absolute  w-3/4 md:w-3/4 h-full ml-4 md:ml-4 border-slate-400 focus:outline-none capitalize mr-4 md:mr-2 test"
                   placeholder="Goal"
                   required={item.amount}
                 />
@@ -520,7 +520,7 @@ const InputGoals = ({
             </div>
           </div>
 
-          <div className="w-full lg:w-1/3">
+          <div className="w-full lg:w-1/4">
             <label>Amount</label>
             <div className="flex items-center border-slate-400 relative">
               <div className="flex justify-center rounded-r-none w-1/3 md:w-1/4 input input-bordered border-black items-center ">
@@ -556,7 +556,7 @@ const InputGoals = ({
 
           {isDeletedButtonVisible && (
             <span
-              className="cursor-pointer -mt-6 md:mt-5 hidden md:block "
+              className="cursor-pointer -mt-6 md:mt-5 hidden md:block absolute delbutton"
               onClick={handleRemoveGoal}
             >
               <BsTrash className="text-[#A0161B]"></BsTrash>
@@ -819,7 +819,7 @@ const InputDependents = ({
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-3 mb-7">
-        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center ">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center pr-0 md:pr-20 relative">
           <div className="w-full lg:w-1/3">
             <label>First Name</label>
             <input
@@ -856,7 +856,7 @@ const InputDependents = ({
             />
           </div>
 
-          <div className="w-full lg:w-1/3">
+          <div className="w-full lg:w-1/4">
             <label>Age</label>
             <input
               name="agedependent"
@@ -880,7 +880,7 @@ const InputDependents = ({
           </div>
           {isDeletedButtonVisible && (
             <span
-              className="cursor-pointer -mt-6 md:mt-5 hidden md:block"
+              className="cursor-pointer -mt-6 md:mt-5 hidden md:block delbutton absolute"
               onClick={handleRemoveNameDependent}
             >
               <BsTrash className="text-[#A0161B]"></BsTrash>
@@ -888,10 +888,10 @@ const InputDependents = ({
           )}
         </div>
 
-        <div className=" flex flex-col justify-start gap-10">
+        <div className="flex flex-col justify-start gap-10">
           <div className="w-full lg:w-1/3">
             <label>Relationship</label>
-            <div className="flex flex items-center mr-0 lg:mr-6 pr-5">
+            <div className="flex flex items-center mr-0 lg:mr-6 pr-0">
               <input
                 className="input input-bordered w-full border-slate-400"
                 placeholder="Relationship"

@@ -70,6 +70,14 @@
   .w77 {
     width: 100% !important;
   }
+
+  .w27 {
+    width: 100% !important;
+  }
+}
+
+.w27 {
+  width: 28% !important;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
@@ -190,4 +198,9 @@ select {
 .test {
   background-color: red !important;
   z-index: 99999 !important;
+}
+
+.delbutton {
+  z-index: 999999 !important;
+  left: 95% !important;
 }
