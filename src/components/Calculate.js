@@ -185,6 +185,7 @@ const InputNames = ({
   isDeletedButtonVisible,
   handleRemoveName,
   checkEmail,
+  inputHandler,
 }) => {
   const onChangeInputValue = (key, value) => {
     const currentValue = {
@@ -198,6 +199,21 @@ const InputNames = ({
     currentValue[key] = value;
     onChangeValues(currentValue);
   };
+
+  function limit(element) {
+    var max_chars = 2;
+    if (
+      arguments[1].char !== "\b" &&
+      arguments[1].key !== "Left" &&
+      arguments[1].key !== "Right"
+    ) {
+      if (element.value.length >= max_chars) {
+        return false;
+      } else if (isNaN(arguments[1].char)) {
+        return false;
+      }
+    }
+  }
 
   return (
     <>
@@ -268,7 +284,6 @@ const InputNames = ({
             <label>Age</label>
             <input
               name="agenew"
-              type="number"
               placeholder="Age"
               className="input input-bordered w-full border-slate-400 appearance-none agediv"
               value={item.agenew}
@@ -278,6 +293,9 @@ const InputNames = ({
               }
               min={1}
               max={99}
+              type="text"
+              pattern="\d*"
+              maxlength="2"
             />
             {errors.agenew && (
               <span className="text-red-600 text-sm absolute w-full required">
@@ -860,7 +878,6 @@ const InputDependents = ({
             <label>Age</label>
             <input
               name="agedependent"
-              type="number"
               placeholder="Age"
               className="input input-bordered w-full border-slate-400"
               value={item.agedependent}
@@ -876,6 +893,9 @@ const InputDependents = ({
               }
               min={1}
               max={99}
+              type="text"
+              pattern="\d*"
+              maxlength="2"
             />
           </div>
           {isDeletedButtonVisible && (
@@ -1358,6 +1378,17 @@ function PersonalForm({ setData }) {
         email: checkEmail(personalDetails.email),
         contact: personalDetails.contact === "" ? "Contact is required" : "",
       };
+
+      const tempDepErrors = {
+        firstnamedependent:
+          dependents.firstnamedependent === "" ? "First Name is required" : "",
+        lastnamedependent:
+          dependents.lastnamedependent === "" ? "Last Name is required" : "",
+        agedependent: checkAge(dependents.agedependent),
+        relationship:
+          dependents.relationship === "" ? "Relationship is required" : "",
+      };
+
       /// validating and setting error message for goals array
       const tempGoalsErrorsArray = [];
       /// loop first
@@ -1379,6 +1410,8 @@ function PersonalForm({ setData }) {
       /// set errors to usestates
       setGoalsErrors(tempGoalsErrorsArray);
       setErrors(tempErrors);
+      setDepErrors(tempDepErrors);
+
       const isEmptyPersonalDetails = Object.values(tempErrors).every(
         (x) => x === null || x === ""
       );
@@ -1449,9 +1482,10 @@ function PersonalForm({ setData }) {
 
   const [depErrors, setDepErrors] = useState([
     {
-      amount: "",
-      goal: "",
-      currency: "",
+      firstnamedependent: "",
+      lastnamedependent: "",
+      agedependent: "",
+      relationship: "",
     },
   ]);
 
@@ -1499,7 +1533,7 @@ function PersonalForm({ setData }) {
       ...dependents,
       {
         firstnamedependent: "",
-        agedependent: "not filled",
+        agedependent: "",
       },
     ]);
   };
