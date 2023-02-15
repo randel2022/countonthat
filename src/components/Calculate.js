@@ -1447,6 +1447,14 @@ function PersonalForm({ setData }) {
     },
   ]);
 
+  const [depErrors, setDepErrors] = useState([
+    {
+      amount: "",
+      goal: "",
+      currency: "",
+    },
+  ]);
+
   console.log(errors);
 
   const [personalDetails, setpersonalDetails] = useState({
