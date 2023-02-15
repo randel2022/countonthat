@@ -205,10 +205,10 @@ select {
   left: 95% !important;
 }
 
-/* .step-dark-red:after {
+.step-dark-red:after {
   content: "•" !important;
   font-weight: bold !important;
-} */
+}
 
 /* .steps .step:after {
   border: 1px solid white !important;
