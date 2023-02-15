@@ -200,21 +200,6 @@ const InputNames = ({
     onChangeValues(currentValue);
   };
 
-  function limit(element) {
-    var max_chars = 2;
-    if (
-      arguments[1].char !== "\b" &&
-      arguments[1].key !== "Left" &&
-      arguments[1].key !== "Right"
-    ) {
-      if (element.value.length >= max_chars) {
-        return false;
-      } else if (isNaN(arguments[1].char)) {
-        return false;
-      }
-    }
-  }
-
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-3 pb-8 border-b-g">
@@ -833,6 +818,7 @@ const InputDependents = ({
   addNewNameDependent,
   isDeletedButtonVisible,
   handleRemoveNameDependent,
+  errorsdep,
 }) => {
   return (
     <>
@@ -1472,6 +1458,13 @@ function PersonalForm({ setData }) {
     currency: "",
   });
 
+  const [errorsdep, setErrorsDep] = useState({
+    firstnamedependent: "",
+    lastnamedependent: "",
+    agedependent: "",
+    relationship: "",
+  });
+
   const [goalsErrors, setGoalsErrors] = useState([
     {
       amount: "",
@@ -1498,6 +1491,13 @@ function PersonalForm({ setData }) {
     email: "",
     contact: "",
     currency: "USD",
+  });
+
+  const [depDetails, setdepDetails] = useState({
+    firstnamedependent: "",
+    lastnamedependent: "",
+    agedependent: "",
+    relationship: "",
   });
 
   const initialGoalState = {
@@ -1643,9 +1643,15 @@ function PersonalForm({ setData }) {
                 <InputDependents
                   item={item}
                   onChangeValues={(data) => {
-                    var dependentsTemporary = [...dependents];
-                    dependentsTemporary[index] = data;
-                    setDependents(dependentsTemporary);
+                    errorsdep = { errorsdep };
+                    const tempDepErrors = {
+                      firstnamedependent: "",
+                      lastnamedependent: "",
+                      agedependent: "",
+                      relationship: "",
+                    };
+                    setDepErrors(tempDepErrors);
+                    setpersonalDetails(data);
                   }}
                   addNewNameDependent={addNewNameDependent}
                   handleRemoveNameDependent={() =>
