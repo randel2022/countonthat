@@ -891,7 +891,7 @@ const InputDependents = ({
         <div className="flex flex-col justify-start gap-10">
           <div className="w-full lg:w-1/3">
             <label>Relationship</label>
-            <div className="flex flex items-center mr-0 lg:mr-6 pr-0">
+            <div className="flex flex items-center mr-0 lg:mr-7 pr-0">
               <input
                 className="input input-bordered w-full border-slate-400"
                 placeholder="Relationship"
