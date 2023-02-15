@@ -217,3 +217,9 @@ select {
 .step-dark-red:nth-last-child(2) {
   content: "" !important;
 }
+
+.modal-open,
+.modal:target,
+.modal-toggle:checked + .modal {
+  z-index: 999999 !important;
+}

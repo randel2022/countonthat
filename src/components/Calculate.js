@@ -1117,7 +1117,7 @@ const InputExp = ({
     <>
       <div className="flex flex-col justify-between w-full gap-4">
         <div className="flex flex-col  w-full gap-2 md:gap-5 lg:gap-10 items-center">
-          <div className="flex flex-col w-full gap-2">
+          <div className="flex flex-col w-full gap-2 pr-10">
             <p className="font-bold my-0">Monthly Expenses</p>
             <div className="flex flex-col lg:flex-row gap-3 lg:gap-10">
               <div className="w-full lg:w-1/2">
