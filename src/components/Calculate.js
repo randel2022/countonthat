@@ -41,6 +41,7 @@ import {
 import { useQuery } from "react-query";
 
 import Calculate from "../services/calculate";
+import { ErrorText } from "./ErrorText";
 
 var data = [
   { full_name: "Savings" },
@@ -60,6 +61,53 @@ var liabilitiesdata = [
   { full_name: "Student Debt" },
 ];
 
+function checkIsEmptyObjects(object) {
+  return Object.values(object).every((x) => x === null || x === "");
+}
+
+function checkIsEmptyArrayObjects(array) {
+  return array
+    .map((arr) => Object.values(arr).every((x) => x === null || x === ""))
+    .every((x) => x === true);
+}
+function checkString(value, requiredMsg) {
+  const newVal = value.trim();
+  if (newVal === "") {
+    return requiredMsg;
+  } else {
+    return "";
+  }
+}
+
+function checkAmount(amount, name) {
+  /// criteria
+  /// name w/ value && amount empty and 0 = required
+  /// name w/o value && amount empty = success
+  if ((amount === "" || amount <= 0) && name !== "") {
+    return "Amount is required";
+  } else {
+    return "";
+  }
+}
+
+function checkAge(age) {
+  if (age === "") {
+    return "Age is Required";
+  } else if (age <= 0) return "Age is must be greater than 0";
+  else if (age > 100) return "Age is must be lesser than 100";
+  else return "";
+}
+
+function checkEmail(email) {
+  let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+  if (email === "") {
+    return "Email is Required";
+  }
+  if (email.match(regex)) return "";
+  else return "Email not valid ";
+}
+
 function CalculateComponent() {
   const [selectedTab, setselectedTab] = useState(0);
   const [goalData, setgoalData] = useState({});
@@ -67,13 +115,19 @@ function CalculateComponent() {
   const goalDataRef = useRef();
   const calculateService = new Calculate();
 
-  const { data, status, refetch } = useQuery(
+  const {
+    data: backendData,
+    status,
+    refetch,
+  } = useQuery(
     ["goalData", goalData],
     () => calculateService.totalGoal(goalData),
     {
       enabled: false,
     }
   );
+
+  console.log(backendData, "data from backend");
 
   const liStyle = (curIdx) => {
     var style = "";
@@ -83,7 +137,7 @@ function CalculateComponent() {
     }`;
     return style;
   };
-  console.log(goalData?.names?.currency);
+
   return (
     <div className="flex-col relative h-auto w-full flex justify-center items-center gap-12 py-5 md:py-36">
       {selectedTab <= 2 ? (
@@ -114,6 +168,7 @@ function CalculateComponent() {
           currency={goalData?.names?.currency}
           goBack={() => setselectedTab(selectedTab - 1)}
           setData={(value) => {
+            console.log(value, "valuevalue");
             if (value.assets) {
               /// if all values have data then go to next Tabs
               setselectedTab(selectedTab + 1);
@@ -121,9 +176,6 @@ function CalculateComponent() {
                 ...previousGoalData,
                 ...value,
               }));
-              setTimeout(() => {
-                refetch();
-              }, 100);
             }
           }}
         ></AssetsForm>
@@ -135,40 +187,30 @@ function CalculateComponent() {
           setData={(value) => {
             if (value.liabilities && value.revexp) {
               /// if all values have data then go to next Tabs
-              setselectedTab(selectedTab + 1);
               setgoalData((previousGoalData) => ({
                 ...previousGoalData,
                 ...value,
               }));
+              setTimeout(() => {
+                refetch();
+              }, 100);
+              setselectedTab(selectedTab + 1);
             }
           }}
         ></LiabilitiesForm>
       </div>
       <div className={`${selectedTab === 3 ? "flex  w-full" : "hidden"}`}>
-        {/* // <OtherForm
-        //   goBack={() => setselectedTab(selectedTab - 1)}
-        //   setData={(value) => {
-        //     if (value.other) {
-        //       /// if all values have data then go to next Tabs
-        //       setselectedTab(selectedTab + 1);
-        //       setgoalData((previousGoalData) => ({
-        //         ...previousGoalData,
-        //         ...value,
-        //       }));
-        //     }
-        //   }}
-        // ></OtherForm> */}
         <Output
           goBack={() => setselectedTab(selectedTab - 1)}
-          currency={goalData?.names?.currency}
           nextTab={() => {
             setselectedTab(selectedTab + 1);
           }}
-          goalData={goalData}
+          currency={goalData?.names?.currency}
+          data={backendData?.data}
         ></Output>
       </div>
       <div className={`${selectedTab === 4 ? "flex w-full" : "hidden"}`}>
-        <AnnualForm goalData={goalData}></AnnualForm>
+        <AnnualForm goalData={backendData?.data}></AnnualForm>
       </div>
     </div>
   );
@@ -184,20 +226,11 @@ const InputNames = ({
   addNewName,
   isDeletedButtonVisible,
   handleRemoveName,
-  checkEmail,
   inputHandler,
 }) => {
   const onChangeInputValue = (key, value) => {
-    const currentValue = {
-      firstname: item.firstName,
-      lastname: item.lastname,
-      agenew: item.agenew,
-      email: item.email,
-      contact: item.contact,
-      currency: item.currency,
-    };
-    currentValue[key] = value;
-    onChangeValues(currentValue);
+    item[key] = value;
+    onChangeValues(item);
   };
 
   return (
@@ -280,7 +313,7 @@ const InputNames = ({
               max={99}
               type="text"
               pattern="\d*"
-              maxlength="2"
+              maxLength="2"
             />
             {errors.agenew && (
               <span className="text-red-600 text-sm absolute w-full required">
@@ -309,7 +342,6 @@ const InputNames = ({
               value={item.email}
               onChange={(e) => onChangeInputValue("email", e.target.value)}
               required
-              checkEmail={checkEmail}
             />
             {errors.email && (
               <span className="text-red-600 absolute w-full required text-sm">
@@ -442,14 +474,8 @@ const InputGoals = ({
   errors,
 }) => {
   const onChangeInputValue = (key, value) => {
-    const currentValue = {
-      goal: item.goal,
-      amount: item.amount,
-      currency: item.currency,
-    };
-
-    currentValue[key] = value;
-    onChangeValues(currentValue);
+    item[key] = value;
+    onChangeValues(item);
   };
 
   const onSearch = (searchTerm) => {
@@ -459,18 +485,17 @@ const InputGoals = ({
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-5 md:gap-2 lg:gap-10 items-center relative pr-0 md:pr-20 ">
-          <div className="w-full w77">
-            <label className="my-3 ">Goals</label>
-            <div className="search-container relative ">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-5 md:gap-2 lg:gap-10 items-center relative">
+          <div className="w-full md:w-[75%] lg:w-[68%]">
+            <label className="my-3">Goals</label>
+            <div className="search-container relative">
               <div className="search-inner relative input input-bordered border-slate-400 px-0">
                 <input
                   type="text"
                   value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
-                  className="absolute  w-3/4 md:w-3/4 h-full ml-4 md:ml-4 border-slate-400 focus:outline-none capitalize mr-4 md:mr-2 test"
+                  className="absolute w-3/4 h-full ml-4 md:ml-4 border-slate-400 focus:outline-none capitalize mr-4 md:mr-2"
                   placeholder="Goal"
-                  required={item.amount}
                 />
 
                 <select
@@ -498,7 +523,7 @@ const InputGoals = ({
                   {errors?.goal}
                 </span>
               )}
-              <div className="dropdown relative ">
+              <div className="dropdown relative">
                 {data
                   .filter((goalItem) => {
                     const searchTerm = item?.goal?.toLowerCase();
@@ -523,7 +548,7 @@ const InputGoals = ({
             </div>
           </div>
 
-          <div className="w-full lg:w-1/4">
+          <div className=" md:w-[33%] lg:w-[32%] pr-0 md:pr-8">
             <label>Amount</label>
             <div className="flex items-center border-slate-400 relative">
               <div className="flex justify-center rounded-r-none w-1/3 md:w-1/4 input input-bordered border-black items-center ">
@@ -559,7 +584,7 @@ const InputGoals = ({
 
           {isDeletedButtonVisible && (
             <span
-              className="cursor-pointer -mt-6 md:mt-5 hidden md:block absolute delbutton"
+              className="cursor-pointer -mt-6 md:mt-5 hidden md:block absolute delbutton  ml-10"
               onClick={handleRemoveGoal}
             >
               <BsTrash className="text-[#A0161B]"></BsTrash>
@@ -598,6 +623,139 @@ const InputGoals = ({
   );
 };
 
+const InputDependents = ({
+  isLast,
+  item,
+  onChangeValues,
+  addNewNameDependent,
+  isDeletedButtonVisible,
+  handleRemoveNameDependent,
+  errors,
+}) => {
+  const onChangeInputValue = (key, value) => {
+    item[key] = value;
+    onChangeValues(item);
+  };
+
+  return (
+    <>
+      <div className="flex flex-col justify-between w-full gap-6 mb-7">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-5 md:gap-2 lg:gap-10 items-center relative ">
+          <div className="w-full lg:w-1/3 relative">
+            <label>First Name</label>
+            <input
+              className="input input-bordered w-full border-slate-400"
+              placeholder="First Name"
+              name="firstnamedependent"
+              type="text"
+              value={item.firstnamedependent}
+              onChange={(e) =>
+                onChangeInputValue("firstnamedependent", e.target.value)
+              }
+            />
+
+            <span className="text-red-600 text-sm absolute w-full required">
+              {errors?.firstnamedependent}
+            </span>
+          </div>
+
+          <div className="w-full lg:w-1/3 relative">
+            <label>Last Name</label>
+            <input
+              className="input input-bordered w-full border-slate-400"
+              placeholder="Last Name"
+              name="lastnamedependent"
+              type="text"
+              value={item.lastnamedependent}
+              onChange={(e) =>
+                onChangeInputValue("lastnamedependent", e.target.value)
+              }
+            />
+            <span className="text-red-600 text-sm absolute w-full required">
+              {errors?.lastnamedependent}
+            </span>
+          </div>
+
+          <div className="w-full lg:w-1/3 pr-0 md:pr-8 relative">
+            <label>Age</label>
+            <input
+              name="agedependent"
+              placeholder="Age"
+              className="input input-bordered w-full border-slate-400"
+              value={item.agedependent}
+              onChange={(e) =>
+                onChangeInputValue("agedependent", e.target.value)
+              }
+              onKeyDown={(e) =>
+                ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+              }
+              min={1}
+              max={99}
+              type="text"
+              pattern="\d*"
+              maxLength="2"
+            />
+            <span className="text-red-600 text-sm absolute w-full required">
+              {errors?.agedependent}
+            </span>
+          </div>
+
+          {isDeletedButtonVisible && (
+            <span
+              className="cursor-pointer -mt-6 md:mt-5 hidden md:block delbutton absolute ml-10"
+              onClick={handleRemoveNameDependent}
+            >
+              <BsTrash className="text-[#A0161B]"></BsTrash>
+            </span>
+          )}
+        </div>
+
+        <div className="flex flex-col justify-start gap-10">
+          <div className="w-full lg:w-1/3">
+            <label>Relationship</label>
+            <div className="flex flex items-center mr-0 lg:mr-7 pr-0 relative">
+              <input
+                className="input input-bordered w-full border-slate-400"
+                placeholder="Relationship"
+                name="relationship"
+                type="text"
+                value={item.relationship}
+                onChange={(e) =>
+                  onChangeInputValue("relationship", e.target.value)
+                }
+              />
+              {isDeletedButtonVisible && (
+                <span
+                  className="cursor-pointer ml-4 md:mt-5 block md:hidden "
+                  onClick={handleRemoveNameDependent}
+                >
+                  <BsTrash className="text-[#A0161B]"></BsTrash>
+                </span>
+              )}
+
+              <span className="text-red-600 text-sm absolute w-full required top-[1px]">
+                {errors?.relationship}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {isLast && (
+          <div
+            className="flex items-center cursor-pointer mt-2"
+            onClick={addNewNameDependent}
+          >
+            <div className="flex items-center gap-2 border-b">
+              <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
+              <p className="text-sm text-[#A0161B]">Add Another Dependent</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
+  );
+};
+
 const InputAssets = ({
   isLast,
   item,
@@ -605,18 +763,12 @@ const InputAssets = ({
   addNewAsset,
   handleRemoveAsset,
   isDeletedButtonVisible,
+  errors,
+  currency,
 }) => {
   const onChangeInputValue = (key, value) => {
-    const currentValue = {
-      asset: item.asset,
-      amount: item.amount,
-      assetmultiplier: item.assetmultiplier,
-      currency: item.currency,
-      revmultiplier: item.revmultiplier,
-      revamount: item.revamount,
-    };
-    currentValue[key] = value;
-    onChangeValues(currentValue);
+    item[key] = value;
+    onChangeValues(item);
   };
 
   const onSearch = (searchTerm) => {
@@ -624,9 +776,9 @@ const InputAssets = ({
   };
 
   return (
-    <div className="flex gap-10 flex-col ">
+    <div className="flex gap-10 flex-col mb-5">
       <div className="flex flex-col justify-between w-full gap-4 ">
-        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center  pr-0 md:pr-10 relative">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-start pr-0 md:pr-10 h-[210px] md:h-[70px]">
           <div className="w-full lg:w-1/2 ">
             <label>Asset</label>
 
@@ -638,13 +790,11 @@ const InputAssets = ({
                   onChange={(e) => onSearch(e.target.value)}
                   className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                   placeholder="Asset"
-                  required={item.amount > 0}
                 />
                 <select
                   className="input input-bordered w-full border-slate-400"
                   value={item.asset}
                   onChange={(e) => onSearch(e.target.value)}
-                  required={item.amount > 0}
                 >
                   <option disabled value="">
                     {" "}
@@ -660,7 +810,12 @@ const InputAssets = ({
                     Business Value
                   </option>
                 </select>
+
+                <span className="text-red-600 text-sm absolute w-full required">
+                  {errors?.asset}
+                </span>
               </div>
+
               <div className="dropdown relative">
                 {assetsdata
                   .filter((assetItem) => {
@@ -700,20 +855,19 @@ const InputAssets = ({
                   onChange={(e) =>
                     onChangeInputValue("assetmultiplier", e.target.value)
                   }
-                  max={100}
-                  min={0}
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
                   required
                 />
               </div>
+              <ErrorText value={errors?.assetmultiplier} />
             </div>
             <div className="w-full lg:w-3/4">
               <label>Amount</label>
-              <div className="flex items-center border-slate-400 w-full items-center">
+              <div className="flex items-center border-slate-400 w-full items-center relative">
                 <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                  <p className="text-center">{item?.currency}</p>
+                  <p className="text-center">{currency}</p>
                 </div>
                 <input
                   name="amount"
@@ -721,28 +875,30 @@ const InputAssets = ({
                   className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
                   onChange={(e) => onChangeInputValue("amount", e.target.value)}
-                  min={item.asset === "" ? 0 : 1}
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
-                  required={item.asset}
                 />
 
                 {isDeletedButtonVisible && (
                   <span
-                    className="cursor-pointer block lg:hidden ml-4"
+                    className="cursor-pointer block lg:hidden ml-4 "
                     onClick={handleRemoveAsset}
                   >
                     <BsTrash className="text-[#A0161B]"></BsTrash>
                   </span>
                 )}
+
+                <span className="text-red-600 text-sm absolute w-full required top-[2px]">
+                  {errors?.amount}
+                </span>
               </div>
             </div>
           </div>
 
           {isDeletedButtonVisible && (
             <span
-              className="cursor-pointer hidden lg:block -mt-6 md:mt-5 absolute delbutton ml-7"
+              className="cursor-pointer hidden lg:block mt-10 absolute left-[80.5%]"
               onClick={handleRemoveAsset}
             >
               <BsTrash className="text-[#A0161B]"></BsTrash>
@@ -759,184 +915,7 @@ const InputAssets = ({
           </div>
         )}
       </div>
-
-      {/* <div className="w-full flex-col lg:flex-col gap-2 flex lg:w-full ">
-        <p className="font-bold my-0">Monthly Revenue</p>
-        <div className="flex flex-col md:flex-row w-full gap-2 lg:gap-10 ">
-          <div className="w-full lg:w-1/2">
-            <label>Multiplier</label>
-            <div className="flex items-center border-slate-400 w-full">
-              <input
-                placeholder="0"
-                name="liabilitymultiplier"
-                type="number"
-                className="input w-full input-bordered border-slate-400"
-                value={item.revmultiplier}
-                onChange={(e) =>
-                  onChangeInputValue("revmultiplier", e.target.value)
-                }
-                max={100}
-                min={0}
-                onKeyDown={(e) =>
-                  ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
-                }
-              />
-            </div>
-          </div>
-
-          <div className="w-full lg:w-1/2">
-            <label>Monthly Revenue</label>
-            <div className="flex items-center border-slate-400">
-              <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                <p className="text-center">{item.currency}</p>
-              </div>
-              <input
-                name="amount"
-                type="number"
-                className="input input-bordered w-3/4 rounded-l-none border-slate-400"
-                value={item.revamount}
-                onChange={(e) =>
-                  onChangeInputValue("revamount", e.target.value)
-                }
-                min={0}
-                onKeyDown={(e) =>
-                  ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
-                }
-              />
-            </div>
-          </div>
-        </div>
-      </div> */}
     </div>
-  );
-};
-
-const InputDependents = ({
-  isLast,
-  item,
-  onChangeValues,
-  addNewNameDependent,
-  isDeletedButtonVisible,
-  handleRemoveNameDependent,
-  errorsdep,
-}) => {
-  return (
-    <>
-      <div className="flex flex-col justify-between w-full gap-3 mb-7">
-        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center pr-0 md:pr-20 relative">
-          <div className="w-full lg:w-1/3">
-            <label>First Name</label>
-            <input
-              className="input input-bordered w-full border-slate-400"
-              placeholder="First Name"
-              name="firstnamedependent"
-              type="text"
-              value={item.firstnamedependent}
-              onChange={(e) =>
-                onChangeValues({
-                  firstnamedependent: e.target.value,
-                  lastnamedependent: item.lastnamedependent,
-                  agedependent: item.agedependent,
-                })
-              }
-            />
-          </div>
-
-          <div className="w-full lg:w-1/3">
-            <label>Last Name</label>
-            <input
-              className="input input-bordered w-full border-slate-400"
-              placeholder="Last Name"
-              name="lastnamedependent"
-              type="text"
-              value={item.lastnamedependent}
-              onChange={(e) =>
-                onChangeValues({
-                  firstnamedependent: item.firstnamedependent,
-                  lastnamedependent: e.target.value,
-                  agedependent: item.agenewdependent,
-                })
-              }
-            />
-          </div>
-
-          <div className="w-full lg:w-1/4">
-            <label>Age</label>
-            <input
-              name="agedependent"
-              placeholder="Age"
-              className="input input-bordered w-full border-slate-400"
-              value={item.agedependent}
-              onChange={(e) =>
-                onChangeValues({
-                  firstnamedependent: item.firstnamedependent,
-                  lastnamedependent: item.lastnamedependent,
-                  agedependent: e.target.value,
-                })
-              }
-              onKeyDown={(e) =>
-                ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
-              }
-              min={1}
-              max={99}
-              type="text"
-              pattern="\d*"
-              maxlength="2"
-            />
-          </div>
-          {isDeletedButtonVisible && (
-            <span
-              className="cursor-pointer -mt-6 md:mt-5 hidden md:block delbutton absolute"
-              onClick={handleRemoveNameDependent}
-            >
-              <BsTrash className="text-[#A0161B]"></BsTrash>
-            </span>
-          )}
-        </div>
-
-        <div className="flex flex-col justify-start gap-10">
-          <div className="w-full lg:w-1/3">
-            <label>Relationship</label>
-            <div className="flex flex items-center mr-0 lg:mr-7 pr-0">
-              <input
-                className="input input-bordered w-full border-slate-400"
-                placeholder="Relationship"
-                name="relationship"
-                type="text"
-                value={item.relationship}
-                onChange={(e) =>
-                  onChangeValues({
-                    firstname: e.target.value,
-                    lastname: item.lastname,
-                    agenew: item.agenew,
-                  })
-                }
-              />
-              {isDeletedButtonVisible && (
-                <span
-                  className="cursor-pointer ml-4 md:mt-5 block md:hidden"
-                  onClick={handleRemoveNameDependent}
-                >
-                  <BsTrash className="text-[#A0161B]"></BsTrash>
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {isLast && (
-          <div
-            className="flex items-center cursor-pointer mt-2"
-            onClick={addNewNameDependent}
-          >
-            <div className="flex items-center gap-2 border-b">
-              <AiOutlinePlus className="text-[#A0161B]"></AiOutlinePlus>
-              <p className="text-sm text-[#A0161B]">Add Another Dependent</p>
-            </div>
-          </div>
-        )}
-      </div>
-    </>
   );
 };
 
@@ -947,16 +926,12 @@ const InputLiabilities = ({
   addNewLiability,
   handleRemoveLiability,
   isDeletedButtonVisible,
+  errors,
+  currency,
 }) => {
   const onChangeInputValue = (key, value) => {
-    const currentValue = {
-      liability: item.liability,
-      amount: item.amount,
-      liabilitymultiplier: item.liabilitymultiplier,
-      currencyliability: item.currencyliability,
-    };
-    currentValue[key] = value;
-    onChangeValues(currentValue);
+    item[key] = value;
+    onChangeValues(item);
   };
 
   const onSearch = (searchTerm) => {
@@ -964,11 +939,11 @@ const InputLiabilities = ({
   };
 
   return (
-    <>
-      <div className="flex flex-col justify-between w-full gap-4 pb-6 ">
-        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-center relative pr-0 md:pr-10">
+    <div className="flex gap-10 flex-col mb-5">
+      <div className="flex flex-col justify-between w-full gap-4 ">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-start pr-0 md:pr-10 h-[210px] md:h-[70px]">
           <div className="w-full lg:w-1/2 ">
-            <label>Liabilities</label>
+            <label>Liability</label>
 
             <div className="search-container relative">
               <div className="search-inner relative">
@@ -978,33 +953,37 @@ const InputLiabilities = ({
                   onChange={(e) => onSearch(e.target.value)}
                   className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                   placeholder="Liability"
-                  required={item.amount > 0}
                 />
                 <select
                   className="input input-bordered w-full border-slate-400"
                   value={item.liability}
                   onChange={(e) => onSearch(e.target.value)}
                 >
-                  <option value="" disabled>
+                  <option disabled value="">
                     {" "}
                     Choose a Goal{" "}
                   </option>
-                  <option value="Mortgage" className="capitalize">
-                    Mortgage
+                  <option value="mortgage" className="capitalize">
+                    Mortagage
                   </option>
-                  <option value="Credit Card" className="capitalize">
+                  <option value="credit card" className="capitalize">
                     Credit Card
                   </option>
                   <option value="Student Debt" className="capitalize">
                     Student Debt
                   </option>
                 </select>
+
+                <span className="text-red-600 text-sm absolute w-full required">
+                  {errors?.liability}
+                </span>
               </div>
+
               <div className="dropdown relative">
                 {liabilitiesdata
-                  .filter((liability) => {
+                  .filter((liabilityItem) => {
                     const searchTerm = item?.liability?.toLowerCase();
-                    const fullName = liability.full_name.toLowerCase();
+                    const fullName = liabilityItem.full_name.toLowerCase();
 
                     return (
                       searchTerm &&
@@ -1013,55 +992,52 @@ const InputLiabilities = ({
                     );
                   })
                   .slice(0, 10)
-                  .map((liability) => (
+                  .map((liabilityItem) => (
                     <div
-                      onClick={() => onSearch(liability.full_name)}
+                      onClick={() => onSearch(liabilityItem.full_name)}
                       className="dropdown-row absolute"
-                      key={liability.full_name}
+                      key={liabilityItem.full_name}
                     >
-                      {liability.full_name}
+                      {liabilityItem.full_name}
                     </div>
                   ))}
               </div>
             </div>
           </div>
 
-          <div className="w-full flex-col lg:flex-row flex gap-3 lg:gap-10 lg:w-1/2">
+          <div className="flex flex-col lg:flex-row gap-3 lg:gap-10 w-full lg:w-1/2 ">
             <div className="w-full lg:w-1/4">
               <label>Multiplier</label>
               <div className="flex items-center border-slate-400 w-full">
                 <input
-                  placeholder="0"
                   name="liabilitymultiplier"
                   type="number"
+                  placeholder="0"
                   className="input w-full input-bordered border-slate-400"
                   value={item.liabilitymultiplier}
                   onChange={(e) =>
                     onChangeInputValue("liabilitymultiplier", e.target.value)
                   }
-                  max={100}
-                  min={0}
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
+                  required
                 />
               </div>
+              <ErrorText value={errors?.liabilitymultiplier} />
             </div>
-
             <div className="w-full lg:w-3/4">
               <label>Amount</label>
-              <div className="flex items-center border-slate-400">
+              <div className="flex items-center border-slate-400 w-full items-center">
                 <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                  <p className="text-center">{item.currencyliability}</p>
+                  <p className="text-center">{currency}</p>
                 </div>
                 <input
                   name="amount"
                   type="number"
-                  className="input input-bordered w-3/4 rounded-l-none border-slate-400"
+                  className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
                   onChange={(e) => onChangeInputValue("amount", e.target.value)}
-                  required={item.liability}
-                  min={item.liability === "" ? 0 : 1}
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
@@ -1069,19 +1045,20 @@ const InputLiabilities = ({
 
                 {isDeletedButtonVisible && (
                   <span
-                    className="cursor-pointer ml-4 block lg:hidden"
+                    className="cursor-pointer block lg:hidden ml-4"
                     onClick={handleRemoveLiability}
                   >
                     <BsTrash className="text-[#A0161B]"></BsTrash>
                   </span>
                 )}
               </div>
+              <ErrorText value={errors?.amount} />
             </div>
           </div>
 
           {isDeletedButtonVisible && (
             <span
-              className="cursor-pointer -mt-6 md:mt-5 hidden lg:block  absolute delbutton ml-7"
+              className="cursor-pointer hidden lg:block absolute left-[80.5%] mt-10"
               onClick={handleRemoveLiability}
             >
               <BsTrash className="text-[#A0161B]"></BsTrash>
@@ -1098,76 +1075,66 @@ const InputLiabilities = ({
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
-const InputExp = ({
-  isLast,
-  item,
-  onChangeValues,
-  addNewRevExp,
-  handleRemoveRevExp,
-}) => {
+const InputExp = ({ item, onChangeValues, currency, errors }) => {
   const onChangeInputValue = (key, value) => {
-    const currentValue = {
-      expenses: item.expenses,
-      multiplierexp: item.multiplierexp,
-      currency: item.currency,
-    };
-    currentValue[key] = value;
-    onChangeValues(currentValue);
+    item[key] = value;
+    onChangeValues(item);
   };
 
   return (
     <>
-      <div className="flex flex-col justify-between w-full gap-4">
-        <div className="flex flex-col  w-full gap-2 md:gap-5 lg:gap-10 items-center">
-          <div className="flex flex-col w-full gap-2 pr-10">
+      <div className="flex flex-col justify-between w-full gap-4 bordertop ">
+        <div className="flex flex-col  w-full gap-2 md:gap-5 lg:gap-10 items-center mt-10">
+          <div className="flex flex-col w-full gap-2 pb-8 pr-0 md:pr-10">
             <p className="font-bold my-0">Monthly Expenses</p>
-            <div className="flex flex-col lg:flex-row gap-3 lg:gap-10">
-              <div className="w-full lg:w-1/2">
+            <div className="flex flex-col lg:flex-row w-full gap-3 lg:gap-10">
+              <div className="w-full lg:w-1/2 relative">
                 <label>Multiplier</label>
                 <div className="flex items-center border-slate-400">
                   <input
-                    name="multiplierexp"
+                    name="multiplierrev"
                     type="number"
                     className="input input-bordered w-full border-slate-400"
-                    placeholder="0"
-                    value={item.multiplierexp}
+                    value={item.multiplier}
                     onChange={(e) =>
-                      onChangeInputValue("multiplierexp", e.target.value)
+                      onChangeInputValue("multiplier", e.target.value)
                     }
-                    max={100}
-                    min={0}
                     onKeyDown={(e) =>
                       ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                     }
                   />
+                  <span className="text-red-600 text-sm absolute w-full required top-[18px]">
+                    {errors?.multiplier}
+                  </span>
                 </div>
               </div>
 
-              <div className="w=full lg:w-1/2">
+              <div className="w-full lg:w-1/2">
                 <label>Monthly Expenses</label>
-                <div className="flex items-center border-slate-400">
+                <div className="flex items-center border-slate-400 relative">
                   <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                    {item.currency}
+                    {currency}
                   </div>
                   <input
-                    name="expenses"
+                    name="amount"
                     type="number"
-                    className="input input-bordered rounded-l-none w-full border-slate-400"
-                    placeholder="0"
-                    value={item.expenses}
+                    className="input w-full rounded-l-none border-slate-400"
+                    value={item.amount}
                     onChange={(e) =>
-                      onChangeInputValue("expenses", e.target.value)
+                      onChangeInputValue("amount", e.target.value)
                     }
-                    required
-                    min={0}
                     onKeyDown={(e) =>
                       ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                     }
                   />
+
+                  <span className="text-red-600 text-sm absolute w-full required top-[3px]">
+                    {errors?.amount}
+                  </span>
                 </div>
               </div>
             </div>
@@ -1178,24 +1145,10 @@ const InputExp = ({
   );
 };
 
-const InputRev = ({
-  isLast,
-  item,
-  onChangeValues,
-  addNewRevExp,
-  handleRemoveRevExp,
-}) => {
+const InputRev = ({ item, onChangeValues, currency, errors }) => {
   const onChangeInputValue = (key, value) => {
-    const currentValue = {
-      multiplierrev: item.multiplierrev,
-      revenue: item.revenue,
-      currency: item.currency,
-      expenses: item.expenses,
-      multiplierexp: item.multiplierexp,
-      currencyexp: item.currencyexp,
-    };
-    currentValue[key] = value;
-    onChangeValues(currentValue);
+    item[key] = value;
+    onChangeValues(item);
   };
 
   return (
@@ -1212,42 +1165,39 @@ const InputRev = ({
                     name="multiplierrev"
                     type="number"
                     className="input input-bordered w-full border-slate-400"
-                    placeholder="0"
-                    value={item.multiplierrev}
+                    value={item.multiplier}
                     onChange={(e) =>
-                      onChangeInputValue("multiplierrev", e.target.value)
+                      onChangeInputValue("multiplier", e.target.value)
                     }
-                    max={100}
-                    min={0}
                     onKeyDown={(e) =>
                       ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                     }
                   />
                 </div>
+                <ErrorText value={errors?.multiplier} />
               </div>
 
               <div className="w-full lg:w-1/2">
                 <label>Monthly Revenue</label>
                 <div className="flex items-center border-slate-400">
                   <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
-                    {item.currency}
+                    {currency}
                   </div>
                   <input
-                    name="revenue"
+                    name="amount"
                     type="number"
                     className="input w-full rounded-l-none border-slate-400"
-                    placeholder="0"
-                    value={item.revenue}
+                    value={item.amount}
                     onChange={(e) =>
-                      onChangeInputValue("revenue", e.target.value)
+                      onChangeInputValue("amount", e.target.value)
                     }
-                    min={0}
                     onKeyDown={(e) =>
                       ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                     }
                   />
                 </div>
               </div>
+              <ErrorText value={errors?.amount} />
             </div>
           </div>
         </div>
@@ -1355,25 +1305,45 @@ const InputOther = ({
 function PersonalForm({ setData }) {
   const handleSubmit = () => {
     try {
+      console.log(personalDetails);
       const tempErrors = {
-        firstname:
-          personalDetails.firstname === "" ? "First Name is required" : "",
-        lastname:
-          personalDetails.lastname === "" ? "Last Name is required" : "",
+        firstname: checkString(
+          personalDetails.firstname,
+          "First Name is required"
+        ),
+        lastname: checkString(
+          personalDetails.lastname,
+          "Last Name is required"
+        ),
         agenew: checkAge(personalDetails.agenew),
         email: checkEmail(personalDetails.email),
-        contact: personalDetails.contact === "" ? "Contact is required" : "",
+        contact: checkString(personalDetails.contact, "Contact is required"),
       };
 
-      const tempDepErrors = {
-        firstnamedependent:
-          dependents.firstnamedependent === "" ? "First Name is required" : "",
-        lastnamedependent:
-          dependents.lastnamedependent === "" ? "Last Name is required" : "",
-        agedependent: checkAge(dependents.agedependent),
-        relationship:
-          dependents.relationship === "" ? "Relationship is required" : "",
-      };
+      /// validating and setting error message for dependents array
+      const tempDepsErrorsArray = [];
+      /// loop first
+      for (const dependent of dependents) {
+        /// set dependent error object
+        console.log(dependent);
+        const tempDepErrors = {
+          firstnamedependent: checkString(
+            dependent.firstnamedependent,
+            "First Name is required"
+          ),
+          lastnamedependent: checkString(
+            dependent.lastnamedependent,
+            "Last Name is required"
+          ),
+          agedependent: checkAge(dependent.agedependent),
+          relationship: checkString(
+            dependent.relationship,
+            "Relationship Name is required"
+          ),
+        };
+        /// and push on temporary array
+        tempDepsErrorsArray.push(tempDepErrors);
+      }
 
       /// validating and setting error message for goals array
       const tempGoalsErrorsArray = [];
@@ -1392,23 +1362,17 @@ function PersonalForm({ setData }) {
         tempGoalsErrorsArray.push(tempGoalsErrors);
       }
       console.log(tempGoalsErrorsArray);
-      console.log(personalDetails);
+      console.log(tempDepsErrorsArray);
       /// set errors to usestates
       setGoalsErrors(tempGoalsErrorsArray);
       setErrors(tempErrors);
-      setDepErrors(tempDepErrors);
+      setDepErrors(tempDepsErrorsArray);
 
-      const isEmptyPersonalDetails = Object.values(tempErrors).every(
-        (x) => x === null || x === ""
-      );
-      const isEmptyGoals = tempGoalsErrorsArray
-        .map((tempGoalsErrorsData) =>
-          Object.values(tempGoalsErrorsData).every(
-            (x) => x === null || x === ""
-          )
-        )
-        .every((x) => x === true);
-      if (isEmptyPersonalDetails && isEmptyGoals) {
+      const isEmptyPersonalDetails = checkIsEmptyObjects(tempErrors);
+      const isEmptyGoals = checkIsEmptyArrayObjects(tempGoalsErrorsArray);
+      const isEmptyDeps = checkIsEmptyArrayObjects(tempDepsErrorsArray);
+
+      if (isEmptyPersonalDetails && isEmptyGoals && isEmptyDeps) {
         setData({
           names: personalDetails,
           dependents: dependents,
@@ -1420,35 +1384,6 @@ function PersonalForm({ setData }) {
     }
   };
 
-  function checkAmount(amount, goal) {
-    /// criteria
-    /// goal w/ value && amount empty and 0 = required
-    /// goal w/o value && amount empty = success
-    if ((amount === "" || amount <= 0) && goal !== "") {
-      return "Amount is required";
-    } else {
-      return "";
-    }
-  }
-
-  function checkAge(age) {
-    if (age === "") {
-      return "Age is Required";
-    } else if (age <= 0) return "Age is must be greater than 0";
-    else if (age > 100) return "Age is must be lesser than 100";
-    else return "";
-  }
-
-  function checkEmail(email) {
-    let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-    if (email === "") {
-      return "Email is Required";
-    }
-    if (email.match(regex)) return "";
-    else return "Email not valid ";
-  }
-
   const [errors, setErrors] = useState({
     firstname: "",
     lastname: "",
@@ -1456,13 +1391,6 @@ function PersonalForm({ setData }) {
     email: "",
     contact: "",
     currency: "",
-  });
-
-  const [errorsdep, setErrorsDep] = useState({
-    firstnamedependent: "",
-    lastnamedependent: "",
-    agedependent: "",
-    relationship: "",
   });
 
   const [goalsErrors, setGoalsErrors] = useState([
@@ -1482,8 +1410,6 @@ function PersonalForm({ setData }) {
     },
   ]);
 
-  console.log(errors);
-
   const [personalDetails, setpersonalDetails] = useState({
     firstname: "",
     lastname: "",
@@ -1491,13 +1417,6 @@ function PersonalForm({ setData }) {
     email: "",
     contact: "",
     currency: "USD",
-  });
-
-  const [depDetails, setdepDetails] = useState({
-    firstnamedependent: "",
-    lastnamedependent: "",
-    agedependent: "",
-    relationship: "",
   });
 
   const initialGoalState = {
@@ -1516,8 +1435,6 @@ function PersonalForm({ setData }) {
 
   const [goalsum, setGoalSum] = useState(0);
 
-  console.log(goalSum);
-
   const addNewName = () => {
     setpersonalDetails([
       ...personalDetails,
@@ -1533,7 +1450,9 @@ function PersonalForm({ setData }) {
       ...dependents,
       {
         firstnamedependent: "",
+        lastnamedependent: "",
         agedependent: "",
+        relationship: "",
       },
     ]);
   };
@@ -1611,10 +1530,11 @@ function PersonalForm({ setData }) {
               <InputGoals
                 item={item}
                 onChangeValues={(data) => {
+                  // set goals data
                   var goalsTemporary = [...goals];
                   goalsTemporary[index] = data;
-                  console.log(goalsTemporary, "goalsTemporary");
                   setGoals(goalsTemporary);
+                  // set goals errors to empty
                   const tempGoalsErrorsArray = [];
                   goalsTemporary.map((e) =>
                     tempGoalsErrorsArray.push({
@@ -1643,23 +1563,27 @@ function PersonalForm({ setData }) {
                 <InputDependents
                   item={item}
                   onChangeValues={(data) => {
-                    errorsdep = { errorsdep };
-                    const tempDepErrors = {
-                      firstnamedependent: "",
-                      lastnamedependent: "",
-                      agedependent: "",
-                      relationship: "",
-                    };
-                    setDepErrors(tempDepErrors);
-                    setpersonalDetails(data);
+                    var dependentsTemporary = [...dependents];
+                    dependentsTemporary[index] = data;
+                    setDependents(dependentsTemporary);
+                    const tempDependentsErrorsArray = [];
+                    dependentsTemporary.map((e) =>
+                      tempDependentsErrorsArray.push({
+                        firstnamedependent: "",
+                        lastnamedependent: "",
+                        agedependent: "",
+                        relationship: "",
+                      })
+                    );
+                    setDepErrors(tempDependentsErrorsArray);
                   }}
                   addNewNameDependent={addNewNameDependent}
                   handleRemoveNameDependent={() =>
                     handleRemoveNameDependent(index)
                   }
+                  errors={depErrors[index]}
                   isDeletedButtonVisible={true}
                   isLast={dependents.length - 1 === index}
-                  goalSum={goalSum}
                 />
               </div>
             ))}
@@ -1700,53 +1624,100 @@ function AssetsForm({ currency, setData, goBack }) {
     asset: "",
     amount: 0.0,
     assetmultiplier: 1,
-    currency: currency?.toUpperCase(),
-    revmultiplier: 1,
-    revamount: 0.0,
   };
 
-  console.log(currency);
+  const [assetsData, setAssetsData] = useState({
+    assets: [initialAssetData],
+    rev: {
+      multiplier: 1,
+      amount: 0,
+    },
+  });
+  const [assetsDataErrors, setAssetsDataErrors] = useState({
+    assets: [
+      {
+        asset: "",
+        amount: "",
+        assetmultiplier: "",
+      },
+    ],
+    rev: {
+      multiplier: "",
+      amount: "",
+    },
+  });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setData({
-      assets: assets,
-      rev: rev,
-    });
+  // Structure will be this
+  // {
+  //   assets : [],
+  //   rev: {
+  //     revmultiplier: 0 ,
+  //     revamount: 0
+  //  }
+  // }
+
+  const handleSubmit = () => {
+    /// loop first
+    var tempAssetsErrorsObject = {};
+    /// set asset error object
+    /// validating and setting error message for assets array
+    var tempAssetsErrorsArray = [];
+    for (const asset of assetsData.assets) {
+      /// set asset error object
+      const tempAssetsErrors = {
+        asset:
+          asset.asset === "" && (!asset.amount === "" || asset.amount > 0)
+            ? "asset is required"
+            : "",
+        amount: checkAmount(asset.amount, asset.asset),
+        assetmultiplier: asset.assetmultiplier === "" ? "amount required" : "",
+      };
+      /// and push on temporary array
+      tempAssetsErrorsArray.push(tempAssetsErrors);
+    }
+    tempAssetsErrorsObject = {
+      assets: tempAssetsErrorsArray,
+      rev: {
+        amount: checkString(
+          assetsData.rev.amount.toString(),
+          "amount is required"
+        ),
+        multiplier: checkString(
+          assetsData.rev.multiplier.toString(),
+          "multiplier is required"
+        ),
+      },
+    };
+    console.log(tempAssetsErrorsObject);
+    /// set errors to usestates
+    setAssetsDataErrors(tempAssetsErrorsObject);
+
+    const isEmptyAssets = checkIsEmptyArrayObjects(
+      tempAssetsErrorsObject.assets
+    );
+    const isEmptyRevAmount = tempAssetsErrorsObject.rev.amount === "";
+    const isEmptyRevMultiplier = tempAssetsErrorsObject.rev.multiplier === "";
+
+    if (isEmptyAssets && isEmptyRevAmount && isEmptyRevMultiplier) {
+      setData(assetsData);
+    }
   };
-
-  const [assets, setAssets] = useState([initialAssetData]);
-
-  useEffect(() => {
-    setAssets((prevAssets) => {
-      const tempAssets = [...prevAssets];
-      tempAssets.map((e) => (e.currency = currency?.toUpperCase()));
-      return tempAssets;
-    });
-    setRevexp((prevRev) => {
-      const tempRev = [...prevRev];
-      tempRev.map((e) => (e.currency = currency?.toUpperCase()));
-      return tempRev;
-    });
-  }, [currency]);
-
-  const initialRevenueData = {
-    revenue: 0.0,
-    multiplierrev: 1,
-    currency: currency?.toUpperCase(),
-  };
-
-  const [rev, setRevexp] = useState([initialRevenueData]);
 
   const addNewAsset = () => {
-    setAssets([...assets, initialAssetData]);
+    setAssetsData((prevAssets) => ({
+      ...prevAssets,
+      assets: [...assetsData.assets, initialAssetData],
+    }));
   };
 
   const handleRemoveAsset = (index) => {
-    if (assets.length !== 1) {
-      const values = [...assets];
+    if (assetsData.assets.length !== 1) {
+      const values = [...assetsData.assets];
       values.splice(index, 1);
-      setAssets(values);
+      setAssetsData((prevAssets) => ({
+        ...prevAssets,
+        assets: values,
+      }));
     }
   };
 
@@ -1784,62 +1755,51 @@ function AssetsForm({ currency, setData, goBack }) {
           </div>
         </div>
 
-        <form
-          onSubmit={(e) => {
-            handleSubmit(e);
-          }}
-          className="flex flex-col w-5/6 md:w-full gap-6"
-        >
-          {assets.map((item, index) => (
-            <div key={index} className="px-0 w-full ">
-              <InputAssets
-                item={item}
-                onChangeValues={(data) => {
-                  var assetsTemporary = [...assets];
-                  assetsTemporary[index] = data;
-                  setAssets(assetsTemporary);
-                }}
-                addNewAsset={addNewAsset}
-                handleRemoveAsset={() => handleRemoveAsset(index)}
-                isLast={assets.length - 1 === index}
-                isDeletedButtonVisible={assets.length - 1 > 0}
-              />
-            </div>
-          ))}
-
-          {rev.map((item, index) => (
-            <div key={index} className="px-0 w-full">
-              <InputRev
-                item={item}
-                onChangeValues={(data) => {
-                  var namesTemporary = [...rev];
-                  namesTemporary[index] = data;
-                  setRevexp(namesTemporary);
-                }}
-                // addNewRevExp={addNewRevExp}
-                // handleRemoveRevExp={handleRemoveRevExp}
-                isLast={rev.length - 1 === index}
-              />
-            </div>
-          ))}
-
-          <div className="flex flex-col lg:flex-row justify-center md:justify-end gap-3 lg:gap-12">
-            <div
-              className="flex items-center cursor-pointer gap-2 justify-center"
-              onClick={goBack}
-            >
-              <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
-              <p className="text-[#A0161B] font-bold">Go Back</p>
-            </div>
-
-            <input
-              type="submit"
-              className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-center md:self-end"
-              value="Next Step"
-              onKeyDown={(e) => (e.key === "Enter" ? handleSubmit : "")}
+        {assetsData.assets.map((item, index) => (
+          <div key={index} className="px-0 w-full ">
+            <InputAssets
+              item={item}
+              onChangeValues={(data) => {
+                var assetsTemporary = [...assetsData.assets];
+                assetsTemporary[index] = data;
+                setAssetsData((prev) => ({ ...prev, assets: assetsTemporary }));
+              }}
+              addNewAsset={addNewAsset}
+              handleRemoveAsset={() => handleRemoveAsset(index)}
+              isLast={assetsData.assets.length - 1 === index}
+              isDeletedButtonVisible={assetsData.assets.length - 1 > 0}
+              errors={assetsDataErrors.assets[index]}
+              currency={currency}
             />
           </div>
-        </form>
+        ))}
+        <div className="px-0 w-full">
+          <InputRev
+            item={assetsData.rev}
+            onChangeValues={(data) => {
+              setAssetsData((prev) => ({ ...prev, rev: data }));
+            }}
+            currency={currency}
+            errors={assetsDataErrors.rev}
+          />
+        </div>
+
+        <div className="flex flex-col lg:flex-row justify-center md:justify-end gap-3 lg:gap-12  w-full">
+          <div
+            className="flex items-center cursor-pointer gap-2 justify-center"
+            onClick={goBack}
+          >
+            <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
+            <p className="text-[#A0161B] font-bold">Go Back</p>
+          </div>
+
+          <button
+            onClick={() => handleSubmit()}
+            className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-center md:self-end"
+          >
+            Next Step
+          </button>
+        </div>
       </div>
 
       <a href="/calculate" className="flex items-center gap-2 mt-4">
@@ -1851,83 +1811,130 @@ function AssetsForm({ currency, setData, goBack }) {
 }
 
 function LiabilitiesForm({ currency, setData, goBack }) {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setData({
-      liabilities: liabilities,
-      revexp: revexp,
-    });
-  };
-
-  const initialRevenueData = {
-    expenses: 0.0,
-    multiplierexp: 1,
-    currency: currency?.toUpperCase(),
-  };
-
-  const [revexp, setRevexp] = useState([initialRevenueData]);
-
-  const initialLiabilitiesData = {
+  const initialLiabilityData = {
     liability: "",
     amount: 0.0,
     liabilitymultiplier: 1,
-    currencyliability: currency?.toUpperCase(),
   };
 
-  const [liabilities, setLiability] = useState([initialLiabilitiesData]);
+  const [liabilitiesData, setLiabilitiesData] = useState({
+    liabilities: [initialLiabilityData],
+    revexp: {
+      multiplier: 1,
+      amount: 0,
+    },
+  });
+  const [liabilitiesDataErrors, setLiabilitiesDataErrors] = useState({
+    liabilities: [
+      {
+        liability: "",
+        amount: "",
+        liabilitymultiplier: "",
+      },
+    ],
+    revexp: {
+      multiplier: "",
+      amount: "",
+    },
+  });
 
-  useEffect(() => {
-    setLiability((prevLiability) => {
-      const tempLiability = [...prevLiability];
-      tempLiability.map((e) => (e.currencyliability = currency?.toUpperCase()));
-      return tempLiability;
-    });
-    setRevexp((prevRev) => {
-      const tempRev = [...prevRev];
-      tempRev.map((e) => (e.currency = currency?.toUpperCase()));
-      return tempRev;
-    });
-  }, [currency]);
+  // Structure will be this
+  // {
+  //   liabilities : [],
+  //   revexp: {
+  //     multiplier: 0 ,
+  //     amount: 0
+  //  }
+  // }
 
-  const addNewLiability = () => {
-    setLiability([...liabilities, initialLiabilitiesData]);
-  };
+  const handleSubmit = () => {
+    /// loop first
+    var tempLiabilitiesErrorsObject = {};
+    /// set liabilities error object
+    /// validating and setting error message for liabilities array
+    var tempLiabilitiesErrorsArray = [];
+    for (const liabilities of liabilitiesData.liabilities) {
+      /// set liabilities error object
+      const tempLiabilitiesErrors = {
+        liability:
+          liabilities.liability === "" &&
+          (!liabilities.amount === "" || liabilities.amount > 0)
+            ? "Liability is required"
+            : "",
+        amount: checkAmount(liabilities.amount, liabilities.liability),
+        liabilitymultiplier:
+          liabilities.liabilitymultiplier === ""
+            ? "multiplier is required"
+            : "",
+      };
+      /// and push on temporary array
+      tempLiabilitiesErrorsArray.push(tempLiabilitiesErrors);
+    }
+    tempLiabilitiesErrorsObject = {
+      liabilities: tempLiabilitiesErrorsArray,
+      revexp: {
+        amount: checkString(
+          liabilitiesData.revexp.amount.toString(),
+          "amount is required"
+        ),
+        multiplier: checkString(
+          liabilitiesData.revexp.multiplier.toString(),
+          "multiplier is required"
+        ),
+      },
+    };
+    console.log(tempLiabilitiesErrorsObject);
+    /// set errors to usestates
+    setLiabilitiesDataErrors(tempLiabilitiesErrorsObject);
 
-  const handleRemoveLiability = (index) => {
-    if (liabilities.length !== 1) {
-      const values = [...liabilities];
-      values.splice(index, 1);
-      setLiability(values);
+    const isEmptyLiabilities = checkIsEmptyArrayObjects(
+      tempLiabilitiesErrorsObject.liabilities
+    );
+    const isEmptyRevAmount = tempLiabilitiesErrorsObject.revexp.amount === "";
+    const isEmptyRevMultiplier =
+      tempLiabilitiesErrorsObject.revexp.multiplier === "";
+
+    if (isEmptyLiabilities && isEmptyRevAmount && isEmptyRevMultiplier) {
+      setData(liabilitiesData);
     }
   };
 
-  // const handleRemoveLiability = (id) => {
-  //   setLiability((item) => {
-  //     return item.filter((myItem, index) => {
-  //       return index !== id;
-  //     });
-  //   });
-  // };
+  const addNewLiability = () => {
+    setLiabilitiesData((prevLiabilities) => ({
+      ...prevLiabilities,
+      liabilities: [...liabilitiesData.liabilities, initialLiabilityData],
+    }));
+  };
 
-  console.log(liabilities);
+  const handleRemoveLiability = (index) => {
+    if (liabilitiesData.liabilities.length !== 1) {
+      const values = [...liabilitiesData.liabilities];
+      values.splice(index, 1);
+      setLiabilitiesData((prevLiabilities) => ({
+        ...prevLiabilities,
+        liabilities: values,
+      }));
+    }
+  };
 
   return (
-    <div className="w-full justify-center items-center flex flex-col gap-3">
-      <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-none lg:shadow-md">
+    <div className="w-full justify-center items-center flex flex-col gap-3 ">
+      <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400  px-7 py-7 rounded-lg shadow-none lg:shadow-md">
         <div className="w-full flex justify-between">
           <p className="font-bold text-center md:text-left">
-            Liability Management
+            Liabilities Management
           </p>
-          <label htmlFor="liability" className="">
+
+          <label htmlFor="liabilities">
             <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
           </label>
         </div>
 
-        <input type="checkbox" id="liability" className="modal-toggle" />
+        <input type="checkbox" id="liabilities" className="modal-toggle" />
         <div className="modal">
           <div className="modal-box relative">
             <label
-              htmlFor="liability"
+              htmlFor="liabilities"
               className="btn btn-sm btn-circle absolute right-2 top-2"
             >
               ✕
@@ -1944,64 +1951,56 @@ function LiabilitiesForm({ currency, setData, goBack }) {
           </div>
         </div>
 
-        <form
-          onSubmit={(e) => {
-            handleSubmit(e);
-          }}
-          className="flex flex-col w-5/6 md:w-full gap-10"
-        >
-          <div className="w-full border-b-g">
-            {liabilities.map((item, index) => (
-              <div key={index} className="px-0 w-full">
-                <InputLiabilities
-                  item={item}
-                  onChangeValues={(data) => {
-                    var liabilityTemporary = [...liabilities];
-                    liabilityTemporary[index] = data;
-                    setLiability(liabilityTemporary);
-                  }}
-                  addNewLiability={addNewLiability}
-                  handleRemoveLiability={() => handleRemoveLiability(index)}
-                  isLast={liabilities.length - 1 === index}
-                  isDeletedButtonVisible={liabilities.length - 1 > 0}
-                />
-              </div>
-            ))}
-          </div>
-
-          {revexp.map((item, index) => (
-            <div key={index} className="px-0 w-full">
-              <InputExp
-                item={item}
-                onChangeValues={(data) => {
-                  var namesTemporary = [...revexp];
-                  namesTemporary[index] = data;
-                  setRevexp(namesTemporary);
-                }}
-                // addNewRevExp={addNewRevExp}
-                // handleRemoveRevExp={handleRemoveRevExp}
-                isLast={revexp.length - 1 === index}
-              />
-            </div>
-          ))}
-
-          <div className="flex flex-col lg:flex-row justify-end gap-3 md:gap-7">
-            <div
-              className="flex items-center justify-center cursor-pointer gap-2"
-              onClick={goBack}
-            >
-              <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
-              <p className="text-[#A0161B] font-bold">Go Back</p>
-            </div>
-
-            <input
-              type="submit"
-              className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
-              value="Next Step"
-              onKeyDown={(e) => (e.key === "Enter" ? handleSubmit : "")}
+        {liabilitiesData.liabilities.map((item, index) => (
+          <div key={index} className="px-0 w-full ">
+            <InputLiabilities
+              item={item}
+              onChangeValues={(data) => {
+                var liabilitiesTemporary = [...liabilitiesData.liabilities];
+                liabilitiesTemporary[index] = data;
+                setLiabilitiesData((prev) => ({
+                  ...prev,
+                  liabilities: liabilitiesTemporary,
+                }));
+              }}
+              addNewLiability={addNewLiability}
+              handleRemoveLiability={() => handleRemoveLiability(index)}
+              isLast={liabilitiesData.liabilities.length - 1 === index}
+              isDeletedButtonVisible={
+                liabilitiesData.liabilities.length - 1 > 0
+              }
+              errors={liabilitiesDataErrors.liabilities[index]}
+              currency={currency}
             />
           </div>
-        </form>
+        ))}
+        <div className="px-0 w-full">
+          <InputExp
+            item={liabilitiesData.revexp}
+            onChangeValues={(data) => {
+              setLiabilitiesData((prev) => ({ ...prev, revexp: data }));
+            }}
+            currency={currency}
+            errors={liabilitiesDataErrors.revexp}
+          />
+        </div>
+
+        <div className="flex flex-col lg:flex-row justify-center md:justify-end gap-3 lg:gap-12 w-full">
+          <div
+            className="flex items-center cursor-pointer gap-2 justify-center"
+            onClick={goBack}
+          >
+            <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
+            <p className="text-[#A0161B] font-bold">Go Back</p>
+          </div>
+
+          <button
+            onClick={() => handleSubmit()}
+            className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-center md:self-end"
+          >
+            Next Step
+          </button>
+        </div>
       </div>
 
       <a href="/calculate" className="flex items-center gap-2 mt-4">
@@ -2011,6 +2010,158 @@ function LiabilitiesForm({ currency, setData, goBack }) {
     </div>
   );
 }
+
+// function LiabilitiesForm({ currency, setData, goBack }) {
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     setData({
+//       liabilities: liabilities,
+//       revexp: revexp,
+//     });
+//   };
+
+//   const initialRevenueData = {
+//     expenses: 0.0,
+//     multiplierexp: 1,
+//     currency: currency?.toUpperCase(),
+//   };
+
+//   const [revexp, setRevexp] = useState([initialRevenueData]);
+
+//   const initialLiabilitiesData = {
+//     liability: "",
+//     amount: 0.0,
+//     liabilitymultiplier: 1,
+//     currencyliability: currency?.toUpperCase(),
+//   };
+
+//   const [liabilities, setLiability] = useState([initialLiabilitiesData]);
+
+//   useEffect(() => {
+//     setLiability((prevLiability) => {
+//       const tempLiability = [...prevLiability];
+//       tempLiability.map((e) => (e.currencyliability = currency?.toUpperCase()));
+//       return tempLiability;
+//     });
+//     setRevexp((prevRev) => {
+//       const tempRev = [...prevRev];
+//       tempRev.map((e) => (e.currency = currency?.toUpperCase()));
+//       return tempRev;
+//     });
+//   }, [currency]);
+
+//   const addNewLiability = () => {
+//     setLiability([...liabilities, initialLiabilitiesData]);
+//   };
+
+//   const handleRemoveLiability = (index) => {
+//     if (liabilities.length !== 1) {
+//       const values = [...liabilities];
+//       values.splice(index, 1);
+//       setLiability(values);
+//     }
+//   };
+
+//   return (
+//     <div className="w-full justify-center items-center flex flex-col gap-3">
+//       <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-none lg:shadow-md">
+//         <div className="w-full flex justify-between">
+//           <p className="font-bold text-center md:text-left">
+//             Liability Management
+//           </p>
+//           <label htmlFor="liability" className="">
+//             <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
+//           </label>
+//         </div>
+
+//         <input type="checkbox" id="liability" className="modal-toggle" />
+//         <div className="modal">
+//           <div className="modal-box relative">
+//             <label
+//               htmlFor="liability"
+//               className="btn btn-sm btn-circle absolute right-2 top-2"
+//             >
+//               ✕
+//             </label>
+//             <h3 className="text-lg font-bold text-center">
+//               Lorem ipsum dolor sit amet
+//             </h3>
+//             <p className="py-4 text-center">
+//               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+//               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+//               enim ad minim veniam, quis nostrud exercitation ullamco laboris
+//               nisi ut aliquip ex ea commodo consequat.
+//             </p>
+//           </div>
+//         </div>
+
+//         <form
+//           onSubmit={(e) => {
+//             handleSubmit(e);
+//           }}
+//           className="flex flex-col w-5/6 md:w-full gap-10"
+//         >
+//           <div className="w-full border-b-g">
+//             {liabilities.map((item, index) => (
+//               <div key={index} className="px-0 w-full">
+//                 <InputLiabilities
+//                   item={item}
+//                   onChangeValues={(data) => {
+//                     var liabilityTemporary = [...liabilities];
+//                     liabilityTemporary[index] = data;
+//                     setLiability(liabilityTemporary);
+//                   }}
+//                   addNewLiability={addNewLiability}
+//                   handleRemoveLiability={() => handleRemoveLiability(index)}
+//                   isLast={liabilities.length - 1 === index}
+//                   isDeletedButtonVisible={liabilities.length - 1 > 0}
+//                 />
+//               </div>
+//             ))}
+//           </div>
+
+//           {revexp.map((item, index) => (
+//             <div key={index} className="px-0 w-full">
+//               <InputExp
+//                 item={item}
+//                 onChangeValues={(data) => {
+//                   var namesTemporary = [...revexp];
+//                   namesTemporary[index] = data;
+//                   setRevexp(namesTemporary);
+//                 }}
+//                 // addNewRevExp={addNewRevExp}
+//                 // handleRemoveRevExp={handleRemoveRevExp}
+//                 isLast={revexp.length - 1 === index}
+//               />
+//             </div>
+//           ))}
+
+//           <div className="flex flex-col lg:flex-row justify-end gap-3 md:gap-7">
+//             <div
+//               className="flex items-center justify-center cursor-pointer gap-2"
+//               onClick={goBack}
+//             >
+//               <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
+//               <p className="text-[#A0161B] font-bold">Go Back</p>
+//             </div>
+
+//             <input
+//               type="submit"
+//               className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
+//               value="Next Step"
+//               onKeyDown={(e) => (e.key === "Enter" ? handleSubmit : "")}
+//             />
+//           </div>
+//         </form>
+//       </div>
+
+//       <a href="/calculate" className="flex items-center gap-2 mt-4">
+//         <img src={refresh} className="w-4 h-4"></img>
+//         <p className="text-[#8A8A8E]">Back to start</p>
+//       </a>
+//     </div>
+//   );
+// }
 
 function OtherForm({ currency, setData, goBack }) {
   const handleSubmit = (e) => {
@@ -2127,67 +2278,17 @@ function OtherForm({ currency, setData, goBack }) {
   );
 }
 
-function Output({ currency, setData, goalData, nextTab, goBack }) {
+function Output({ data, currency, nextTab, goBack }) {
   const {
-    firstName,
-    lastName,
-    age,
-    names,
-    goalsData,
+    annualNet,
     assets,
-    revexp,
-    rev,
-    assetName,
-    assetAmount,
-    liabilityName,
+    financiallyTowardsDream,
     liabilities,
-    liabilityAmount,
-  } = goalData;
-
-  const revexpSum = revexp?.map((object) => {
-    return Number(object.revenue) - Number(object.expenses);
-  });
-
-  const assetSum = assets?.reduce((accumulator, object) => {
-    return accumulator + Number(object.amount) * Number(object.assetmultiplier);
-  }, 0);
-
-  const liabilitySum = liabilities?.reduce((accumulator, object) => {
-    return (
-      accumulator + Number(object.amount) * Number(object.liabilitymultiplier)
-    );
-  }, 0);
-
-  const revenueSum = rev?.map((object) => {
-    return Number(object.multiplierrev) * Number(object.revenue);
-    // return console.log(object);
-  });
-
-  const expensesSum = revexp?.reduce((accumulator, object) => {
-    return accumulator + Number(object.expenses) * Number(object.multiplierexp);
-  }, 0);
-
-  const totalCurrency = goalsData ? goalsData[0]?.currency : 0;
-
-  const goalsCurrency = goalsData?.map((object) => {
-    return object.currency;
-  });
-
-  const assetsCurrency = assets?.map((object) => {
-    return object.currency;
-  });
-
-  const liabilityCurrency = liabilities?.map((object) => {
-    return object.currencyliability;
-  });
-
-  const revCurrency = revexp?.map((object) => {
-    return object.currencyrev;
-  });
-
-  const expCurrency = revexp?.map((object) => {
-    return object.currencyexp;
-  });
+    monthlyExpense,
+    monthlyNet,
+    monthlyRevenue,
+    netWorth,
+  } = data?.initial ? data.initial : {};
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -2322,27 +2423,29 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
               <div className="flex justify-between flex-row gap-2 bg-[#F9E8E8] px-3 py-3 rounded-md">
                 <p>Total Net worth:</p>
                 <p className="py-0 my-0">
-                  {totalCurrency}
+                  {currency}
                   &nbsp;
-                  {revenueSum?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  {netWorth?.toString()}
                 </p>
               </div>
 
               <div className="flex justify-between flex-row gap-2 bg-[#F9E8E8] px-3 py-3 rounded-md">
                 <p>Total Assets:</p>
                 <p className="py-0 my-0">
-                  {totalCurrency}
+                  {currency}
                   &nbsp;
-                  {assetSum?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  {assets?.totalAssets
+                    ?.toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </p>
               </div>
 
               <div className="flex justify-between flex-row gap-2 bg-[#F9E8E8] px-3 py-3 rounded-md">
                 <p>Total Liabilities:</p>
                 <p className="py-0 my-0">
-                  {totalCurrency}
+                  {currency}
                   &nbsp;
-                  {liabilitySum
+                  {liabilities?.totalLiabilities
                     ?.toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </p>
@@ -2351,9 +2454,9 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
               <div className="flex justify-between flex-row gap-2 bg-[#F9E8E8] px-3 py-3 rounded-md">
                 <p>Total Expenses:</p>
                 <p className="py-0 my-0">
-                  {totalCurrency}
+                  {currency}
                   &nbsp;
-                  {expensesSum
+                  {monthlyExpense
                     ?.toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                 </p>
@@ -2397,44 +2500,7 @@ function Output({ currency, setData, goalData, nextTab, goBack }) {
 }
 
 function CalculateForm({ goalData }) {
-  const {
-    firstName,
-    lastName,
-    age,
-    names,
-    goalsData,
-    assets,
-    assetName,
-    assetAmount,
-    liabilityName,
-    liabilities,
-    liabilityAmount,
-  } = goalData;
-
-  const [newAssetsData, setNewAssetsData] = useState([]);
-
-  console.log(newAssetsData);
-
-  useEffect(() => {
-    const temporaryAssetsData = [];
-    goalData.assets?.map((assetItem) => {
-      temporaryAssetsData.push({
-        ...assetItem,
-        year_one: assetItem.amount * assetItem.assetmultiplier * 1,
-        year_two: assetItem.amount * assetItem.assetmultiplier * 2,
-        year_three: assetItem.amount * assetItem.assetmultiplier * 3,
-        year_four: assetItem.amount * assetItem.assetmultiplier * 4,
-        year_five: assetItem.amount * assetItem.assetmultiplier * 5,
-        year_six: assetItem.amount * assetItem.assetmultiplier * 6,
-        year_seven: assetItem.amount * assetItem.assetmultiplier * 7,
-        year_eight: assetItem.amount * assetItem.assetmultiplier * 8,
-        year_nine: assetItem.amount * assetItem.assetmultiplier * 9,
-        year_ten: assetItem.amount * assetItem.assetmultiplier * 10,
-      });
-    });
-    console.log(temporaryAssetsData);
-    setNewAssetsData(temporaryAssetsData);
-  }, []);
+  const newGoalData = { ...goalData };
 
   return (
     <div className="overflow-x-auto w-25 lg:w-full">
@@ -2451,72 +2517,40 @@ function CalculateForm({ goalData }) {
         <div className="">9th Year</div>
         <div className="">10th Year</div>
       </div>
-      {newAssetsData?.map((assetItem) => (
-        <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
-          <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1 capitalize ">
-            {assetItem.asset}
-          </div>
-          <div className="py-3 ">{assetItem.year_one}</div>
-          <div className="py-3">{assetItem.year_two}</div>
-          <div className="py-3">{assetItem.year_three}</div>
-          <div className="py-3">{assetItem.year_four}</div>
-          <div className="py-3">{assetItem.year_five}</div>
-          <div className="py-3">{assetItem.year_six}</div>
-          <div className="py-3">{assetItem.year_seven}</div>
-          <div className="py-3">{assetItem.year_eight}</div>
-          <div className="py-3">{assetItem.year_nine}</div>
-          <div className="py-3">{assetItem.year_ten}</div>
-        </div>
-      ))}
+      <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
+        {newGoalData?.initial?.assets ? (
+          Object.keys(newGoalData?.initial?.assets).map((e) => (
+            <>
+              <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1 capitalize ">
+                {e}
+              </div>
+              <div className="py-3 ">{newGoalData.yearOne.assets[e]}</div>
+              <div className="py-3">{newGoalData.yearTwo.assets[e]}</div>
+              <div className="py-3">{newGoalData.yearThree.assets[e]}</div>
+              <div className="py-3">{newGoalData.yearFour.assets[e]}</div>
+              <div className="py-3">{newGoalData.yearFive.assets[e]}</div>
+              <div className="py-3">{newGoalData.yearSix.assets[e]}</div>
+              <div className="py-3">{newGoalData.yearSeven.assets[e]}</div>
+              <div className="py-3">{newGoalData.yearEight.assets[e]}</div>
+              <div className="py-3">{newGoalData.yearNine.assets[e]}</div>
+              <div className="py-3">{newGoalData.yearTen.assets[e]}</div>
+            </>
+          ))
+        ) : (
+          <></>
+        )}
+      </div>
     </div>
   );
 }
 
 function CalculateLiabilityForm({ goalData }) {
-  const {
-    firstName,
-    lastName,
-    age,
-    names,
-    goalsData,
-    assets,
-    assetName,
-    assetAmount,
-    liabilityName,
-    liabilities,
-    liabilityAmount,
-  } = goalData;
-
-  const [newLiabilityData, setLiabilityData] = useState([]);
-
-  useEffect(() => {
-    const temporaryLiabilitiesData = [];
-    goalData.liabilities?.map((liabilityItem) => {
-      temporaryLiabilitiesData.push({
-        ...liabilityItem,
-        year_one: liabilityItem.amount * liabilityItem.liabilitymultiplier * 1,
-        year_two: liabilityItem.amount * liabilityItem.liabilitymultiplier * 2,
-        year_three:
-          liabilityItem.amount * liabilityItem.liabilitymultiplier * 3,
-        year_four: liabilityItem.amount * liabilityItem.liabilitymultiplier * 4,
-        year_five: liabilityItem.amount * liabilityItem.liabilitymultiplier * 5,
-        year_six: liabilityItem.amount * liabilityItem.liabilitymultiplier * 6,
-        year_seven:
-          liabilityItem.amount * liabilityItem.liabilitymultiplier * 7,
-        year_eight:
-          liabilityItem.amount * liabilityItem.liabilitymultiplier * 8,
-        year_nine: liabilityItem.amount * liabilityItem.liabilitymultiplier * 9,
-        year_ten: liabilityItem.amount * liabilityItem.liabilitymultiplier * 10,
-      });
-    });
-
-    setLiabilityData(temporaryLiabilitiesData);
-  }, []);
+  const newGoalData = { ...goalData };
 
   return (
     <div className="overflow-x-auto w-25 lg:w-full">
-      <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full">
-        <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1"></div>
+      <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div ">
+        <div className="capitalize text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1 "></div>
         <div className="">1st Year</div>
         <div className="">2nd Year</div>
         <div className="">3rd Year</div>
@@ -2528,49 +2562,34 @@ function CalculateLiabilityForm({ goalData }) {
         <div className="">9th Year</div>
         <div className="">10th Year</div>
       </div>
-      {newLiabilityData?.map((liabilityItem) => (
-        <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div h-15">
-          <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1">
-            {liabilityItem.liability}
-          </div>
-          <div className="py-3 ">{liabilityItem.year_one}</div>
-          <div className="py-3">{liabilityItem.year_two}</div>
-          <div className="py-3">{liabilityItem.year_three}</div>
-          <div className="py-3">{liabilityItem.year_four}</div>
-          <div className="py-3">{liabilityItem.year_five}</div>
-          <div className="py-3">{liabilityItem.year_six}</div>
-          <div className="py-3">{liabilityItem.year_seven}</div>
-          <div className="py-3">{liabilityItem.year_eight}</div>
-          <div className="py-3">{liabilityItem.year_nine}</div>
-          <div className="py-3">{liabilityItem.year_ten}</div>
-        </div>
-      ))}
+      <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div">
+        {newGoalData?.initial?.liabilities ? (
+          Object.keys(newGoalData?.initial?.liabilities).map((e) => (
+            <>
+              <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1 capitalize ">
+                {e}
+              </div>
+              <div className="py-3 ">{newGoalData.yearOne.liabilities[e]}</div>
+              <div className="py-3">{newGoalData.yearTwo.liabilities[e]}</div>
+              <div className="py-3">{newGoalData.yearThree.liabilities[e]}</div>
+              <div className="py-3">{newGoalData.yearFour.liabilities[e]}</div>
+              <div className="py-3">{newGoalData.yearFive.liabilities[e]}</div>
+              <div className="py-3">{newGoalData.yearSix.liabilities[e]}</div>
+              <div className="py-3">{newGoalData.yearSeven.liabilities[e]}</div>
+              <div className="py-3">{newGoalData.yearEight.liabilities[e]}</div>
+              <div className="py-3">{newGoalData.yearNine.liabilities[e]}</div>
+              <div className="py-3">{newGoalData.yearTen.liabilities[e]}</div>
+            </>
+          ))
+        ) : (
+          <></>
+        )}
+      </div>
     </div>
   );
 }
 
 function AnnualForm({ goalData }) {
-  const {
-    firstName,
-    lastName,
-    age,
-    names,
-    goalsData,
-    assets,
-    assetName,
-    assetAmount,
-    liabilityName,
-    liabilities,
-    liabilityAmount,
-  } = goalData;
-
-  const assetsAnuallytotal = goalData.assets?.reduce(
-    (accumulator, goalData) => {
-      return accumulator * goalData.amount;
-    },
-    1
-  );
-
   return (
     <div className="w-full justify-center items-center flex flex-col gap-8 ">
       <div className="flex flex-col gap-20 w-10/12 ">
@@ -2605,7 +2624,7 @@ function AnnualForm({ goalData }) {
 
           <div className="w-full grid ">
             <div className="flex flex-col md:w-full">
-              <div className="text-center shadow-gray-400 rounded-lg shadow-md h-12 ">
+              <div className="text-center shadow-gray-400 rounded-lg shadow-md ">
                 <CalculateForm goalData={goalData}></CalculateForm>
               </div>
             </div>
@@ -2643,7 +2662,7 @@ function AnnualForm({ goalData }) {
 
           <div className="w-full grid ">
             <div className="flex flex-col">
-              <div className="text-center shadow-gray-400 rounded-lg shadow-md h-12">
+              <div className="text-center shadow-gray-400 rounded-lg shadow-md">
                 <CalculateLiabilityForm
                   goalData={goalData}
                 ></CalculateLiabilityForm>

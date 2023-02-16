@@ -80,6 +80,13 @@
   width: 28% !important;
 }
 
+.w71 {
+  width: 71 !important;
+}
+.w75 {
+  width: 75% !important;
+}
+
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
   .w-900 {
     width: 1100px;
@@ -181,6 +188,7 @@ select {
   margin-top: 42px;
   left: 15px;
 }
+
 .select-goal {
   z-index: 99999;
   /* background-color: red !important; */
