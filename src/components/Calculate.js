@@ -376,7 +376,9 @@ const InputNames = ({
               <select
                 className="w-full focus:outline-none "
                 value={item.currency}
-                onChange={(e) => onChangeInputValue("currency", e.target.value)}
+                onChange={(e) =>
+                  onChangeInputValue("currency", e.target.value.toUpperCase())
+                }
               >
                 <option disabled className="">
                   {" "}
@@ -472,6 +474,7 @@ const InputGoals = ({
   isDeletedButtonVisible,
   goalSum,
   errors,
+  currency,
 }) => {
   const onChangeInputValue = (key, value) => {
     item[key] = value;
@@ -552,7 +555,7 @@ const InputGoals = ({
             <label>Amount</label>
             <div className="flex items-center border-slate-400 relative">
               <div className="flex justify-center rounded-r-none w-1/3 md:w-1/4 input input-bordered border-black items-center ">
-                <p className="text-center">{item.currency}</p>
+                <p className="text-center">{currency}</p>
               </div>
               <input
                 name="amount"
@@ -1553,6 +1556,7 @@ function PersonalForm({ setData }) {
                 isLast={goals.length - 1 === index}
                 goalSum={goalSum}
                 errors={goalsErrors[index]}
+                currency={personalDetails.currency}
               />
             </div>
           ))}
