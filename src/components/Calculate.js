@@ -42,6 +42,7 @@ import { useQuery } from "react-query";
 
 import Calculate from "../services/calculate";
 import { ErrorText } from "./ErrorText";
+import { Spinner } from "react-bootstrap";
 
 var data = [
   { full_name: "Savings" },
@@ -111,6 +112,7 @@ function checkEmail(email) {
 function CalculateComponent() {
   const [selectedTab, setselectedTab] = useState(0);
   const [goalData, setgoalData] = useState({});
+  const [isLoading, setisLoading] = useState(false);
 
   const goalDataRef = useRef();
   const calculateService = new Calculate();
@@ -126,6 +128,15 @@ function CalculateComponent() {
       enabled: false,
     }
   );
+
+  useEffect(() => {
+    if (selectedTab === 3) {
+      setisLoading(true);
+      setTimeout(() => {
+        setisLoading(false);
+      }, 2000);
+    }
+  }, [selectedTab]);
 
   console.log(backendData, "data from backend");
 
@@ -200,14 +211,20 @@ function CalculateComponent() {
         ></LiabilitiesForm>
       </div>
       <div className={`${selectedTab === 3 ? "flex  w-full" : "hidden"}`}>
-        <Output
-          goBack={() => setselectedTab(selectedTab - 1)}
-          nextTab={() => {
-            setselectedTab(selectedTab + 1);
-          }}
-          currency={goalData?.names?.currency}
-          data={backendData?.data}
-        ></Output>
+        {isLoading ? (
+          <>
+            <Spinner></Spinner>
+          </>
+        ) : (
+          <Output
+            goBack={() => setselectedTab(selectedTab - 1)}
+            nextTab={() => {
+              setselectedTab(selectedTab + 1);
+            }}
+            currency={goalData?.names?.currency}
+            data={backendData?.data}
+          ></Output>
+        )}
       </div>
       <div className={`${selectedTab === 4 ? "flex w-full" : "hidden"}`}>
         <AnnualForm goalData={backendData?.data}></AnnualForm>
@@ -305,14 +322,16 @@ const InputNames = ({
               placeholder="Age"
               className="input input-bordered w-full border-slate-400 appearance-none agediv"
               value={item.agenew}
-              onChange={(e) => onChangeInputValue("agenew", e.target.value)}
-              onKeyDown={(e) =>
-                ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+              onChange={(e) =>
+                onChangeInputValue(
+                  "agenew",
+                  e.target.value.replace(/[^0-9]/g, "")
+                )
               }
-              min={1}
-              max={99}
+              // onKeyDown={(e) =>
+              //   ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+              // }
               type="text"
-              pattern="\d*"
               maxLength="2"
             />
             {errors.agenew && (
@@ -687,7 +706,10 @@ const InputDependents = ({
               className="input input-bordered w-full border-slate-400"
               value={item.agedependent}
               onChange={(e) =>
-                onChangeInputValue("agedependent", e.target.value)
+                onChangeInputValue(
+                  "agedependent",
+                  e.target.value.replace(/[^0-9]/g, "")
+                )
               }
               onKeyDown={(e) =>
                 ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
@@ -695,7 +717,6 @@ const InputDependents = ({
               min={1}
               max={99}
               type="text"
-              pattern="\d*"
               maxLength="2"
             />
             <span className="text-red-600 text-sm absolute w-full required">
@@ -856,7 +877,10 @@ const InputAssets = ({
                   className="input w-full input-bordered border-slate-400"
                   value={item.assetmultiplier}
                   onChange={(e) =>
-                    onChangeInputValue("assetmultiplier", e.target.value)
+                    onChangeInputValue(
+                      "assetmultiplier",
+                      e.target.value.replace(/[^0-9]/g, "")
+                    )
                   }
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
@@ -877,7 +901,12 @@ const InputAssets = ({
                   type="number"
                   className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
-                  onChange={(e) => onChangeInputValue("amount", e.target.value)}
+                  onChange={(e) =>
+                    onChangeInputValue(
+                      "amount",
+                      e.target.value.replace(/[^0-9]/g, "")
+                    )
+                  }
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
@@ -1019,7 +1048,10 @@ const InputLiabilities = ({
                   className="input w-full input-bordered border-slate-400"
                   value={item.liabilitymultiplier}
                   onChange={(e) =>
-                    onChangeInputValue("liabilitymultiplier", e.target.value)
+                    onChangeInputValue(
+                      "liabilitymultiplier",
+                      e.target.value.replace(/[^0-9]/g, "")
+                    )
                   }
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
@@ -1040,7 +1072,12 @@ const InputLiabilities = ({
                   type="number"
                   className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
-                  onChange={(e) => onChangeInputValue("amount", e.target.value)}
+                  onChange={(e) =>
+                    onChangeInputValue(
+                      "amount",
+                      e.target.value.replace(/[^0-9]/g, "")
+                    )
+                  }
                   onKeyDown={(e) =>
                     ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
@@ -1104,7 +1141,10 @@ const InputExp = ({ item, onChangeValues, currency, errors }) => {
                     className="input input-bordered w-full border-slate-400"
                     value={item.multiplier}
                     onChange={(e) =>
-                      onChangeInputValue("multiplier", e.target.value)
+                      onChangeInputValue(
+                        "multiplier",
+                        e.target.value.replace(/[^0-9]/g, "")
+                      )
                     }
                     onKeyDown={(e) =>
                       ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
@@ -1128,7 +1168,10 @@ const InputExp = ({ item, onChangeValues, currency, errors }) => {
                     className="input w-full rounded-l-none border-slate-400"
                     value={item.amount}
                     onChange={(e) =>
-                      onChangeInputValue("amount", e.target.value)
+                      onChangeInputValue(
+                        "amount",
+                        e.target.value.replace(/[^0-9]/g, "")
+                      )
                     }
                     onKeyDown={(e) =>
                       ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
@@ -1170,7 +1213,10 @@ const InputRev = ({ item, onChangeValues, currency, errors }) => {
                     className="input input-bordered w-full border-slate-400"
                     value={item.multiplier}
                     onChange={(e) =>
-                      onChangeInputValue("multiplier", e.target.value)
+                      onChangeInputValue(
+                        "multiplier",
+                        e.target.value.replace(/[^0-9]/g, "")
+                      )
                     }
                     onKeyDown={(e) =>
                       ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
@@ -1192,7 +1238,10 @@ const InputRev = ({ item, onChangeValues, currency, errors }) => {
                     className="input w-full rounded-l-none border-slate-400"
                     value={item.amount}
                     onChange={(e) =>
-                      onChangeInputValue("amount", e.target.value)
+                      onChangeInputValue(
+                        "amount",
+                        e.target.value.replace(/[^0-9]/g, "")
+                      )
                     }
                     onKeyDown={(e) =>
                       ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
