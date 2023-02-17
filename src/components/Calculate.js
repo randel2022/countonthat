@@ -803,8 +803,8 @@ const InputAssets = ({
 
   return (
     <div className="flex gap-10 flex-col mb-5">
-      <div className="flex flex-col justify-between w-full gap-4 ">
-        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-start pr-0 md:pr-10 h-[210px] md:h-[70px]">
+      <div className="flex flex-col justify-between w-full gap-6 md:gap-4 ">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-4 md:gap-2 lg:gap-10 items-start pr-0 md:pr-10 h-[210px] md:h-[70px]">
           <div className="w-full lg:w-1/2 ">
             <label>Asset</label>
 
@@ -974,8 +974,8 @@ const InputLiabilities = ({
 
   return (
     <div className="flex gap-10 flex-col mb-5">
-      <div className="flex flex-col justify-between w-full gap-4 ">
-        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-2 md:gap-2 lg:gap-10 items-start pr-0 md:pr-10 h-[210px] md:h-[70px]">
+      <div className="flex flex-col justify-between w-full gap-6 md:gap-4">
+        <div className="flex flex-col md:flex-col lg:flex-row w-full gap-4 md:gap-2 lg:gap-10 items-start pr-0 md:pr-10 h-[210px] md:h-[70px]">
           <div className="w-full lg:w-1/2 ">
             <label>Liability</label>
 
@@ -1065,7 +1065,7 @@ const InputLiabilities = ({
             </div>
             <div className="w-full lg:w-3/4">
               <label>Amount</label>
-              <div className="flex items-center border-slate-400 w-full items-center">
+              <div className="flex items-center border-slate-400 w-full items-center relative">
                 <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
                   <p className="text-center">{currency}</p>
                 </div>
@@ -1093,8 +1093,11 @@ const InputLiabilities = ({
                     <BsTrash className="text-[#A0161B]"></BsTrash>
                   </span>
                 )}
+
+                <span className="text-red-600 text-sm top-[3px] absolute w-full required">
+                  {errors?.amount}
+                </span>
               </div>
-              <ErrorText value={errors?.amount} />
             </div>
           </div>
 
@@ -1133,7 +1136,7 @@ const InputExp = ({ item, onChangeValues, currency, errors }) => {
         <div className="flex flex-col  w-full gap-2 md:gap-5 lg:gap-10 items-center mt-10">
           <div className="flex flex-col w-full gap-2 pb-8 pr-0 md:pr-10">
             <p className="font-bold my-0">Monthly Expenses</p>
-            <div className="flex flex-col lg:flex-row w-full gap-3 lg:gap-10">
+            <div className="flex flex-col lg:flex-row w-full gap-5 md:gap-3 lg:gap-10">
               <div className="w-full lg:w-1/2 relative">
                 <label>Multiplier</label>
                 <div className="flex items-center border-slate-400">
@@ -1203,9 +1206,9 @@ const InputRev = ({ item, onChangeValues, currency, errors }) => {
     <>
       <div className="flex flex-col justify-between w-full gap-4 bordertop ">
         <div className="flex flex-col  w-full gap-2 md:gap-5 lg:gap-10 items-center mt-10">
-          <div className="flex flex-col w-full gap-2 pb-8 pr-0 md:pr-10">
+          <div className="flex flex-col  w-full gap-2 pb-8 pr-0 md:pr-10">
             <p className="font-bold my-0">Monthly Revenue</p>
-            <div className="flex flex-col lg:flex-row w-full gap-3 lg:gap-10">
+            <div className="flex flex-col lg:flex-row w-full gap-5 md:gap-3 lg:gap-10">
               <div className="w-full lg:w-1/2">
                 <label>Multiplier</label>
                 <div className="flex items-center border-slate-400">
