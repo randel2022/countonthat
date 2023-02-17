@@ -213,7 +213,9 @@ function CalculateComponent() {
       <div className={`${selectedTab === 3 ? "flex  w-full" : "hidden"}`}>
         {isLoading ? (
           <>
-            <Spinner></Spinner>
+            <div className="flex justify-center w-full h-[500px] items-center">
+              <p>Calculating...</p>
+            </div>
           </>
         ) : (
           <Output
