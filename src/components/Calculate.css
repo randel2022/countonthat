@@ -231,3 +231,7 @@ select {
 .modal-toggle:checked + .modal {
   z-index: 999999 !important;
 }
+
+.spinner {
+  background-color: #a0161b !important;
+}
