@@ -548,7 +548,7 @@ const InputGoals = ({
             </div>
           </div>
 
-          <div className=" md:w-[33%] lg:w-[32%] pr-0 md:pr-8">
+          <div className="w-full md:w-[33%] lg:w-[32%] pr-0 md:pr-8">
             <label>Amount</label>
             <div className="flex items-center border-slate-400 relative">
               <div className="flex justify-center rounded-r-none w-1/3 md:w-1/4 input input-bordered border-black items-center ">
@@ -1177,7 +1177,7 @@ const InputRev = ({ item, onChangeValues, currency, errors }) => {
                 <ErrorText value={errors?.multiplier} />
               </div>
 
-              <div className="w-full lg:w-1/2">
+              <div className="w-full lg:w-1/2 relative">
                 <label>Monthly Revenue</label>
                 <div className="flex items-center border-slate-400">
                   <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
@@ -1196,8 +1196,10 @@ const InputRev = ({ item, onChangeValues, currency, errors }) => {
                     }
                   />
                 </div>
+                <span className="text-red-600 text-sm absolute w-full required top-[21px]">
+                  {errors?.amount}
+                </span>
               </div>
-              <ErrorText value={errors?.amount} />
             </div>
           </div>
         </div>
@@ -1667,10 +1669,10 @@ function AssetsForm({ currency, setData, goBack }) {
       const tempAssetsErrors = {
         asset:
           asset.asset === "" && (!asset.amount === "" || asset.amount > 0)
-            ? "asset is required"
+            ? "Asset is required"
             : "",
         amount: checkAmount(asset.amount, asset.asset),
-        assetmultiplier: asset.assetmultiplier === "" ? "amount required" : "",
+        assetmultiplier: asset.assetmultiplier === "" ? "Amount required" : "",
       };
       /// and push on temporary array
       tempAssetsErrorsArray.push(tempAssetsErrors);
@@ -1680,11 +1682,11 @@ function AssetsForm({ currency, setData, goBack }) {
       rev: {
         amount: checkString(
           assetsData.rev.amount.toString(),
-          "amount is required"
+          "Amount is required"
         ),
         multiplier: checkString(
           assetsData.rev.multiplier.toString(),
-          "multiplier is required"
+          "Multiplier is required"
         ),
       },
     };
@@ -1864,7 +1866,7 @@ function LiabilitiesForm({ currency, setData, goBack }) {
         amount: checkAmount(liabilities.amount, liabilities.liability),
         liabilitymultiplier:
           liabilities.liabilitymultiplier === ""
-            ? "multiplier is required"
+            ? "Multiplier is required"
             : "",
       };
       /// and push on temporary array
@@ -1875,11 +1877,11 @@ function LiabilitiesForm({ currency, setData, goBack }) {
       revexp: {
         amount: checkString(
           liabilitiesData.revexp.amount.toString(),
-          "amount is required"
+          "Amount is required"
         ),
         multiplier: checkString(
           liabilitiesData.revexp.multiplier.toString(),
-          "multiplier is required"
+          "Multiplier is required"
         ),
       },
     };
