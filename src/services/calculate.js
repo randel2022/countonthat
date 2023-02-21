@@ -69,7 +69,7 @@ export default class Calculate {
       };
 
       const response = await fetch(
-        "http://localhost:5000/api/calculator",
+        "http://137.184.16.76:81/api/calculator",
         requestOptions
       );
       return response.json();
