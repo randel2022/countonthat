@@ -20,7 +20,7 @@ function App() {
         <div className="flex flex-col h-full md:h-auto py-0 space-between bg-white">
           <Routes>
             <Route
-              path="/"
+              exact path="/"
               element={
                 <>
                   <Header />
