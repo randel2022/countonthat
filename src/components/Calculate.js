@@ -2435,7 +2435,7 @@ function Output({ data, currency, nextTab, goBack }) {
           <div className="flex flex-col gap-7 w-full lg:w-3/5">
             <div className="flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
               <div className="flex flex-row gap-2 item-center justify-between">
-                <p className="font-bold my-0">Financially Towards Dream 40%</p>
+                <p className="font-bold my-0">Financially Towards Dream {financiallyTowardsDream}%</p>
                 <label htmlFor="finacial" className="">
                   <IoMdInformationCircle className="text-2xl cursor-pointer block text-[#011013]"></IoMdInformationCircle>
                 </label>
@@ -2464,7 +2464,7 @@ function Output({ data, currency, nextTab, goBack }) {
 
               <div>
                 <ProgressBar
-                  completed={40}
+                  completed={financiallyTowardsDream}
                   bgColor={"#D35055"}
                   baseBgColor={"#F9E8E8"}
                   isLabelVisible={false}

@@ -1,70 +1,52 @@
-import { Assets } from "../models/assets";
-import { Dream } from "../models/dream";
-import { Liabilities } from "../models/liabilities";
-
 export default class Calculate {
   async totalGoal(data) {
-    console.log(data, "log on total goal function");
-    if (data.goalsData) {
-      const dreamModel = new Dream(
-        0,
-        data.goalsData.filter(
-          (goalData) => goalData.goal === "savings"
-        )[0]?.amount,
-        data.goalsData.filter((goalData) => goalData.goal === "car")[0]?.amount,
-        data.goalsData.filter(
-          (goalData) => goalData.goal === "amount"
-        )[0]?.amount
-      );
-      const assetModel = new Assets(
-        0,
-        data.assets?.filter((assetData) => assetData.asset === "home")[0]
-          ?.amount *
-          data.assets?.filter((assetData) => assetData.asset === "home")[0]
-            ?.assetmultiplier,
-        data.assets?.filter((assetData) => assetData.asset === "investment")[0]
-          ?.amount *
-          data.assets?.filter(
-            (assetData) => assetData.asset === "investment"
-          )[0]?.assetmultiplier,
-        data.assets?.filter((assetData) => assetData.asset === "business")[0]
-          ?.amount *
-          data.assets?.filter((assetData) => assetData.asset === "business")[0]
-            ?.assetmultiplier,
-        0
-      );
+    console.log("log on total goal function", data);
+    if (data) {
+      const goals = [];
+      data.goalsData.forEach((goal) => {
+        goals.push({
+          name: goal.goal,
+          value: parseFloat(goal.amount)
+        });
+      });
 
-      const liabilityModel = new Liabilities(
-        data.liabilities?.filter(
-          (liabilityData) => liabilityData.liability === "mortgage"
-        )[0]?.amount *
-          data.liabilities?.filter(
-            (liabilityData) => liabilityData.liability === "mortgage"
-          )[0]?.liabilitymultiplier,
-        data.liabilities?.filter(
-          (liabilityData) => liabilityData.liability === "creditcard"
-        )[0]?.amount *
-          data.liabilities?.filter(
-            (liabilityData) => liabilityData.liability === "creditcard"
-          )[0]?.liabilitymultiplier,
-        data.liabilities?.filter(
-          (liabilityData) => liabilityData.liability === "studentdebt"
-        )[0]?.amount *
-          data.liabilities?.filter(
-            (liabilityData) => liabilityData.liability === "studentdebt"
-          )[0]?.liabilitymultiplier
-      );
+      const assets = [];
+      data.assets.forEach((asset) => {
+        assets.push({
+          name: asset.asset,
+          value: parseFloat(asset.amount),
+          multiplier: parseFloat(asset.assetmultiplier)
+        });
+      });
 
-      console.log(assetModel);
+      const liabilities = [];
+      data.liabilities.forEach((liability) => {
+        liabilities.push({
+          name: liability.liability,
+          value: parseFloat(liability.amount),
+          multiplier: parseFloat(liability.liabilitymultiplier)
+        });
+      });
+
+      const monthlyRevenue = {
+        value: parseFloat(data.rev.amount),
+        multiplier: parseFloat(data.rev.multiplier) 
+      };
+
+      const monthlyExpense = {
+        value: parseFloat(data.revexp.amount),
+        multiplier: parseFloat(data.revexp.multiplier)
+      }
+
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          dream: dreamModel,
-          assets: assetModel,
-          liabilities: liabilityModel,
-          monthlyRevenue: 220000,
-          monthlyExpense: 45000,
+          goals: goals,
+          assets: assets,
+          liabilities: liabilities,
+          monthlyRevenue: monthlyRevenue,
+          monthlyExpense: monthlyExpense,
         }),
       };
 
