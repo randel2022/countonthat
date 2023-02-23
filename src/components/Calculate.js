@@ -402,6 +402,7 @@ const InputNames = ({
               placeholder="Contact Number"
               name="contact"
               type="number"
+              onKeyDown={(evt) => evt.key === ('e') && evt.preventDefault()}
               value={item.contact}
               onChange={(e) => onChangeInputValue("contact", e.target.value)}
             />
@@ -425,28 +426,20 @@ const InputNames = ({
                   onChangeInputValue("currency", e.target.value.toUpperCase())
                 }
               >
-                <option disabled className="">
+                <option disabled value="" className="currency">
                   {" "}
                   Choose Currency{" "}
                 </option>
-                <option value="usd" className="currency">
+                <option value="usd" className="currency" style={{ display: "none", height: 0, padding: 0 }}>
                   USD
                 </option>
-                <option value="eur" className="currency">
-                  EUR
+                <option value="usd"  className="currency">
+                  USD
                 </option>
-                <option value="cad" className="currency">
-                  CAD
+                <option value="php" className="currency">
+                  PHP
                 </option>
-                <option value="gbp" className="currency">
-                  GBP
-                </option>
-                <option value="bhd" className="currency">
-                  BHD
-                </option>
-                <option value="kwd" className="currency">
-                  KWD
-                </option>
+                
               </select>
             </div>
           </div>
@@ -521,6 +514,8 @@ const InputGoals = ({
   errors,
   currency,
 }) => {
+  const[editGoals, setEditGoals] = useState(true);
+
   const onChangeInputValue = (key, value) => {
     item[key] = value;
     onChangeValues(item);
@@ -528,7 +523,20 @@ const InputGoals = ({
 
   const onSearch = (searchTerm) => {
     onChangeInputValue("goal", searchTerm);
+    if (searchTerm===""){
+      setEditGoals(false)
+    }
+    if(searchTerm==="luxury car"){
+      setEditGoals(true)
+    }
+    if(searchTerm==="house"){
+      setEditGoals(true)
+    }
+    if(searchTerm==="savings"){
+      setEditGoals(true)
+    }
   };
+
 
   return (
     <>
@@ -540,6 +548,7 @@ const InputGoals = ({
               <div className="search-inner relative input input-bordered border-slate-400 px-0">
                 <input
                   type="text"
+                  disabled = {editGoals}
                   value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
                   className="absolute w-3/4 h-full ml-4 md:ml-4 border-slate-400 focus:outline-none capitalize mr-4 md:mr-2"
@@ -563,6 +572,9 @@ const InputGoals = ({
                   </option>
                   <option value="luxury car" className="capitalize">
                     Luxury Car
+                  </option>
+                  <option value="" className="capitalize">
+                    Customize...
                   </option>
                 </select>
               </div>
@@ -605,7 +617,7 @@ const InputGoals = ({
               <input
                 name="amount"
                 type="number"
-                className="input input-bordered w-3/4 rounded-l-none border-slate-400 focus:outline-none"
+                className="input input-bordered w-full rounded-l-none border-slate-400 focus:outline-none"
                 value={item.amount}
                 onChange={(e) => onChangeInputValue("amount", e.target.value)}
                 onKeyDown={(e) =>
@@ -619,25 +631,25 @@ const InputGoals = ({
                 </span>
               )}
 
-              {isDeletedButtonVisible && (
+              {/* {isDeletedButtonVisible && (
                 <span
                   className="cursor-pointer ml-4 md:mt-5 block md:hidden "
                   onClick={handleRemoveGoal}
                 >
                   <BsTrash className="text-[#A0161B]"></BsTrash>
                 </span>
-              )}
+              )} */}
             </div>
           </div>
 
-          {isDeletedButtonVisible && (
+          {/* {isDeletedButtonVisible && (
             <span
               className="cursor-pointer -mt-6 md:mt-5 hidden md:block absolute delbutton  ml-10"
               onClick={handleRemoveGoal}
             >
               <BsTrash className="text-[#A0161B]"></BsTrash>
             </span>
-          )}
+          )} */}
         </div>
         {isLast && (
           <div
@@ -653,11 +665,7 @@ const InputGoals = ({
               <p className="text-sm ">
                 Total Goal Amount:
                 {item.currency == "USD" ? "$" : <></>}
-                {item.currency == "EUR" ? "€" : <></>}
-                {item.currency == "CAD" ? "C$" : <></>}
-                {item.currency == "GBP" ? "£" : <></>}
-                {item.currency == "BHD" ? "فلس" : <></>}
-                {item.currency == "KWD" ? "د.ك" : <></>}
+                {item.currency == "PHP" ? "₱" : <></>}
                 {goalSum
                   .toFixed(2)
                   .toString()
@@ -905,7 +913,7 @@ const InputAssets = ({
                   onChange={(e) =>
                     onChangeInputValue(
                       "assetmultiplier",
-                      e.target.value.replace(/[^0-9]/g, "")
+                      e.target.value.replace(/[^0-9.]/g, "")
                     )
                   }
                   onKeyDown={(e) =>
@@ -1022,7 +1030,7 @@ const InputLiabilities = ({
                     Choose a Goal{" "}
                   </option>
                   <option value="mortgage" className="capitalize">
-                    Mortagage
+                    Mortgage
                   </option>
                   <option value="credit card" className="capitalize">
                     Credit Card
@@ -1076,7 +1084,7 @@ const InputLiabilities = ({
                   onChange={(e) =>
                     onChangeInputValue(
                       "liabilitymultiplier",
-                      e.target.value.replace(/[^0-9]/g, "")
+                      e.target.value.replace(/[^0-9.]/g, "")
                     )
                   }
                   onKeyDown={(e) =>
@@ -1161,29 +1169,6 @@ const InputExp = ({ item, onChangeValues, currency, errors }) => {
           <div className="flex flex-col w-full gap-2 pb-8 pr-0 md:pr-10">
             <p className="font-bold my-0">Monthly Expenses</p>
             <div className="flex flex-col lg:flex-row w-full gap-5 md:gap-3 lg:gap-10">
-              <div className="w-full lg:w-1/2 relative">
-                <label>Multiplier</label>
-                <div className="flex items-center border-slate-400">
-                  <input
-                    name="multiplierrev"
-                    type="number"
-                    className="input input-bordered w-full border-slate-400"
-                    value={item.multiplier}
-                    onChange={(e) =>
-                      onChangeInputValue(
-                        "multiplier",
-                        e.target.value.replace(/[^0-9]/g, "")
-                      )
-                    }
-                    onKeyDown={(e) =>
-                      ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
-                    }
-                  />
-                  <span className="text-red-600 text-sm absolute w-full required top-[18px]">
-                    {errors?.multiplier}
-                  </span>
-                </div>
-              </div>
 
               <div className="w-full lg:w-1/2">
                 <label>Monthly Expenses</label>
@@ -1212,6 +1197,31 @@ const InputExp = ({ item, onChangeValues, currency, errors }) => {
                   </span>
                 </div>
               </div>
+
+              <div className="w-full lg:w-1/2 relative">
+                <label>Multiplier</label>
+                <div className="flex items-center border-slate-400">
+                  <input
+                    name="multiplierrev"
+                    type="number"
+                    className="input input-bordered w-full border-slate-400"
+                    value={item.multiplier}
+                    onChange={(e) =>
+                      onChangeInputValue(
+                        "multiplier",
+                        e.target.value.replace(/[^0-9.]/g, "")
+                      )
+                    }
+                    onKeyDown={(e) =>
+                      ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                    }
+                  />
+                  <span className="text-red-600 text-sm absolute w-full required top-[18px]">
+                    {errors?.multiplier}
+                  </span>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
@@ -1233,28 +1243,7 @@ const InputRev = ({ item, onChangeValues, currency, errors }) => {
           <div className="flex flex-col  w-full gap-2 pb-8 pr-0 md:pr-10">
             <p className="font-bold my-0">Monthly Revenue</p>
             <div className="flex flex-col lg:flex-row w-full gap-5 md:gap-3 lg:gap-10">
-              <div className="w-full lg:w-1/2">
-                <label>Multiplier</label>
-                <div className="flex items-center border-slate-400">
-                  <input
-                    name="multiplierrev"
-                    type="number"
-                    className="input input-bordered w-full border-slate-400"
-                    value={item.multiplier}
-                    onChange={(e) =>
-                      onChangeInputValue(
-                        "multiplier",
-                        e.target.value.replace(/[^0-9]/g, "")
-                      )
-                    }
-                    onKeyDown={(e) =>
-                      ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
-                    }
-                  />
-                </div>
-                <ErrorText value={errors?.multiplier} />
-              </div>
-
+              
               <div className="w-full lg:w-1/2 relative">
                 <label>Monthly Revenue</label>
                 <div className="flex items-center border-slate-400">
@@ -1281,6 +1270,30 @@ const InputRev = ({ item, onChangeValues, currency, errors }) => {
                   {errors?.amount}
                 </span>
               </div>
+
+              <div className="w-full lg:w-1/2">
+                <label>Multiplier</label>
+                <div className="flex items-center border-slate-400">
+                  <input
+                    name="multiplierrev"
+                    type="number"
+                    className="input input-bordered w-full border-slate-400"
+                    value={item.multiplier}
+                    onChange={(e) =>
+                      onChangeInputValue(
+                        "multiplier",
+                        e.target.value.replace(/[^0-9.]/g, "")
+                      )
+                    }
+                    onKeyDown={(e) =>
+                      ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                    }
+                  />
+                </div>
+                <ErrorText value={errors?.multiplier} />
+              </div>
+
+
             </div>
           </div>
         </div>
@@ -2755,11 +2768,21 @@ function AnnualForm({ goalData }) {
           </div>
         </div>
       </div>
-      <div className="flex justify-center">
-        <a href="/calculate" className="flex text-center items-center gap-2">
-          <img src={refresh} className="w-4 h-4"></img>
-          <p className="text-[#8A8A8E]">Back to start</p>
-        </a>
+      <div className="grid grid-cols-3 gap-4 w-10/12">
+        <div className="col-span-1"></div>
+        <div className="col-span-1 flex justify-center">
+          <a href="/calculate" className="flex justify-center text-center items-center  gap-2">
+            <img src={refresh} className="w-4 h-4"></img>
+            <p className="text-[#8A8A8E]">Back to start</p>
+          </a>
+        </div>
+        <div className="col-span-1 flex justify-content-end">
+          <input
+            type="submit"
+            className="py-3 w-full rounded-md bg-white text-[#A0161B] cursor-pointer text-right"
+            value="Download PDF"
+          />
+        </div>
       </div>
     </div>
   );
