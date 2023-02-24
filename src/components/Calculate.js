@@ -4,6 +4,9 @@ import React from "react";
 import API from "./mockAPI";
 import refresh from "../assets/refresh.png";
 import dollar from "../assets/dollar.png";
+import jsPDF from 'jspdf';
+import logo from '../assets/logo.png';
+import logo2 from '../assets/logo2.png';
 
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { IconButton, Stack, TextField } from "@mui/material";
@@ -45,6 +48,8 @@ import { useQuery } from "react-query";
 import Calculate from "../services/calculate";
 import { ErrorText } from "./ErrorText";
 
+import 'jspdf-autotable';
+
 var data = [
   { full_name: "Savings" },
   { full_name: "House" },
@@ -62,6 +67,37 @@ var liabilitiesdata = [
   { full_name: "Credit Card" },
   { full_name: "Student Debt" },
 ];
+
+var assets = [''];
+  var year1asset=['1st Year'];
+  var year2asset=['2nd Year'];
+  var year3asset=['3rd Year'];
+  var year4asset=['4th Year'];
+  var year5asset=['5th Year'];
+  var year6asset=['6th Year'];
+  var year7asset=['7th Year'];
+  var year8asset=['8th Year'];
+  var year9asset=['9th Year'];
+  var year10asset=['10th Year'];
+  var i = 1;
+
+  var liabilities = [''];
+  var year1liability=['1st Year'];
+  var year2liability=['2nd Year'];
+  var year3liability=['3rd Year'];
+  var year4liability=['4th Year'];
+  var year5liability=['5th Year'];
+  var year6liability=['6th Year'];
+  var year7liability=['7th Year'];
+  var year8liability=['8th Year'];
+  var year9liability=['9th Year'];
+  var year10liability=['10th Year'];
+  var j = 1;
+
+
+
+
+
 
 function checkIsEmptyObjects(object) {
   return Object.values(object).every((x) => x === null || x === "");
@@ -271,7 +307,21 @@ const InputNames = ({
   handleRemoveName,
   inputHandler,
 }) => {
+
+  // const [inputValuesPersonal, setInputValuesPersonal] = useState([]);
+
+  // useEffect(() => {
+  //   const storedValuePersonal = localStorage.getItem('inputValuesPersonal');
+  //   if (storedValuePersonal) {
+  //     setInputValuesPersonal(JSON.parse(storedValuePersonal));
+  //     onChangeValues(JSON.parse(storedValuePersonal));
+  //   }
+  // }, []);
+
+
   const onChangeInputValue = (key, value) => {
+    // setInputValuesPersonal({ ...inputValuesPersonal, [key]: value });
+    // localStorage.setItem('inputValuesPersonal', JSON.stringify({ ...inputValuesPersonal, [key]: value }));
     item[key] = value;
     onChangeValues(item);
   };
@@ -515,8 +565,19 @@ const InputGoals = ({
   currency,
 }) => {
   const[editGoals, setEditGoals] = useState(true);
+  // const [inputValuesGoal, setInputValuesGoal] = useState([]);
+
+  // useEffect(() => {
+  //   const storedValueGoal = localStorage.getItem('inputValuesGoals');
+  //   if (storedValueGoal) {
+  //     setInputValuesGoal(JSON.parse(storedValueGoal));
+  //     onChangeValues(JSON.parse(storedValueGoal));
+  //   }
+  // }, []);
 
   const onChangeInputValue = (key, value) => {
+    // setInputValuesGoal({ ...inputValuesGoal, [key]: value });
+    // localStorage.setItem('inputValuesGoals', JSON.stringify({ ...inputValuesGoal, [key]: value }));
     item[key] = value;
     onChangeValues(item);
   };
@@ -631,25 +692,25 @@ const InputGoals = ({
                 </span>
               )}
 
-              {/* {isDeletedButtonVisible && (
+              {isDeletedButtonVisible && (
                 <span
                   className="cursor-pointer ml-4 md:mt-5 block md:hidden "
                   onClick={handleRemoveGoal}
                 >
                   <BsTrash className="text-[#A0161B]"></BsTrash>
                 </span>
-              )} */}
+              )}
             </div>
           </div>
 
-          {/* {isDeletedButtonVisible && (
+          {isDeletedButtonVisible && (
             <span
               className="cursor-pointer -mt-6 md:mt-5 hidden md:block absolute delbutton  ml-10"
               onClick={handleRemoveGoal}
             >
               <BsTrash className="text-[#A0161B]"></BsTrash>
             </span>
-          )} */}
+          )}
         </div>
         {isLast && (
           <div
@@ -2687,6 +2748,120 @@ function CalculateLiabilityForm({ goalData }) {
 }
 
 function AnnualForm({ goalData }) {
+  const newGoalData = { ...goalData };
+  console.log(newGoalData);
+  jsPDF.autoTableSetDefaults({
+    headStyles: { 
+      fillColor: '#fff',
+      textColor: '#000' },
+  })
+
+  useEffect(() => {
+    console.log("mount test");
+    console.log(newGoalData);
+    if(newGoalData?.initial?.liabilities){
+      Object.keys(newGoalData?.initial?.liabilities).map((e) => (
+        liabilities[j]=e,
+        year1liability[j]=newGoalData.yearOne.liabilities[e],
+        year2liability[j]=newGoalData.yearTwo.liabilities[e],
+        year3liability[j]=newGoalData.yearThree.liabilities[e],
+        year4liability[j]=newGoalData.yearFour.liabilities[e],
+        year5liability[j]=newGoalData.yearFive.liabilities[e],
+        year6liability[j]=newGoalData.yearSix.liabilities[e],
+        year7liability[j]=newGoalData.yearSeven.liabilities[e],
+        year8liability[j]=newGoalData.yearEight.liabilities[e],
+        year9liability[j]=newGoalData.yearNine.liabilities[e],
+        year10liability[j]=newGoalData.yearTen.liabilities[e],
+        j++
+      ))}
+  
+      newGoalData?.initial?.assets && (
+      Object.keys(newGoalData?.initial?.assets).map((e) => (
+        assets[i]=e,
+        year1asset[i]=newGoalData.yearOne.assets[e],
+        year2asset[i]=newGoalData.yearTwo.assets[e],
+        year3asset[i]=newGoalData.yearThree.assets[e],
+        year4asset[i]=newGoalData.yearFour.assets[e],
+        year5asset[i]=newGoalData.yearFive.assets[e],
+        year6asset[i]=newGoalData.yearSix.assets[e],
+        year7asset[i]=newGoalData.yearSeven.assets[e],
+        year8asset[i]=newGoalData.yearEight.assets[e],
+        year9asset[i]=newGoalData.yearNine.assets[e],
+        year10asset[i]=newGoalData.yearTen.assets[e],
+        i++
+      ))) 
+      i=1;
+      j=1;
+  },[newGoalData])
+  
+  useEffect(() => {
+    const downloadBtn = document.querySelector('.download-btn');
+    
+    function handleDownloadClick() {
+      const pdfDoc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'px',
+        format: [595, 842]
+      });
+      const tableData2 = [
+        liabilities,
+        year1liability,
+        year2liability,
+        year3liability,
+        year4liability,
+        year5liability,
+        year6liability,
+        year7liability,
+        year8liability,
+        year9liability,
+        year10liability,
+      ];
+      const tableData = [
+        assets,
+        year1asset,
+        year2asset,
+        year3asset,
+        year4asset,
+        year5asset,
+        year6asset,
+        year7asset,
+        year8asset,
+        year9asset,
+        year10asset
+      ];
+      pdfDoc.text('Assets', 29, 123 )
+      pdfDoc.autoTable({
+        startY: 148,
+        head: [tableData[0]],
+        body: tableData.slice(1),
+        tableWidth: 533,
+        columnWidth: 106,
+        styles: { cellPadding: 6, fontSize: 10, align: 'center', halign: 'center', rowPageHeight: 31, },
+        
+
+      });
+      pdfDoc.text('Liabilities', 29, 468)
+      pdfDoc.autoTable({
+        startY: 493,
+        head: [tableData2[0]],
+        body: tableData2.slice(1),
+        columnWidth: 106,
+        styles: { cellPadding: 6, fontSize: 10, align: 'center', halign: 'center', rowPageHeight: 31, },
+      }
+      );
+      pdfDoc.addImage(logo, 'PNG', 34, 24, 189, 37.77);
+      pdfDoc.addImage(logo2, 'PNG', 414, 24, 149.59, 48);
+      pdfDoc.save('example.pdf');
+    }
+
+    downloadBtn.addEventListener('click', handleDownloadClick);
+
+    return () => {
+      downloadBtn.removeEventListener('click', handleDownloadClick);
+    }
+  }, []);
+
+
   return (
     <div className="w-full justify-center items-center flex flex-col gap-8 ">
       <div className="flex flex-col gap-20 w-10/12 ">
@@ -2699,7 +2874,7 @@ function AnnualForm({ goalData }) {
               <IoMdInformationCircle className="text-2xl md:text-4xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
             </label>
           </div>
-
+        
           <input type="checkbox" id="assets" className="modal-toggle" />
           <div className="modal">
             <div className="modal-box relative">
@@ -2779,7 +2954,7 @@ function AnnualForm({ goalData }) {
         <div className="col-span-1 flex justify-content-end">
           <input
             type="submit"
-            className="py-3 w-full rounded-md bg-white text-[#A0161B] cursor-pointer text-right"
+            className="download-btn py-3 w-full rounded-md bg-white text-[#A0161B] cursor-pointer text-right"
             value="Download PDF"
           />
         </div>
