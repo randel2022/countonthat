@@ -317,8 +317,6 @@ const InputNames = ({
   //     onChangeValues(JSON.parse(storedValuePersonal));
   //   }
   // }, []);
-
-
   const onChangeInputValue = (key, value) => {
     // setInputValuesPersonal({ ...inputValuesPersonal, [key]: value });
     // localStorage.setItem('inputValuesPersonal', JSON.stringify({ ...inputValuesPersonal, [key]: value }));
@@ -571,10 +569,11 @@ const InputGoals = ({
   //   const storedValueGoal = localStorage.getItem('inputValuesGoals');
   //   if (storedValueGoal) {
   //     setInputValuesGoal(JSON.parse(storedValueGoal));
-  //     onChangeValues(JSON.parse(storedValueGoal));
+  //     onChangeValues(inputValuesGoal);
+  //     console.log(inputValuesGoal)
   //   }
   // }, []);
-
+  // console.log(inputValuesGoal)
   const onChangeInputValue = (key, value) => {
     // setInputValuesGoal({ ...inputValuesGoal, [key]: value });
     // localStorage.setItem('inputValuesGoals', JSON.stringify({ ...inputValuesGoal, [key]: value }));
@@ -1549,7 +1548,7 @@ function PersonalForm({ setData }) {
     contact: "",
     currency: "",
   });
-
+  
   const [goalsErrors, setGoalsErrors] = useState([
     {
       amount: "",
@@ -1575,17 +1574,17 @@ function PersonalForm({ setData }) {
     contact: "",
     currency: "USD",
   });
-
+  
   const initialGoalState = {
     amount: 0.0,
     goal: "",
     currency: personalDetails.currency?.toUpperCase(),
   };
 
+  const [goals, setGoals] = useState([]);
   const [dependents, setDependents] = useState([]);
 
-  const [goals, setGoals] = useState([initialGoalState]);
-
+  
   const goalSum = goals.reduce((accumulator, item) => {
     return accumulator + Number(item.amount);
   }, 0);
@@ -1633,6 +1632,54 @@ function PersonalForm({ setData }) {
     setGoals([...goals, initialGoalState]);
   };
 
+  const[testflag, setTestFlag] = useState()
+  useEffect(() => {
+    const storedValuePersonal = localStorage.getItem('personalDetails');
+    if (storedValuePersonal) {
+      setpersonalDetails(JSON.parse(storedValuePersonal));
+      setTestFlag(true);
+    }
+  }, []);
+  
+  useEffect(() => {
+    const storedValueDependents = localStorage.getItem('dependents');
+    if(storedValueDependents){
+      setDependents(JSON.parse(storedValueDependents))
+    }
+  },[])
+
+
+ 
+  
+
+  useEffect(() => {
+    const resetPersonalbtn = document.querySelector('.resetPersonal-btn');
+    
+    function handleResetClick() {
+      setpersonalDetails({
+        firstname: "",
+        lastname: "",
+        agenew: "",
+        email: "",
+        contact: "",
+        currency: "USD",
+      });
+      setGoals([initialGoalState]);
+      setDependents([]);
+      localStorage.removeItem('personalDetails');
+      localStorage.removeItem('goals');
+      localStorage.removeItem('dependents');
+    }
+
+    resetPersonalbtn.addEventListener('click', handleResetClick);
+
+    return () => {
+      resetPersonalbtn.removeEventListener('click', handleResetClick);
+    }
+  }, []);
+
+
+
   useEffect(() => {
     const temporaryGoalsArray = [...goals];
     temporaryGoalsArray.map(
@@ -1660,6 +1707,20 @@ function PersonalForm({ setData }) {
     };
   }, [errors]);
 
+  useEffect(() => {
+    const storedValueGoals = localStorage.getItem('goals');
+    console.log(storedValueGoals);
+    if(storedValueGoals){
+      console.log("triggered")
+      const parsedGoals = JSON.parse(storedValueGoals);
+      setGoals(parsedGoals);
+      console.log(goals) ;
+    }else{
+      console.log("triggered else")
+      setGoals([initialGoalState]);
+    }
+  },[])
+
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3 px-16">
       <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-0 md:px-7 py-7 rounded-lg shadow-none lg:shadow-md">
@@ -1677,6 +1738,7 @@ function PersonalForm({ setData }) {
               };
               setErrors(tempErrors);
               setpersonalDetails(data);
+              localStorage.setItem('personalDetails', JSON.stringify(personalDetails))
             }}
             addNewName={addNewName}
           />
@@ -1700,7 +1762,9 @@ function PersonalForm({ setData }) {
                       currency: "",
                     })
                   );
+                  localStorage.setItem('goals', JSON.stringify(goals))
                   setGoalsErrors(tempGoalsErrorsArray);
+                  
                 }}
                 addNewGoal={addNewGoal}
                 handleRemoveGoal={() => handleRemoveGoal(index)}
@@ -1731,8 +1795,10 @@ function PersonalForm({ setData }) {
                         lastnamedependent: "",
                         agedependent: "",
                         relationship: "",
-                      })
+                      }) 
                     );
+                    localStorage.setItem('dependents', JSON.stringify(dependents))
+                    console.log(dependents)
                     setDepErrors(tempDependentsErrorsArray);
                   }}
                   addNewNameDependent={addNewNameDependent}
@@ -1769,10 +1835,22 @@ function PersonalForm({ setData }) {
         </button>
       </div>
 
-      <a href="/calculate" className="flex items-center gap-2 mt-4">
-        <img src={refresh} className="w-4 h-4"></img>
-        <p className="text-[#8A8A8E]">Back to start</p>
-      </a>
+      <div className="grid grid-cols-3 gap-4 w-8/12">
+        <div className="col-span-1"></div>
+        <div className="col-span-1 flex justify-center">
+          <a href="/calculate" className="flex justify-center text-center items-center  gap-2">
+            <img src={refresh} className="w-4 h-4"></img>
+            <p className="text-[#8A8A8E]">Back to start</p>
+          </a>
+        </div>
+        <div className="col-span-1 flex justify-content-end">
+          <input
+            type="submit"
+            className="resetPersonal-btn py-3 w-full rounded-md bg-white text-[#A0161B] cursor-pointer text-right"
+            value="Reset"
+          />
+        </div>
+      </div>
     </div>
   );
 }
@@ -1879,12 +1957,41 @@ function AssetsForm({ currency, setData, goBack }) {
     }
   };
 
+  useEffect(() => {
+    const resetAssetsbtn = document.querySelector('.resetAssets-btn');
+    
+    function handleResetClick() {
+      setAssetsData({
+        assets: [initialAssetData],
+        rev: {
+          multiplier: 1,
+          amount: 0,
+        },
+      });
+      localStorage.removeItem('assets');
+    }
+
+    resetAssetsbtn.addEventListener('click', handleResetClick);
+
+    return () => {
+      resetAssetsbtn.removeEventListener('click', handleResetClick);
+    }
+  }, []);
+
+  useEffect(() => {
+    const storedValueAssets = localStorage.getItem('assets');
+    if(storedValueAssets){
+      setAssetsData(JSON.parse(storedValueAssets))
+    }
+  },[])
+
+
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3 ">
       <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400  px-7 py-7 rounded-lg shadow-none lg:shadow-md">
         <div className="w-full flex justify-between">
           <p className="font-bold text-center md:text-left">
-            Assement Management
+            Assets Info
           </p>
 
           <label htmlFor="asset">
@@ -1921,6 +2028,7 @@ function AssetsForm({ currency, setData, goBack }) {
                 var assetsTemporary = [...assetsData.assets];
                 assetsTemporary[index] = data;
                 setAssetsData((prev) => ({ ...prev, assets: assetsTemporary }));
+                localStorage.setItem('assets', JSON.stringify(assetsData));
               }}
               addNewAsset={addNewAsset}
               handleRemoveAsset={() => handleRemoveAsset(index)}
@@ -1928,6 +2036,7 @@ function AssetsForm({ currency, setData, goBack }) {
               isDeletedButtonVisible={assetsData.assets.length - 1 > 0}
               errors={assetsDataErrors.assets[index]}
               currency={currency}
+              
             />
           </div>
         ))}
@@ -1936,6 +2045,7 @@ function AssetsForm({ currency, setData, goBack }) {
             item={assetsData.rev}
             onChangeValues={(data) => {
               setAssetsData((prev) => ({ ...prev, rev: data }));
+              localStorage.setItem('assets', JSON.stringify(assetsData));
             }}
             currency={currency}
             errors={assetsDataErrors.rev}
@@ -1960,10 +2070,22 @@ function AssetsForm({ currency, setData, goBack }) {
         </div>
       </div>
 
-      <a href="/calculate" className="flex items-center gap-2 mt-4">
-        <img src={refresh} className="w-4 h-4"></img>
-        <p className="text-[#8A8A8E]">Back to start</p>
-      </a>
+      <div className="grid grid-cols-3 gap-4 w-8/12">
+        <div className="col-span-1"></div>
+        <div className="col-span-1 flex justify-center">
+          <a href="/calculate" className="flex justify-center text-center items-center  gap-2">
+            <img src={refresh} className="w-4 h-4"></img>
+            <p className="text-[#8A8A8E]">Back to start</p>
+          </a>
+        </div>
+        <div className="col-span-1 flex justify-content-end">
+          <input
+            type="submit"
+            className="resetAssets-btn py-3 w-full rounded-md bg-white text-[#A0161B] cursor-pointer text-right"
+            value="Reset"
+          />
+        </div>
+      </div>
     </div>
   );
 }
@@ -2027,6 +2149,11 @@ function LiabilitiesForm({ currency, setData, goBack }) {
       };
       /// and push on temporary array
       tempLiabilitiesErrorsArray.push(tempLiabilitiesErrors);
+      localStorage.removeItem('personalDetails');
+      localStorage.removeItem('goals');
+      localStorage.removeItem('dependents');
+      localStorage.removeItem('assets');
+      localStorage.removeItem('liabilities');
     }
     tempLiabilitiesErrorsObject = {
       liabilities: tempLiabilitiesErrorsArray,
@@ -2074,6 +2201,33 @@ function LiabilitiesForm({ currency, setData, goBack }) {
       }));
     }
   };
+  useEffect(() => {
+    const resetLiabilitiesbtn = document.querySelector('.resetLiabilities-btn');
+    
+    function handleResetClick() {
+      setLiabilitiesData({
+        liabilities: [initialLiabilityData],
+        revexp: {
+          multiplier: 1,
+          amount: 0,
+        },
+      });
+      localStorage.removeItem('liabilities');
+    }
+
+    resetLiabilitiesbtn.addEventListener('click', handleResetClick);
+
+    return () => {
+      resetLiabilitiesbtn.removeEventListener('click', handleResetClick);
+    }
+  }, []);
+
+  useEffect(() => {
+    const storedValueLiabilities= localStorage.getItem('liabilities');
+    if(storedValueLiabilities){
+      setLiabilitiesData(JSON.parse(storedValueLiabilities))
+    }
+  },[])
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3 ">
@@ -2120,6 +2274,7 @@ function LiabilitiesForm({ currency, setData, goBack }) {
                   ...prev,
                   liabilities: liabilitiesTemporary,
                 }));
+                localStorage.setItem('liabilities', JSON.stringify(liabilitiesData));
               }}
               addNewLiability={addNewLiability}
               handleRemoveLiability={() => handleRemoveLiability(index)}
@@ -2137,6 +2292,7 @@ function LiabilitiesForm({ currency, setData, goBack }) {
             item={liabilitiesData.revexp}
             onChangeValues={(data) => {
               setLiabilitiesData((prev) => ({ ...prev, revexp: data }));
+              localStorage.setItem('liabilities', JSON.stringify(liabilitiesData));
             }}
             currency={currency}
             errors={liabilitiesDataErrors.revexp}
@@ -2161,10 +2317,22 @@ function LiabilitiesForm({ currency, setData, goBack }) {
         </div>
       </div>
 
-      <a href="/calculate" className="flex items-center gap-2 mt-4">
-        <img src={refresh} className="w-4 h-4"></img>
-        <p className="text-[#8A8A8E]">Back to start</p>
-      </a>
+      <div className="grid grid-cols-3 gap-4 w-8/12">
+        <div className="col-span-1"></div>
+        <div className="col-span-1 flex justify-center">
+          <a href="/calculate" className="flex justify-center text-center items-center  gap-2">
+            <img src={refresh} className="w-4 h-4"></img>
+            <p className="text-[#8A8A8E]">Back to start</p>
+          </a>
+        </div>
+        <div className="col-span-1 flex justify-content-end">
+          <input
+            type="submit"
+            className="resetLiabilities-btn py-3 w-full rounded-md bg-white text-[#A0161B] cursor-pointer text-right"
+            value="Reset"
+          />
+        </div>
+      </div>
     </div>
   );
 }
