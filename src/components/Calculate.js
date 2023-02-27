@@ -481,10 +481,10 @@ const InputNames = ({
                 <option value="usd" className="currency" style={{ display: "none", height: 0, padding: 0 }}>
                   USD
                 </option>
-                <option value="usd"  className="currency">
+                <option value="USD"  className="currency">
                   USD
                 </option>
-                <option value="php" className="currency">
+                <option value="PHP" className="currency">
                   PHP
                 </option>
                 
@@ -596,6 +596,17 @@ const InputGoals = ({
       setEditGoals(true)
     }
   };
+
+  const[curSymbol, setCurSymbol]= useState();
+
+
+  useEffect(() => {
+    if(item.currency == 'USD'){
+      setCurSymbol('$')
+    }else{
+      setCurSymbol('₱')
+    }
+  },[item.currency])
 
 
   return (
@@ -724,8 +735,7 @@ const InputGoals = ({
             <div className="flex ">
               <p className="text-sm ">
                 Total Goal Amount:
-                {item.currency == "USD" ? "$" : <></>}
-                {item.currency == "PHP" ? "₱" : <></>}
+                {curSymbol}
                 {goalSum
                   .toFixed(2)
                   .toString()
@@ -884,6 +894,8 @@ const InputAssets = ({
   errors,
   currency,
 }) => {
+
+  const[editAssets, setEditAssets] = useState(true) 
   const onChangeInputValue = (key, value) => {
     item[key] = value;
     onChangeValues(item);
@@ -891,6 +903,18 @@ const InputAssets = ({
 
   const onSearch = (searchTerm) => {
     onChangeInputValue("asset", searchTerm);
+    if (searchTerm===""){
+      setEditAssets(false)
+    }
+    if(searchTerm==="home"){
+      setEditAssets(true)
+    }
+    if(searchTerm==="investments"){
+      setEditAssets(true)
+    }
+    if(searchTerm==="Business Value"){
+      setEditAssets(true)
+    }
   };
 
   return (
@@ -904,9 +928,11 @@ const InputAssets = ({
               <div className="search-inner relative">
                 <input
                   type="text"
+                  disabled
                   value={item.asset}
                   onChange={(e) => onSearch(e.target.value)}
                   className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
+                  style={{ borderColor: "#8A8A8E" }}
                   placeholder="Asset"
                 />
                 <select
@@ -926,6 +952,9 @@ const InputAssets = ({
                   </option>
                   <option value="Business Value" className="capitalize">
                     Business Value
+                  </option>
+                  <option value="" className="capitalize">
+                    Customize...
                   </option>
                 </select>
 
@@ -1055,6 +1084,7 @@ const InputLiabilities = ({
   errors,
   currency,
 }) => {
+  const[editLiabilities, setEditLiabiliities] = useState(true);
   const onChangeInputValue = (key, value) => {
     item[key] = value;
     onChangeValues(item);
@@ -1062,6 +1092,18 @@ const InputLiabilities = ({
 
   const onSearch = (searchTerm) => {
     onChangeInputValue("liability", searchTerm);
+    if (searchTerm===""){
+      setEditLiabiliities(false)
+    }
+    if(searchTerm==="mortgage"){
+      setEditLiabiliities(true)
+    }
+    if(searchTerm==="credit card"){
+      setEditLiabiliities(true)
+    }
+    if(searchTerm==="Student Debt"){
+      setEditLiabiliities(true)
+    }
   };
 
   return (
@@ -1076,9 +1118,11 @@ const InputLiabilities = ({
                 <input
                   type="text"
                   value={item.liability}
+                  disabled={editLiabilities}
                   onChange={(e) => onSearch(e.target.value)}
                   className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                   placeholder="Liability"
+                  style={{ borderColor: "#8A8A8E" }}
                 />
                 <select
                   className="input input-bordered w-full border-slate-400"
@@ -1097,6 +1141,9 @@ const InputLiabilities = ({
                   </option>
                   <option value="Student Debt" className="capitalize">
                     Student Debt
+                  </option>
+                  <option value="" className="capitalize">
+                    Customize...
                   </option>
                 </select>
 
@@ -2930,32 +2977,32 @@ function AnnualForm({ goalData }) {
     if(newGoalData?.initial?.liabilities){
       Object.keys(newGoalData?.initial?.liabilities).map((e) => (
         liabilities[j]=e,
-        year1liability[j]=newGoalData.yearOne.liabilities[e],
-        year2liability[j]=newGoalData.yearTwo.liabilities[e],
-        year3liability[j]=newGoalData.yearThree.liabilities[e],
-        year4liability[j]=newGoalData.yearFour.liabilities[e],
-        year5liability[j]=newGoalData.yearFive.liabilities[e],
-        year6liability[j]=newGoalData.yearSix.liabilities[e],
-        year7liability[j]=newGoalData.yearSeven.liabilities[e],
-        year8liability[j]=newGoalData.yearEight.liabilities[e],
-        year9liability[j]=newGoalData.yearNine.liabilities[e],
-        year10liability[j]=newGoalData.yearTen.liabilities[e],
+        year1liability[j]=newGoalData.yearOne.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year2liability[j]=newGoalData.yearTwo.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year3liability[j]=newGoalData.yearThree.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year4liability[j]=newGoalData.yearFour.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year5liability[j]=newGoalData.yearFive.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year6liability[j]=newGoalData.yearSix.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year7liability[j]=newGoalData.yearSeven.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year8liability[j]=newGoalData.yearEight.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year9liability[j]=newGoalData.yearNine.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year10liability[j]=newGoalData.yearTen.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         j++
       ))}
   
       newGoalData?.initial?.assets && (
       Object.keys(newGoalData?.initial?.assets).map((e) => (
         assets[i]=e,
-        year1asset[i]=newGoalData.yearOne.assets[e],
-        year2asset[i]=newGoalData.yearTwo.assets[e],
-        year3asset[i]=newGoalData.yearThree.assets[e],
-        year4asset[i]=newGoalData.yearFour.assets[e],
-        year5asset[i]=newGoalData.yearFive.assets[e],
-        year6asset[i]=newGoalData.yearSix.assets[e],
-        year7asset[i]=newGoalData.yearSeven.assets[e],
-        year8asset[i]=newGoalData.yearEight.assets[e],
-        year9asset[i]=newGoalData.yearNine.assets[e],
-        year10asset[i]=newGoalData.yearTen.assets[e],
+        year1asset[i]=newGoalData.yearOne.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year2asset[i]=newGoalData.yearTwo.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year3asset[i]=newGoalData.yearThree.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year4asset[i]=newGoalData.yearFour.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year5asset[i]=newGoalData.yearFive.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year6asset[i]=newGoalData.yearSix.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year7asset[i]=newGoalData.yearSeven.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year8asset[i]=newGoalData.yearEight.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year9asset[i]=newGoalData.yearNine.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year10asset[i]=newGoalData.yearTen.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         i++
       ))) 
       i=1;
