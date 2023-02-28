@@ -289,7 +289,7 @@ function CalculateComponent() {
         )}
       </div>
       <div className={`${selectedTab === 4 ? "flex w-full" : "hidden"}`}>
-        <AnnualForm goalData={backendData?.data}></AnnualForm>
+        <AnnualForm goalData={backendData?.data} currency={goalData?.names?.currency}></AnnualForm>
       </div>
     </div>
   );
@@ -606,9 +606,9 @@ const InputGoals = ({
     }else{
       setCurSymbol('₱')
     }
-  },[item.currency])
-
-
+  },[currency])
+  console.log(currency);
+  
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
@@ -678,7 +678,7 @@ const InputGoals = ({
               </div>
             </div>
           </div>
-
+          
           <div className="w-full md:w-[33%] lg:w-[32%] pr-0 md:pr-8">
             <label>Amount</label>
             <div className="flex items-center border-slate-400 relative">
@@ -712,7 +712,7 @@ const InputGoals = ({
               )}
             </div>
           </div>
-
+          
           {isDeletedButtonVisible && (
             <span
               className="cursor-pointer -mt-6 md:mt-5 hidden md:block absolute delbutton  ml-10"
@@ -722,7 +722,9 @@ const InputGoals = ({
             </span>
           )}
         </div>
-        {isLast && (
+           
+       {isLast && 
+          
           <div
             className="flex flex-col gap-3 md:flex-row items-start md:items-center justify-between cursor-pointer mt-2 "
             onClick={addNewGoal}
@@ -735,15 +737,15 @@ const InputGoals = ({
             <div className="flex ">
               <p className="text-sm ">
                 Total Goal Amount:
-                {curSymbol}
-                {goalSum
+                {curSymbol + 
+                goalSum
                   .toFixed(2)
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
               </p>
             </div>
           </div>
-        )}
+       }
       </div>
     </>
   );
@@ -2962,9 +2964,18 @@ function CalculateLiabilityForm({ goalData }) {
   );
 }
 
-function AnnualForm({ goalData }) {
+function AnnualForm({ goalData, currency }) {
   const newGoalData = { ...goalData };
-  console.log(newGoalData);
+  var symbol = "";
+  console.log(currency);
+  if(currency == 'USD'){
+    symbol = '$'
+  }else{
+    symbol = '₱'
+  }
+
+
+  console.log(symbol)
   jsPDF.autoTableSetDefaults({
     headStyles: { 
       fillColor: '#fff',
@@ -2976,33 +2987,33 @@ function AnnualForm({ goalData }) {
     console.log(newGoalData);
     if(newGoalData?.initial?.liabilities){
       Object.keys(newGoalData?.initial?.liabilities).map((e) => (
-        liabilities[j]=e,
-        year1liability[j]=newGoalData.yearOne.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year2liability[j]=newGoalData.yearTwo.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year3liability[j]=newGoalData.yearThree.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year4liability[j]=newGoalData.yearFour.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year5liability[j]=newGoalData.yearFive.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year6liability[j]=newGoalData.yearSix.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year7liability[j]=newGoalData.yearSeven.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year8liability[j]=newGoalData.yearEight.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year9liability[j]=newGoalData.yearNine.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year10liability[j]=newGoalData.yearTen.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        liabilities[j]=e.charAt(0).toUpperCase() + e.slice(1),
+        year1liability[j]=symbol + newGoalData.yearOne.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year2liability[j]=symbol + newGoalData.yearTwo.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year3liability[j]=symbol + newGoalData.yearThree.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year4liability[j]=symbol + newGoalData.yearFour.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year5liability[j]=symbol + newGoalData.yearFive.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year6liability[j]=symbol + newGoalData.yearSix.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year7liability[j]=symbol + newGoalData.yearSeven.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year8liability[j]=symbol + newGoalData.yearEight.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year9liability[j]=symbol + newGoalData.yearNine.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year10liability[j]=symbol + newGoalData.yearTen.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         j++
       ))}
   
       newGoalData?.initial?.assets && (
       Object.keys(newGoalData?.initial?.assets).map((e) => (
-        assets[i]=e,
-        year1asset[i]=newGoalData.yearOne.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year2asset[i]=newGoalData.yearTwo.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year3asset[i]=newGoalData.yearThree.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year4asset[i]=newGoalData.yearFour.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year5asset[i]=newGoalData.yearFive.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year6asset[i]=newGoalData.yearSix.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year7asset[i]=newGoalData.yearSeven.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year8asset[i]=newGoalData.yearEight.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year9asset[i]=newGoalData.yearNine.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year10asset[i]=newGoalData.yearTen.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        assets[i]=e.charAt(0).toUpperCase() + e.slice(1),
+        year1asset[i]=symbol + newGoalData.yearOne.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year2asset[i]=symbol + newGoalData.yearTwo.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year3asset[i]=symbol + newGoalData.yearThree.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year4asset[i]=symbol + newGoalData.yearFour.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year5asset[i]=symbol + newGoalData.yearFive.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year6asset[i]=symbol + newGoalData.yearSix.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year7asset[i]=symbol + newGoalData.yearSeven.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year8asset[i]=symbol + newGoalData.yearEight.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year9asset[i]=symbol + newGoalData.yearNine.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year10asset[i]=symbol + newGoalData.yearTen.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         i++
       ))) 
       i=1;
