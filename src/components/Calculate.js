@@ -306,6 +306,7 @@ const InputNames = ({
   isDeletedButtonVisible,
   handleRemoveName,
   inputHandler,
+  ref
 }) => {
 
   // const [inputValuesPersonal, setInputValuesPersonal] = useState([]);
@@ -364,6 +365,7 @@ const InputNames = ({
               type="text"
               value={item.firstname}
               onChange={(e) => onChangeInputValue("firstname", e.target.value)}
+              
             />
             {errors.firstname && (
               <span className="text-red-600 text-sm absolute w-full required">
@@ -450,7 +452,7 @@ const InputNames = ({
               placeholder="Contact Number"
               name="contact"
               type="number"
-              onKeyDown={(evt) =>  (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace') || evt.preventDefault()}
+              onKeyDown={(evt) =>  (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab') || evt.preventDefault()}
               value={item.contact}
               onChange={(e) =>
                 onChangeInputValue(
@@ -935,7 +937,7 @@ const InputAssets = ({
               <div className="search-inner relative">
                 <input
                   type="text"
-                  disabled
+                  disabled = {editAssets}
                   value={item.asset}
                   onChange={(e) => onSearch(e.target.value)}
                   className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
@@ -1742,17 +1744,19 @@ function PersonalForm({ setData }) {
     setGoals(temporaryGoalsArray);
   }, [personalDetails]);
 
+
   useEffect(() => {
     const keyDownHandler = (event) => {
-      console.log("User pressed: ", event.key);
-
       if (event.key === "Enter") {
         event.preventDefault();
-
-        // 👇️ your logic here
-        handleSubmit();
-      }
-    };
+        const tabEvent = new KeyboardEvent("keydown", {
+          bubbles: true,
+          cancelable: true,
+          key: 'tab',
+        });
+      console.log(document.activeElement);
+      event.target.dispatchEvent(tabEvent);
+    }};
 
     document.addEventListener("keydown", keyDownHandler);
 
