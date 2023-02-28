@@ -450,7 +450,7 @@ const InputNames = ({
               placeholder="Contact Number"
               name="contact"
               type="number"
-              onKeyDown={(evt) => evt.key.match(/^[a-zA-Z]$/) && evt.preventDefault()}
+              onKeyDown={(evt) => !(evt.key.match(/^[0-9]$/) || evt.key('Backspace')) && evt.preventDefault()}
               value={item.contact}
               onChange={(e) =>
                 onChangeInputValue(
