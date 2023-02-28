@@ -737,7 +737,7 @@ const InputGoals = ({
             <div className="flex ">
               <p className="text-sm ">
                 Total Goal Amount:
-                {curSymbol + 
+                {(currency == 'USD'? '$' : '₱') + 
                 goalSum
                   .toFixed(2)
                   .toString()
@@ -2897,7 +2897,7 @@ function CalculateForm({ goalData }) {
           Object.keys(newGoalData?.initial?.assets).map((e) => (
             <>
               <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1 capitalize ">
-                {e}
+              {e == 'totalAssets' ? 'Total Assets': e}
               </div>
               <div className="py-3 ">{newGoalData.yearOne.assets[e]}</div>
               <div className="py-3">{newGoalData.yearTwo.assets[e]}</div>
@@ -2942,7 +2942,7 @@ function CalculateLiabilityForm({ goalData }) {
           Object.keys(newGoalData?.initial?.liabilities).map((e) => (
             <>
               <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1 capitalize ">
-                {e}
+                {e == 'totalLiabilities' ? 'Total Liabilities': e}
               </div>
               <div className="py-3 ">{newGoalData.yearOne.liabilities[e]}</div>
               <div className="py-3">{newGoalData.yearTwo.liabilities[e]}</div>
@@ -2987,7 +2987,7 @@ function AnnualForm({ goalData, currency }) {
     console.log(newGoalData);
     if(newGoalData?.initial?.liabilities){
       Object.keys(newGoalData?.initial?.liabilities).map((e) => (
-        liabilities[j]=e.charAt(0).toUpperCase() + e.slice(1),
+        liabilities[j]=(e == 'totalLiabilities' ? 'Total Liabilities' :e.charAt(0).toUpperCase() + e.slice(1)),
         year1liability[j]=symbol + newGoalData.yearOne.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         year2liability[j]=symbol + newGoalData.yearTwo.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         year3liability[j]=symbol + newGoalData.yearThree.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
@@ -3003,7 +3003,7 @@ function AnnualForm({ goalData, currency }) {
   
       newGoalData?.initial?.assets && (
       Object.keys(newGoalData?.initial?.assets).map((e) => (
-        assets[i]=e.charAt(0).toUpperCase() + e.slice(1),
+        assets[i]=(e == 'totalAssets' ? 'Total Assets' : e.charAt(0).toUpperCase() + e.slice(1)),
         year1asset[i]=symbol + newGoalData.yearOne.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         year2asset[i]=symbol + newGoalData.yearTwo.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         year3asset[i]=symbol + newGoalData.yearThree.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
