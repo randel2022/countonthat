@@ -452,7 +452,12 @@ const InputNames = ({
               type="number"
               onKeyDown={(evt) => evt.key === ('e') && evt.preventDefault()}
               value={item.contact}
-              onChange={(e) => onChangeInputValue("contact", e.target.value)}
+              onChange={(e) =>
+                onChangeInputValue(
+                "contact",
+                e.target.value.replace(/[^0-9]/g, "")
+              )
+            }
             />
             {errors.contact && (
               <span className="text-red-600 absolute w-full required text-sm">
