@@ -2969,9 +2969,9 @@ function AnnualForm({ goalData, currency }) {
   var symbol = "";
   console.log(currency);
   if(currency == 'USD'){
-    symbol = '$'
+    symbol = 'USD '
   }else{
-    symbol = '₱'
+    symbol = 'PHP '
   }
 
 
