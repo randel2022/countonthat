@@ -626,10 +626,11 @@ const InputGoals = ({
               <div className="search-inner relative input input-bordered border-slate-400 px-0">
                 <input
                   type="text"
-                  disabled = {editGoals}
+                  readOnly = {editGoals}
                   value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
-                  className="absolute w-3/4 h-full ml-4 md:ml-4 border-slate-400 focus:outline-none capitalize mr-4 md:mr-2"
+                  className={editGoals ? "absolute w-3/4 h-full ml-4 md:ml-4 border-slate-400 focus:outline-none capitalize mr-4 md:mr-2 cursor-default":
+                  "absolute w-3/4 h-full ml-4 md:ml-4 border-slate-400 focus:outline-none capitalize mr-4 md:mr-2"}
                   placeholder="Goal"
                 />
 
@@ -937,10 +938,13 @@ const InputAssets = ({
               <div className="search-inner relative">
                 <input
                   type="text"
-                  disabled = {editAssets}
+                  readOnly = {editAssets}
                   value={item.asset}
                   onChange={(e) => onSearch(e.target.value)}
-                  className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
+                  className= {editAssets ?
+                  "absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none cursor-default" :
+                  "absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
+                  }
                   style={{ borderColor: "#8A8A8E" }}
                   placeholder="Asset"
                 />
@@ -1127,9 +1131,10 @@ const InputLiabilities = ({
                 <input
                   type="text"
                   value={item.liability}
-                  disabled={editLiabilities}
+                  readOnly={editLiabilities}
                   onChange={(e) => onSearch(e.target.value)}
-                  className="absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
+                  className={ editLiabilities ? "absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none cursor-default":
+                  "absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"}
                   placeholder="Liability"
                   style={{ borderColor: "#8A8A8E" }}
                 />
@@ -1720,7 +1725,10 @@ function PersonalForm({ setData }) {
         contact: "",
         currency: "USD",
       });
-      setGoals([initialGoalState]);
+      setGoals([{
+        amount: 0.0,
+        goal: "",
+        currency: personalDetails.currency?.toUpperCase()}]);
       setDependents([]);
       localStorage.removeItem('personalDetails');
       localStorage.removeItem('goals');
@@ -1769,12 +1777,10 @@ function PersonalForm({ setData }) {
     const storedValueGoals = localStorage.getItem('goals');
     console.log(storedValueGoals);
     if(storedValueGoals){
-      console.log("triggered")
       const parsedGoals = JSON.parse(storedValueGoals);
       setGoals(parsedGoals);
       console.log(goals) ;
     }else{
-      console.log("triggered else")
       setGoals([initialGoalState]);
     }
   },[])
@@ -2020,7 +2026,9 @@ function AssetsForm({ currency, setData, goBack }) {
     
     function handleResetClick() {
       setAssetsData({
-        assets: [initialAssetData],
+        assets: [{asset: "",
+        amount: 0.0,
+        assetmultiplier: 1,}],
         rev: {
           multiplier: 1,
           amount: 0,
@@ -2264,7 +2272,11 @@ function LiabilitiesForm({ currency, setData, goBack }) {
     
     function handleResetClick() {
       setLiabilitiesData({
-        liabilities: [initialLiabilityData],
+        liabilities: [{
+          liability: "",
+          amount: 0.0,
+          liabilitymultiplier: 1,
+        }],
         revexp: {
           multiplier: 1,
           amount: 0,
@@ -2809,7 +2821,7 @@ function Output({ data, currency, nextTab, goBack }) {
                 <p className="py-0 my-0">
                   {currency}
                   &nbsp;
-                  {netWorth?.toString()}
+                  {netWorth?.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </p>
               </div>
 
@@ -2819,8 +2831,7 @@ function Output({ data, currency, nextTab, goBack }) {
                   {currency}
                   &nbsp;
                   {assets?.totalAssets
-                    ?.toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                    ?.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </p>
               </div>
 
@@ -2830,8 +2841,7 @@ function Output({ data, currency, nextTab, goBack }) {
                   {currency}
                   &nbsp;
                   {liabilities?.totalLiabilities
-                    ?.toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                    ?.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </p>
               </div>
 
@@ -2841,8 +2851,7 @@ function Output({ data, currency, nextTab, goBack }) {
                   {currency}
                   &nbsp;
                   {monthlyExpense
-                    ?.toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                    ?.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </p>
               </div>
 
@@ -2883,9 +2892,14 @@ function Output({ data, currency, nextTab, goBack }) {
   );
 }
 
-function CalculateForm({ goalData }) {
+function CalculateForm({ goalData, currency }) {
   const newGoalData = { ...goalData };
-
+  var curSymbol = ""
+  if( currency == 'USD'){
+    curSymbol = '$'
+  }else{
+    curSymbol = '₱'
+  }
   return (
     <div className="overflow-x-auto w-25 lg:w-full">
       <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div ">
@@ -2908,16 +2922,16 @@ function CalculateForm({ goalData }) {
               <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1 capitalize ">
               {e == 'totalAssets' ? 'Total Assets': e}
               </div>
-              <div className="py-3 ">{newGoalData.yearOne.assets[e]}</div>
-              <div className="py-3">{newGoalData.yearTwo.assets[e]}</div>
-              <div className="py-3">{newGoalData.yearThree.assets[e]}</div>
-              <div className="py-3">{newGoalData.yearFour.assets[e]}</div>
-              <div className="py-3">{newGoalData.yearFive.assets[e]}</div>
-              <div className="py-3">{newGoalData.yearSix.assets[e]}</div>
-              <div className="py-3">{newGoalData.yearSeven.assets[e]}</div>
-              <div className="py-3">{newGoalData.yearEight.assets[e]}</div>
-              <div className="py-3">{newGoalData.yearNine.assets[e]}</div>
-              <div className="py-3">{newGoalData.yearTen.assets[e]}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearOne.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearTwo.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearThree.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearFour.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearFive.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearSix.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearSeven.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearEight.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearNine.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearTen.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
             </>
           ))
         ) : (
@@ -2928,9 +2942,14 @@ function CalculateForm({ goalData }) {
   );
 }
 
-function CalculateLiabilityForm({ goalData }) {
+function CalculateLiabilityForm({ goalData, currency}) {
   const newGoalData = { ...goalData };
-
+  var curSymbol = ""
+  if( currency == 'USD'){
+    curSymbol = '$'
+  }else{
+    curSymbol = '₱'
+  }
   return (
     <div className="overflow-x-auto w-25 lg:w-full">
       <div className="grid grid-cols-12 md:grid-cols-11 w-900 md:w-full box-div ">
@@ -2953,16 +2972,16 @@ function CalculateLiabilityForm({ goalData }) {
               <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1 capitalize ">
                 {e == 'totalLiabilities' ? 'Total Liabilities': e}
               </div>
-              <div className="py-3 ">{newGoalData.yearOne.liabilities[e]}</div>
-              <div className="py-3">{newGoalData.yearTwo.liabilities[e]}</div>
-              <div className="py-3">{newGoalData.yearThree.liabilities[e]}</div>
-              <div className="py-3">{newGoalData.yearFour.liabilities[e]}</div>
-              <div className="py-3">{newGoalData.yearFive.liabilities[e]}</div>
-              <div className="py-3">{newGoalData.yearSix.liabilities[e]}</div>
-              <div className="py-3">{newGoalData.yearSeven.liabilities[e]}</div>
-              <div className="py-3">{newGoalData.yearEight.liabilities[e]}</div>
-              <div className="py-3">{newGoalData.yearNine.liabilities[e]}</div>
-              <div className="py-3">{newGoalData.yearTen.liabilities[e]}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearOne.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearTwo.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearThree.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearFour.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearFive.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearSix.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearSeven.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearEight.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearNine.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+              <div className="py-3">{curSymbol + newGoalData.yearTen.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
             </>
           ))
         ) : (
@@ -2976,7 +2995,7 @@ function CalculateLiabilityForm({ goalData }) {
 function AnnualForm({ goalData, currency }) {
   const newGoalData = { ...goalData };
   var symbol = "";
-  console.log(currency);
+
   if(currency == 'USD'){
     symbol = 'USD '
   }else{
@@ -3132,7 +3151,7 @@ function AnnualForm({ goalData, currency }) {
           <div className="w-full grid ">
             <div className="flex flex-col md:w-full">
               <div className="text-center shadow-gray-400 rounded-lg shadow-md ">
-                <CalculateForm goalData={goalData}></CalculateForm>
+                <CalculateForm goalData={goalData} currency={currency}></CalculateForm>
               </div>
             </div>
           </div>
@@ -3172,6 +3191,7 @@ function AnnualForm({ goalData, currency }) {
               <div className="text-center shadow-gray-400 rounded-lg shadow-md">
                 <CalculateLiabilityForm
                   goalData={goalData}
+                  currency={currency}
                 ></CalculateLiabilityForm>
               </div>
             </div>
