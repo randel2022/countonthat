@@ -1899,7 +1899,7 @@ function PersonalForm({ setData }) {
         </button>
       </div>
 
-      <div className="grid grid-cols-3 gap-4 w-8/12">
+      <div className="grid grid-cols-3 gap-4 md:w-11/12 lg:w-8/12">
         <div className="col-span-1"></div>
         <div className="col-span-1 flex justify-center">
           <a href="/calculate" className="flex justify-center text-center items-center  gap-2">
@@ -2136,7 +2136,7 @@ function AssetsForm({ currency, setData, goBack }) {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4 w-8/12">
+      <div className="grid grid-cols-3 gap-4 md:w-11/12 lg:w-8/12">
         <div className="col-span-1"></div>
         <div className="col-span-1 flex justify-center">
           <a href="/calculate" className="flex justify-center text-center items-center  gap-2">
@@ -2215,11 +2215,6 @@ function LiabilitiesForm({ currency, setData, goBack }) {
       };
       /// and push on temporary array
       tempLiabilitiesErrorsArray.push(tempLiabilitiesErrors);
-      localStorage.removeItem('personalDetails');
-      localStorage.removeItem('goals');
-      localStorage.removeItem('dependents');
-      localStorage.removeItem('assets');
-      localStorage.removeItem('liabilities');
     }
     tempLiabilitiesErrorsObject = {
       liabilities: tempLiabilitiesErrorsArray,
@@ -2387,7 +2382,7 @@ function LiabilitiesForm({ currency, setData, goBack }) {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4 w-8/12">
+      <div className="grid grid-cols-3 gap-4 md:w-11/12 lg:w-8/12">
         <div className="col-span-1"></div>
         <div className="col-span-1 flex justify-center">
           <a href="/calculate" className="flex justify-center text-center items-center  gap-2">
@@ -3198,13 +3193,63 @@ function AnnualForm({ goalData, currency }) {
           </div>
         </div>
       </div>
+
+      <input type="checkbox" id="bts" className="modal-toggle" />
+          <div className="modal">
+            <div className="modal-box relative">
+              <label
+                htmlFor="bts"
+                className="btn btn-sm btn-circle absolute right-2 top-2"
+              >
+                ✕
+              </label>
+              <h1 className="text-lg font-bold text-center">Do you want to erase all the input?</h1>
+              <p className="py-4 text-center">
+                Choosing yes will erase all the input.
+              </p>
+              <div className="flex justify-center">
+              <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    localStorage.removeItem('personalDetails');
+                    localStorage.removeItem('goals');
+                    localStorage.removeItem('dependents');
+                    localStorage.removeItem('liabilities');
+                    localStorage.removeItem('assets');
+                    window.location.href = "/calculate";
+                  }}
+                  className="flex w-1/2 gap-10 items-center justify-center"
+                >
+                  <input
+                    type="submit"
+                    className="py-3 w-10/12 rounded-md bg-[#A0161B] text-white cursor-pointer"
+                    value="Yes"
+                  />
+                </form>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    window.location.href = "/calculate";
+                  }}
+                  className="flex w-1/2 gap-10 items-center justify-center"
+                >
+                  <input
+                    type="submit"
+                    className="py-3 w-10/12 rounded-md bg-[#A0161B] text-white cursor-pointer"
+                    value="No"
+                  />
+                </form>
+                </div>
+            </div>
+          </div>
+
       <div className="grid grid-cols-3 gap-4 w-10/12">
         <div className="col-span-1"></div>
         <div className="col-span-1 flex justify-center">
-          <a href="/calculate" className="flex justify-center text-center items-center  gap-2">
+          <label htmlFor="bts" className="flex justify-center text-center items-center  gap-2">
             <img src={refresh} className="w-4 h-4"></img>
             <p className="text-[#8A8A8E]">Back to start</p>
-          </a>
+          </label>
         </div>
         <div className="col-span-1 flex justify-content-end">
           <input
