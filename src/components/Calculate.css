@@ -1,16 +1,36 @@
-.step-dark-red:before,
-.step-dark-red:after {
+.step-dark-red:before {
+  background-color: #a0161b !important;
+  color: #fff ;
+}
+
+.step-dark-red:after{
+  border: 1px solid #a0161b !important;
+  background-color: #E5E5E5 !important;
+  color: #a0161b !important;
+}
+
+.steps .step::after {
+  border: 1px solid #E5E5E5;
+  background-color: #fff;
+  color: #fff;
+
+  content: "•";
+  font-weight: bold !important;
+  font-size: large;
+}
+
+.steps .step::before {
+  border: 1px solid #E5E5E5;
+  background-color: #E5E5E5 ;
+  color: #a0161b ;
+}
+
+.step-success::after {
+  content: "✓" !important;
   background-color: #a0161b !important;
   color: #fff !important;
 }
 
-/* .steps .step:after {
-  border: 1px solid #a0161b !important;
-} */
-
-.step-success::after {
-  content: "✓" !important;
-}
 
 .CircularProgressbar .CircularProgressbar-path {
   stroke: #d35055;
@@ -213,18 +233,6 @@ select {
   left: 95% !important;
 }
 
-.step-dark-red:after {
-  content: "•" !important;
-  font-weight: bold !important;
-}
-
-/* .steps .step:after {
-  border: 1px solid white !important;
-} */
-
-.step-dark-red:nth-last-child(2) {
-  content: "" !important;
-}
 
 .modal-open,
 .modal:target,
