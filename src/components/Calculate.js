@@ -7,6 +7,7 @@ import dollar from "../assets/dollar.png";
 import jsPDF from 'jspdf';
 import logo from '../assets/logo.png';
 import logo2 from '../assets/logo2.png';
+import html2canvas from "html2canvas";
 
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { IconButton, Stack, TextField } from "@mui/material";
@@ -150,7 +151,7 @@ function CalculateComponent() {
   const [selectedTab, setselectedTab] = useState(0);
   const [goalData, setgoalData] = useState({});
   const [isLoading, setisLoading] = useState(false);
-
+  const [pdfChart, setPdfChart] = useState();
   const goalDataRef = useRef();
   const calculateService = new Calculate();
 
@@ -283,13 +284,15 @@ function CalculateComponent() {
             nextTab={() => {
               setselectedTab(selectedTab + 1);
             }}
+            // personalDetails = {personalDetails}
             currency={goalData?.names?.currency}
             data={backendData?.data}
+            setPdfChart={setPdfChart}
           ></Output>
         )}
       </div>
       <div className={`${selectedTab === 4 ? "flex w-full" : "hidden"}`}>
-        <AnnualForm goalData={backendData?.data} currency={goalData?.names?.currency}></AnnualForm>
+        <AnnualForm goalData={backendData?.data} currency={goalData?.names?.currency} personalDetails={goalData?.names} pdfChart={pdfChart}></AnnualForm>
       </div>
     </div>
   );
@@ -1536,7 +1539,6 @@ function PersonalForm({ setData }) {
         email: checkEmail(personalDetails.email),
         contact: checkString(personalDetails.contact, "Contact is required"),
       };
-
       /// validating and setting error message for dependents array
       const tempDepsErrorsArray = [];
       /// loop first
@@ -1635,6 +1637,7 @@ function PersonalForm({ setData }) {
     contact: "",
     currency: "USD",
   });
+
   
   const initialGoalState = {
     amount: 0.0,
@@ -2669,7 +2672,7 @@ function OtherForm({ currency, setData, goBack }) {
   );
 }
 
-function Output({ data, currency, nextTab, goBack }) {
+function Output({ data, currency, nextTab, goBack, setPdfChart}) {
   const {
     annualNet,
     assets,
@@ -2680,13 +2683,29 @@ function Output({ data, currency, nextTab, goBack }) {
     monthlyRevenue,
     netWorth,
   } = data?.initial ? data.initial : {};
+  console.log(data);
+
+  const handleCapture = () => {
+    html2canvas(canvasRef.current).then(canvas => {
+      // Do something with the captured image
+      setPdfChart(canvas.toDataURL());
+    });
+    // const canvas = await html2canvas(canvasRef.current);
+    // const imgData = canvas.toDataURL("image/png");
+    // const pdf = new jsPDF();
+    // pdf.addImage(imgData, "PNG", 10, 10);
+    // pdf.save("progress.pdf");
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     nextTab();
+    console.log("b4 hc")
+    handleCapture();
   };
-
+  const canvasRef = useRef(null);
   const percentage = 60;
+  console.log(data)
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
@@ -2883,7 +2902,93 @@ function Output({ data, currency, nextTab, goBack }) {
           </a>
         </div>
       </div>
+      
+      <div className="flex flex-col gap-5 w-3/5 border-b-g" ref={canvasRef} style={{ width: "785px", height: "400px", position: 'absolute', left: '-99999px' }}>
+        <div className="flex flex-row gap-10">
+          <div className="px-0 flex flex-col w-2/5 shadow-gray-400 px-7 py-7 rounded-lg shadow-md justify-center" style={{ height: "400px" }}>
+            <div className="flex justify-between py-0 ">
+              <h2 className="font-bold text-xl my-0">
+                Realistically Towards Dream
+              </h2>
+            </div>
+
+            <div className="p-10">
+              <CircularProgressbar value={percentage} text={`${percentage}%`} />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-7 w-3/5" style={{height: "400px" }}>
+            <div className="flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
+              <div className="flex flex-row gap-2 item-center justify-between">
+                <p className="font-bold my-0">Financially Towards Dream {financiallyTowardsDream}%</p>
+              </div>
+
+              <div>
+                <ProgressBar
+                  completed={financiallyTowardsDream}
+                  bgColor={"#D35055"}
+                  baseBgColor={"#F9E8E8"}
+                  isLabelVisible={false}
+                  borderRadius={10}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-4 shadow-gray-400 px-7 py-7 rounded-lg shadow-md h-full" style={{ height: "350px" }}>
+              <div className="flex justify-between items-center">
+                <p className="font-bold my-0">Total Calculation</p>
+              </div>
+              <input
+                type="checkbox"
+                id="calculation"
+                className="modal-toggle"
+              />
+              <div className="flex justify-between flex-row gap-2 bg-[#F9E8E8] px-3 py-3 rounded-md" style={{ height: "40px" }}>
+                <p>Total Net worth:</p>
+                <p className="py-0 my-0">
+                  {currency}
+                  &nbsp;
+                  {netWorth?.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </p>
+              </div>
+
+              <div className="flex justify-between flex-row gap-2 bg-[#F9E8E8] px-3 py-3 rounded-md" style={{ height: "40px" }}>
+                <p>Total Assets:</p>
+                <p className="py-0 my-0">
+                  {currency}
+                  &nbsp;
+                  {assets?.totalAssets
+                    ?.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </p>
+              </div>
+
+              <div className="flex justify-between flex-row gap-2 bg-[#F9E8E8] px-3 py-3 rounded-md" style={{ height: "40px" }}>
+                <p>Total Liabilities:</p>
+                <p className="py-0 my-0r">
+                  {currency}
+                  &nbsp;
+                  {liabilities?.totalLiabilities
+                    ?.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </p>
+              </div>
+
+              <div className="flex justify-between flex-row gap-2 bg-[#F9E8E8] px-3 py-3 rounded-md" style={{ height: "40px" }}>
+                <p>Total Expenses:</p>
+                <p className="py-0 my-0">
+                  {currency}
+                  &nbsp;
+                  {monthlyExpense
+                    ?.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+        </div>
+      </div> 
     </div>
+    
   );
 }
 
@@ -2987,27 +3092,27 @@ function CalculateLiabilityForm({ goalData, currency}) {
   );
 }
 
-function AnnualForm({ goalData, currency }) {
+function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
   const newGoalData = { ...goalData };
+  const personalData = {...personalDetails};
+  const img = pdfChart;
+  console.log(img);
   var symbol = "";
-
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [contact, setConact] = useState('');
+  const [chart, setChart] = useState();
   if(currency == 'USD'){
     symbol = 'USD '
   }else{
     symbol = 'PHP '
   }
-
-
-  console.log(symbol)
   jsPDF.autoTableSetDefaults({
     headStyles: { 
       fillColor: '#fff',
       textColor: '#000' },
   })
-
   useEffect(() => {
-    console.log("mount test");
-    console.log(newGoalData);
     if(newGoalData?.initial?.liabilities){
       Object.keys(newGoalData?.initial?.liabilities).map((e) => (
         liabilities[j]=(e == 'totalLiabilities' ? 'Total Liabilities' :e.charAt(0).toUpperCase() + e.slice(1)),
@@ -3042,16 +3147,22 @@ function AnnualForm({ goalData, currency }) {
       i=1;
       j=1;
   },[newGoalData])
-  
+
+
+
   useEffect(() => {
     const downloadBtn = document.querySelector('.download-btn');
-    
+    setName(personalData.lastname + ", " + personalData.firstname);
+    setEmail(personalData.email);
+    setConact(personalData.contact);
+
     function handleDownloadClick() {
       const pdfDoc = new jsPDF({
         orientation: 'portrait',
         unit: 'px',
         format: [595, 842]
       });
+
       const tableData2 = [
         liabilities,
         year1liability,
@@ -3078,28 +3189,52 @@ function AnnualForm({ goalData, currency }) {
         year9asset,
         year10asset
       ];
-      pdfDoc.text('Assets', 29, 123 )
+      pdfDoc.addImage(logo, 'PNG', 34, 34, 189, 37.77);
+      pdfDoc.addImage(logo2, 'PNG', 414, 24, 149.59, 48);
+      pdfDoc.addImage(img, "PNG", 60, 220, 471, 240);
+      pdfDoc.setFontSize(18);
+      pdfDoc.text('Graph', 32, 205);
+
+      pdfDoc.setFontSize(12);
+      pdfDoc.text('Name: ' + name, 40, 101);
+      pdfDoc.text('Email: ' + email, 40, 116);
+      pdfDoc.text('Contact no: ' + contact, 40, 131);
+      pdfDoc.setFontSize(15);
+      pdfDoc.text('Total Asset Calculation', 29, 180);
+      pdfDoc.text('Calculations', 29, 488);
       pdfDoc.autoTable({
-        startY: 148,
+        startY: 493,
         head: [tableData[0]],
         body: tableData.slice(1),
         tableWidth: 533,
         columnWidth: 106,
-        styles: { cellPadding: 6, fontSize: 10, align: 'center', halign: 'center', rowPageHeight: 31, },
+        styles: { cellPadding: 6, fontSize: 13.33, align: 'center', halign: 'center', rowPageHeight: 31, },
         
 
       });
-      pdfDoc.text('Liabilities', 29, 468)
+
+      pdfDoc.addPage();
+      pdfDoc.addImage(logo, 'PNG', 34, 34, 189, 37.77);
+      pdfDoc.addImage(logo2, 'PNG', 414, 24, 149.59, 48);
+      pdfDoc.addImage(img, "PNG", 60, 220, 471, 240);
+      pdfDoc.setFontSize(18);
+      pdfDoc.text('Graph', 32, 205);
+
+      pdfDoc.setFontSize(12);
+      pdfDoc.text('Name: ' + name, 40, 101);
+      pdfDoc.text('Email: ' + email, 40, 116);
+      pdfDoc.text('Contact no: ' + contact, 40, 131);
+      pdfDoc.setFontSize(15);
+      pdfDoc.text('Total Liabilities Calculation', 29, 180);
+      pdfDoc.text('Calculations', 29, 488);
       pdfDoc.autoTable({
         startY: 493,
         head: [tableData2[0]],
         body: tableData2.slice(1),
         columnWidth: 106,
-        styles: { cellPadding: 6, fontSize: 10, align: 'center', halign: 'center', rowPageHeight: 31, },
-      }
-      );
-      pdfDoc.addImage(logo, 'PNG', 34, 24, 189, 37.77);
-      pdfDoc.addImage(logo2, 'PNG', 414, 24, 149.59, 48);
+        styles: { cellPadding: 6, fontSize: 13.33, align: 'center', halign: 'center', rowPageHeight: 31, },
+      });
+
       pdfDoc.save('example.pdf');
     }
 
@@ -3108,7 +3243,7 @@ function AnnualForm({ goalData, currency }) {
     return () => {
       downloadBtn.removeEventListener('click', handleDownloadClick);
     }
-  }, []);
+  }, [img, personalData]);
 
 
   return (
