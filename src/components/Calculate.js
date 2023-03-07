@@ -2903,7 +2903,7 @@ function Output({ data, currency, nextTab, goBack, setPdfChart}) {
         </div>
       </div>
       
-      <div className="flex flex-col gap-5 w-3/5 border-b-g" ref={canvasRef} style={{ width: "785px", height: "400px", position: 'absolute', left: '-99999px' }}>
+      <div className="flex flex-col gap-5 w-3/5" ref={canvasRef} style={{ width: "785px", height: "400px", position: 'absolute', left: '-99999px' }}>
         <div className="flex flex-row gap-10">
           <div className="px-0 flex flex-col w-2/5 shadow-gray-400 px-7 py-7 rounded-lg shadow-md justify-center" style={{ height: "400px" }}>
             <div className="flex justify-between py-0 ">
@@ -3191,19 +3191,23 @@ function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
       ];
       pdfDoc.addImage(logo, 'PNG', 34, 34, 189, 37.77);
       pdfDoc.addImage(logo2, 'PNG', 414, 24, 149.59, 48);
-      pdfDoc.addImage(img, "PNG", 60, 220, 471, 240);
-      pdfDoc.setFontSize(18);
-      pdfDoc.text('Graph', 32, 205);
+      pdfDoc.addImage(img, "PNG", 60, 493, 471, 240);
+    
 
-      pdfDoc.setFontSize(12);
-      pdfDoc.text('Name: ' + name, 40, 101);
-      pdfDoc.text('Email: ' + email, 40, 116);
-      pdfDoc.text('Contact no: ' + contact, 40, 131);
-      pdfDoc.setFontSize(15);
-      pdfDoc.text('Total Asset Calculation', 29, 180);
-      pdfDoc.text('Calculations', 29, 488);
+      pdfDoc.setFontSize(14);
+      pdfDoc.setFont('helvetica', 'bold');
+      pdfDoc.text('Name: ', 40, 101);
+      pdfDoc.text('Email Address: ', 40, 116);
+      pdfDoc.text('Contact No.: ', 40, 131);
+      pdfDoc.setFont('helvetica', 'normal');
+      pdfDoc.text(name, 75, 101);
+      pdfDoc.text(email, 120, 116);
+      pdfDoc.text(contact, 105, 131);
+      pdfDoc.setFontSize(14);
+      pdfDoc.setFont('helvetica', 'bold');
+      pdfDoc.text('Total Asset Calculation', 40, 180);
       pdfDoc.autoTable({
-        startY: 493,
+        startY: 188,
         head: [tableData[0]],
         body: tableData.slice(1),
         tableWidth: 533,
@@ -3212,21 +3216,9 @@ function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
         
 
       });
-
-      pdfDoc.addPage();
-      pdfDoc.addImage(logo, 'PNG', 34, 34, 189, 37.77);
-      pdfDoc.addImage(logo2, 'PNG', 414, 24, 149.59, 48);
-      pdfDoc.addImage(img, "PNG", 60, 220, 471, 240);
-      pdfDoc.setFontSize(18);
-      pdfDoc.text('Graph', 32, 205);
-
-      pdfDoc.setFontSize(12);
-      pdfDoc.text('Name: ' + name, 40, 101);
-      pdfDoc.text('Email: ' + email, 40, 116);
-      pdfDoc.text('Contact no: ' + contact, 40, 131);
-      pdfDoc.setFontSize(15);
-      pdfDoc.text('Total Liabilities Calculation', 29, 180);
-      pdfDoc.text('Calculations', 29, 488);
+      
+      pdfDoc.setFont('helvetica', 'bold');
+      pdfDoc.text('Total Liabilities Calculation', 40, 485);
       pdfDoc.autoTable({
         startY: 493,
         head: [tableData2[0]],
@@ -3235,6 +3227,14 @@ function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
         styles: { cellPadding: 6, fontSize: 13.33, align: 'center', halign: 'center', rowPageHeight: 31, },
       });
 
+      pdfDoc.addPage();
+      pdfDoc.addImage(logo, 'PNG', 34, 34, 189, 37.77);
+      pdfDoc.addImage(logo2, 'PNG', 414, 24, 149.59, 48);
+      pdfDoc.addImage(img, "PNG", 60, 121, 471, 240);
+      pdfDoc.setFontSize(14);
+      pdfDoc.setFont('helvetica', 'bold');
+      pdfDoc.text('Graphical Representation', 45, 101);
+      pdfDoc.setFontSize(12);
       pdfDoc.save('example.pdf');
     }
 
