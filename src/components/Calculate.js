@@ -61,6 +61,7 @@ var assetsdata = [
   { full_name: "Home" },
   { full_name: "Investments" },
   { full_name: "Business Value" },
+  { full_name: "Cash"}
 ];
 
 var liabilitiesdata = [
@@ -95,7 +96,18 @@ var assets = [''];
   var year10liability=['10th Year'];
   var j = 1;
 
-
+  var misc = [''];
+  var year1Misc=['1st Year'];
+  var year2Misc=['2nd Year'];
+  var year3Misc=['3rd Year'];
+  var year4Misc=['4th Year'];
+  var year5Misc=['5th Year'];
+  var year6Misc=['6th Year'];
+  var year7Misc=['7th Year'];
+  var year8Misc=['8th Year'];
+  var year9Misc=['9th Year'];
+  var year10Misc=['10th Year'];
+  var k = 1;
 
 
 
@@ -617,7 +629,8 @@ const InputGoals = ({
       setCurSymbol('₱')
     }
   },[currency])
-  console.log(currency);
+
+    
   
   return (
     <>
@@ -698,14 +711,19 @@ const InputGoals = ({
               </div>
               <input
                 name="amount"
-                type="number"
                 className="input input-bordered w-full rounded-l-none border-slate-400 focus:outline-none"
                 value={item.amount}
                 onChange={(e) => onChangeInputValue("amount", e.target.value)}
-                onKeyDown={(e) =>
-                  ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
-                }
+                onKeyDown={(evt) =>  (evt.key.match(/^[0-9.]$/) || evt.key === 'Backspace' || evt.key === 'Tab') || evt.preventDefault()}
                 min={0}
+                onBlur={(e) => {
+                  const value = parseFloat(e.target.value.replace(/,/g, "")).toFixed(2);
+                  e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,");
+                }}
+                onFocus={(e) => {
+                  const value = e.target.value.replace(/,/g, "");
+                  e.target.value = value;
+                }}
               />
               {errors?.amount && (
                 <span className="text-red-600 text-sm absolute top-px w-full required">
@@ -969,6 +987,9 @@ const InputAssets = ({
                   <option value="Business Value" className="capitalize">
                     Business Value
                   </option>
+                  <option value="Cash" className="capitalize">
+                    Cash
+                  </option>
                   <option value="" className="capitalize">
                     Customize...
                   </option>
@@ -1037,18 +1058,24 @@ const InputAssets = ({
                 </div>
                 <input
                   name="amount"
-                  type="number"
                   className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
                   onChange={(e) =>
                     onChangeInputValue(
                       "amount",
-                      e.target.value.replace(/[^0-9]/g, "")
+                      e.target.value.replace(/[^0-9.]/g, "")
                     )
                   }
-                  onKeyDown={(e) =>
-                    ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
-                  }
+                  onKeyDown={(evt) =>  (evt.key.match(/^[0-9.]$/) || evt.key === 'Backspace' || evt.key === 'Tab') || evt.preventDefault()}
+                  min={0}
+                  onBlur={(e) => {
+                    const value = parseFloat(e.target.value).toFixed(2);
+                    e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
+                  }}
+                  onFocus={(e) => {
+                    const value = e.target.value.replace(/,/g, "");
+                    e.target.value = value;
+                  }}
                 />
 
                 {isDeletedButtonVisible && (
@@ -1227,7 +1254,6 @@ const InputLiabilities = ({
                 </div>
                 <input
                   name="amount"
-                  type="number"
                   className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
                   value={item.amount}
                   onChange={(e) =>
@@ -1236,9 +1262,16 @@ const InputLiabilities = ({
                       e.target.value.replace(/[^0-9]/g, "")
                     )
                   }
-                  onKeyDown={(e) =>
-                    ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
-                  }
+                  onKeyDown={(evt) =>  (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab' || evt.key === 'Tab') || evt.preventDefault()}
+                  min={0}
+                  onBlur={(e) => {
+                    const value = parseFloat(e.target.value).toFixed(2);
+                    e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
+                  }}
+                  onFocus={(e) => {
+                    const value = e.target.value.replace(/,/g, "");
+                    e.target.value = value;
+                  }}
                 />
 
                 {isDeletedButtonVisible && (
@@ -1295,25 +1328,33 @@ const InputExp = ({ item, onChangeValues, currency, errors }) => {
             <div className="flex flex-col lg:flex-row w-full gap-5 md:gap-3 lg:gap-10">
 
               <div className="w-full lg:w-1/2">
-                <label>Monthly Expenses</label>
+                <label style={{color: "white"}}>Monthly Expenses</label>
                 <div className="flex items-center border-slate-400 relative">
                   <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
                     {currency}
                   </div>
                   <input
                     name="amount"
-                    type="number"
                     className="input w-full rounded-l-none border-slate-400"
-                    value={item.amount}
+                    value={
+                      item.amount
+                    }
                     onChange={(e) =>
                       onChangeInputValue(
                         "amount",
                         e.target.value.replace(/[^0-9]/g, "")
                       )
                     }
-                    onKeyDown={(e) =>
-                      ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
-                    }
+                    onKeyDown={(evt) =>  (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab' || evt.key === '.') || evt.preventDefault()}
+                    min={0}
+                    onBlur={(e) => {
+                      const value = parseFloat(e.target.value).toFixed(2);
+                      e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
+                    }}
+                   onFocus={(e) => {
+                      const value = e.target.value.replace(/,/g, "");
+                      e.target.value = value;
+                    }}
                   />
 
                   <span className="text-red-600 text-sm absolute w-full required top-[3px]">
@@ -1369,14 +1410,13 @@ const InputRev = ({ item, onChangeValues, currency, errors }) => {
             <div className="flex flex-col lg:flex-row w-full gap-5 md:gap-3 lg:gap-10">
               
               <div className="w-full lg:w-1/2 relative">
-                <label>Monthly Revenue</label>
+                <label style={{color: "white"}}>l</label>
                 <div className="flex items-center border-slate-400">
                   <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
                     {currency}
                   </div>
                   <input
                     name="amount"
-                    type="number"
                     className="input w-full rounded-l-none border-slate-400"
                     value={item.amount}
                     onChange={(e) =>
@@ -1385,9 +1425,16 @@ const InputRev = ({ item, onChangeValues, currency, errors }) => {
                         e.target.value.replace(/[^0-9]/g, "")
                       )
                     }
-                    onKeyDown={(e) =>
-                      ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
-                    }
+                    onKeyDown={(evt) =>  (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab' || evt.key === 'Tab') || evt.preventDefault()}
+                    min={0}
+                    onBlur={(e) => {
+                      const value = parseFloat(e.target.value).toFixed(2);
+                      e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
+                    }}
+                    onFocus={(e) => {
+                      const value = e.target.value.replace(/,/g, "");
+                      e.target.value = value;
+                    }}
                   />
                 </div>
                 <span className="text-red-600 text-sm absolute w-full required top-[21px]">
@@ -1820,7 +1867,7 @@ function PersonalForm({ setData }) {
                   var goalsTemporary = [...goals];
                   goalsTemporary[index] = data;
                   setGoals(goalsTemporary);
-                  // set goals errors to empty
+                  
                   const tempGoalsErrorsArray = [];
                   goalsTemporary.map((e) =>
                     tempGoalsErrorsArray.push({
@@ -3096,12 +3143,12 @@ function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
   const newGoalData = { ...goalData };
   const personalData = {...personalDetails};
   const img = pdfChart;
-  console.log(img);
   var symbol = "";
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [contact, setConact] = useState('');
-  const [chart, setChart] = useState();
+  const [goalAchieve, setGoalAchieve] = useState('');
+  const currentYear = new Date().getFullYear();
   if(currency == 'USD'){
     symbol = 'USD '
   }else{
@@ -3113,6 +3160,91 @@ function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
       textColor: '#000' },
   })
   useEffect(() => {
+    if(newGoalData?.initial){
+      misc = ["", "Monthly Expenses", "Monthly Revenue", "Monthly Net", "Annual Net", "Net Worth"];
+      year1Misc = [
+        "1st Year",
+        symbol + newGoalData.yearOne.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearOne.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearOne.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearOne.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearOne.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      ];
+      year2Misc = [
+        "2nd Year",
+        symbol + newGoalData.yearTwo.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearTwo.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearTwo.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearTwo.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearTwo.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      ];
+      year3Misc = [
+        "3rd Year",
+        symbol + newGoalData.yearThree.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearThree.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearThree.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearThree.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearThree.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      ];
+      year4Misc = [
+        "4th Year",
+        symbol + newGoalData.yearFour.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearFour.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearFour.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearFour.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearFour.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      ];
+      year5Misc = [
+        "5th Year",
+        symbol + newGoalData.yearFive.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearFive.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearFive.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearFive.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearFive.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      ];
+      year6Misc = [
+        "6th Year",
+        symbol + newGoalData.yearSix.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearSix.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearSix.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearSix.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearSix.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      ];
+      year7Misc = [
+        "7th Year",
+        symbol + newGoalData.yearSeven.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearSeven.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearSeven.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearSeven.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearSeven.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      ];
+      year8Misc = [
+        "8th Year",
+        symbol + newGoalData.yearEight.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearEight.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearEight.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearEight.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearEight.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      ];
+      year9Misc = [
+        "9th Year",
+        symbol + newGoalData.yearNine.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearNine.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearNine.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearNine.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearNine.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      ];
+      year10Misc = [
+        "10th Year",
+        symbol + newGoalData.yearTen.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearTen.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearTen.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearTen.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearTen.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      ];
+    }
+
+
     if(newGoalData?.initial?.liabilities){
       Object.keys(newGoalData?.initial?.liabilities).map((e) => (
         liabilities[j]=(e == 'totalLiabilities' ? 'Total Liabilities' :e.charAt(0).toUpperCase() + e.slice(1)),
@@ -3144,9 +3276,40 @@ function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
         year10asset[i]=symbol + newGoalData.yearTen.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         i++
       ))) 
+
+      if(newGoalData?.initial){
+        if(newGoalData.initial.financiallyTowardsDream >= 100){
+          setGoalAchieve("It appears that you could already achieve your dream!");
+        }else if(newGoalData.yearOne.financiallyTowardsDream >= 100){
+          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 1) + ".");
+        }else if(newGoalData.yearTwo.financiallyTowardsDream >= 100){
+          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 2) + ".");
+        }else if(newGoalData.yearThree.financiallyTowardsDream >= 100){
+          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 3) + ".");
+        }else if(newGoalData.yearFour.financiallyTowardsDream >= 100){
+          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 4) + ".");
+        }else if(newGoalData.yearFive.financiallyTowardsDream >= 100){
+          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 5) + ".");
+        }else if(newGoalData.yearSix.financiallyTowardsDream >= 100){
+          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 6) + ".");
+        }else if(newGoalData.yearSeven.financiallyTowardsDream >= 100){
+          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 7) + ".");
+        }else if(newGoalData.yearEight.financiallyTowardsDream >= 100){
+          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 8) + "." );
+        }else if(newGoalData.yearNine.financiallyTowardsDream >= 100){
+          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 9) + ".");
+        }else if(newGoalData.yearTen.financiallyTowardsDream >= 100){
+          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 10)  + ".");
+        }else{
+          setGoalAchieve("It appears that 10 years is not enough to achieve your dream.")
+        }
+      }
       i=1;
       j=1;
+
   },[newGoalData])
+
+  
 
 
 
@@ -3189,11 +3352,28 @@ function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
         year9asset,
         year10asset
       ];
+
+      const tableData3 = [
+        misc,
+        year1Misc,
+        year2Misc,
+        year3Misc,
+        year4Misc,
+        year5Misc,
+        year6Misc,
+        year7Misc,
+        year8Misc,
+        year9Misc,
+        year10Misc,
+      ];
+
       pdfDoc.addImage(logo, 'PNG', 34, 34, 189, 37.77);
       pdfDoc.addImage(logo2, 'PNG', 414, 24, 149.59, 48);
       pdfDoc.addImage(img, "PNG", 60, 493, 471, 240);
     
-
+      pdfDoc.setFontSize(15);
+      pdfDoc.setFont('helvetica', 'italic');
+      pdfDoc.text(goalAchieve, 40, 150);
       pdfDoc.setFontSize(14);
       pdfDoc.setFont('helvetica', 'bold');
       pdfDoc.text('Name: ', 40, 101);
@@ -3207,20 +3387,26 @@ function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
       pdfDoc.setFont('helvetica', 'bold');
       pdfDoc.text('Total Asset Calculation', 40, 180);
       pdfDoc.autoTable({
-        startY: 188,
+        startY: 208,
         head: [tableData[0]],
         body: tableData.slice(1),
         tableWidth: 533,
         columnWidth: 106,
-        styles: { cellPadding: 6, fontSize: 13.33, align: 'center', halign: 'center', rowPageHeight: 31, },
-        
-
+        styles: { cellPadding: 6, fontSize: 13.33, align: 'center', halign: 'center', rowPageHeight: 31, 
+        didParseCell: function(data) {
+          // Check if current cell is last cell in row
+          if (data.row.index === data.table.body.length - 1 && data.column.index === data.row.cells.length - 1) {
+            // Set font style to bold
+            data.cell.styles.fontStyle = 'bold';
+          }
+        }
+      },
       });
       
       pdfDoc.setFont('helvetica', 'bold');
       pdfDoc.text('Total Liabilities Calculation', 40, 485);
       pdfDoc.autoTable({
-        startY: 493,
+        startY: 513,
         head: [tableData2[0]],
         body: tableData2.slice(1),
         columnWidth: 106,
@@ -3230,11 +3416,17 @@ function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
       pdfDoc.addPage();
       pdfDoc.addImage(logo, 'PNG', 34, 34, 189, 37.77);
       pdfDoc.addImage(logo2, 'PNG', 414, 24, 149.59, 48);
-      pdfDoc.addImage(img, "PNG", 60, 121, 471, 240);
+      pdfDoc.addImage(img, "PNG", 60, 473, 471, 240);
       pdfDoc.setFontSize(14);
       pdfDoc.setFont('helvetica', 'bold');
-      pdfDoc.text('Graphical Representation', 45, 101);
-      pdfDoc.setFontSize(12);
+      pdfDoc.text('Graphical Representation', 45, 453);
+      pdfDoc.autoTable({
+        startY: 131,
+        head: [tableData3[0]],
+        body: tableData3.slice(1),
+        columnWidth: 106,
+        styles: { cellPadding: 6, fontSize: 13.33, align: 'center', halign: 'center', rowPageHeight: 31, },
+      });
       pdfDoc.save('example.pdf');
     }
 
