@@ -1324,11 +1324,10 @@ const InputExp = ({ item, onChangeValues, currency, errors }) => {
       <div className="flex flex-col justify-between w-full gap-4 bordertop ">
         <div className="flex flex-col  w-full gap-2 md:gap-5 lg:gap-10 items-center mt-10">
           <div className="flex flex-col w-full gap-2 pb-8 pr-0 md:pr-10">
-            <p className="font-bold my-0">Monthly Expenses</p>
             <div className="flex flex-col lg:flex-row w-full gap-5 md:gap-3 lg:gap-10">
 
               <div className="w-full lg:w-1/2">
-                <label style={{color: "white"}}>Monthly Expenses</label>
+                <label>Monthly Expenses</label>
                 <div className="flex items-center border-slate-400 relative">
                   <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
                     {currency}
@@ -1406,11 +1405,10 @@ const InputRev = ({ item, onChangeValues, currency, errors }) => {
       <div className="flex flex-col justify-between w-full gap-4 bordertop ">
         <div className="flex flex-col  w-full gap-2 md:gap-5 lg:gap-10 items-center mt-10">
           <div className="flex flex-col  w-full gap-2 pb-8 pr-0 md:pr-10">
-            <p className="font-bold my-0">Monthly Revenue</p>
             <div className="flex flex-col lg:flex-row w-full gap-5 md:gap-3 lg:gap-10">
               
               <div className="w-full lg:w-1/2 relative">
-                <label style={{color: "white"}}>l</label>
+                <label >Monthly Revenue</label>
                 <div className="flex items-center border-slate-400">
                   <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
                     {currency}
