@@ -585,20 +585,8 @@ const InputGoals = ({
   currency,
 }) => {
   const[editGoals, setEditGoals] = useState(true);
-  // const [inputValuesGoal, setInputValuesGoal] = useState([]);
 
-  // useEffect(() => {
-  //   const storedValueGoal = localStorage.getItem('inputValuesGoals');
-  //   if (storedValueGoal) {
-  //     setInputValuesGoal(JSON.parse(storedValueGoal));
-  //     onChangeValues(inputValuesGoal);
-  //     console.log(inputValuesGoal)
-  //   }
-  // }, []);
-  // console.log(inputValuesGoal)
   const onChangeInputValue = (key, value) => {
-    // setInputValuesGoal({ ...inputValuesGoal, [key]: value });
-    // localStorage.setItem('inputValuesGoals', JSON.stringify({ ...inputValuesGoal, [key]: value }));
     item[key] = value;
     onChangeValues(item);
   };
@@ -620,7 +608,8 @@ const InputGoals = ({
   };
 
   const[curSymbol, setCurSymbol]= useState();
-
+  var formatted = '' 
+  var amount = ''
 
   useEffect(() => {
     if(item.currency == 'USD'){
@@ -630,7 +619,13 @@ const InputGoals = ({
     }
   },[currency])
 
-    
+  useEffect(() => {
+    if(item.amount){
+      amount = parseFloat(amount)
+      formatted = (amount.toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, "$&,");
+    }
+  },[])
+
   
   return (
     <>
@@ -712,18 +707,21 @@ const InputGoals = ({
               <input
                 name="amount"
                 className="input input-bordered w-full rounded-l-none border-slate-400 focus:outline-none"
-                value={item.amount}
-                onChange={(e) => onChangeInputValue("amount", e.target.value)}
-                onKeyDown={(evt) =>  (evt.key.match(/^[0-9.]$/) || evt.key === 'Backspace' || evt.key === 'Tab') || evt.preventDefault()}
-                min={0}
-                onBlur={(e) => {
-                  const value = parseFloat(e.target.value.replace(/,/g, "")).toFixed(2);
-                  e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,");
+                defaultValue={(parseInt(item.amount).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, "$&,")}
+                onChange={(e) => {
+                  onChangeInputValue("amount", e.target.value)
                 }}
-                onFocus={(e) => {
-                  const value = e.target.value.replace(/,/g, "");
-                  e.target.value = value;
-                }}
+                
+                onKeyDown={(evt) => (/[0-9.]|\bBackspace\b|\bTab\b/.test(evt.key) || evt.preventDefault())}
+                  onBlur={(e) => {
+                    const value = parseFloat(e.target.value).toFixed(2);
+                    e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,");
+                  }}
+                  onFocus={(e) => {
+                    const value = e.target.value.replace(/,/g, "");
+                    e.target.value = value;
+                  }}
+                  
               />
               {errors?.amount && (
                 <span className="text-red-600 text-sm absolute top-px w-full required">
@@ -1056,10 +1054,32 @@ const InputAssets = ({
                 <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
                   <p className="text-center">{currency}</p>
                 </div>
+                {item.amount ?
                 <input
                   name="amount"
                   className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
-                  value={item.amount}
+                  defaultValue={(parseInt(item.amount).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, "$&,")}
+                  onChange={(e) =>
+                    onChangeInputValue(
+                      "amount",
+                      e.target.value.replace(/[^0-9.]/g, "")
+                    )
+                  }
+                  onKeyDown={(evt) =>  (evt.key.match(/^[0-9.]$/) || evt.key === 'Backspace' || evt.key === 'Tab') || evt.preventDefault()}
+                  min={0}
+                  onBlur={(e) => {
+                    const value = parseFloat(e.target.value).toFixed(2);
+                    e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
+                  }}
+                  onFocus={(e) => {
+                    const value = e.target.value.replace(/,/g, "");
+                    e.target.value = value;
+                  }}
+                /> :
+
+                <input
+                  name="amount"
+                  className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
                   onChange={(e) =>
                     onChangeInputValue(
                       "amount",
@@ -1077,6 +1097,7 @@ const InputAssets = ({
                     e.target.value = value;
                   }}
                 />
+                }
 
                 {isDeletedButtonVisible && (
                   <span
@@ -1252,10 +1273,11 @@ const InputLiabilities = ({
                 <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
                   <p className="text-center">{currency}</p>
                 </div>
+                {item.amount ?
                 <input
                   name="amount"
                   className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
-                  value={item.amount}
+                  defaultValue={(parseInt(item.amount).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, "$&,")}
                   onChange={(e) =>
                     onChangeInputValue(
                       "amount",
@@ -1272,7 +1294,27 @@ const InputLiabilities = ({
                     const value = e.target.value.replace(/,/g, "");
                     e.target.value = value;
                   }}
-                />
+                />:
+                <input
+                  name="amount"
+                  className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
+                  onChange={(e) =>
+                    onChangeInputValue(
+                      "amount",
+                      e.target.value.replace(/[^0-9]/g, "")
+                    )
+                  }
+                  onKeyDown={(evt) =>  (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab' || evt.key === 'Tab') || evt.preventDefault()}
+                  min={0}
+                  onBlur={(e) => {
+                    const value = parseFloat(e.target.value).toFixed(2);
+                    e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
+                  }}
+                  onFocus={(e) => {
+                    const value = e.target.value.replace(/,/g, "");
+                    e.target.value = value;
+                  }}
+                /> }
 
                 {isDeletedButtonVisible && (
                   <span
@@ -1332,12 +1374,11 @@ const InputExp = ({ item, onChangeValues, currency, errors }) => {
                   <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
                     {currency}
                   </div>
+                  {item.amount ?
                   <input
                     name="amount"
                     className="input w-full rounded-l-none border-slate-400"
-                    value={
-                      item.amount
-                    }
+                    defaultValue={(parseInt(item.amount).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, "$&,")}
                     onChange={(e) =>
                       onChangeInputValue(
                         "amount",
@@ -1354,7 +1395,27 @@ const InputExp = ({ item, onChangeValues, currency, errors }) => {
                       const value = e.target.value.replace(/,/g, "");
                       e.target.value = value;
                     }}
-                  />
+                  /> :
+                  <input
+                    name="amount"
+                    className="input w-full rounded-l-none border-slate-400"
+                    onChange={(e) =>
+                      onChangeInputValue(
+                        "amount",
+                        e.target.value.replace(/[^0-9]/g, "")
+                      )
+                    }
+                    onKeyDown={(evt) =>  (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab' || evt.key === '.') || evt.preventDefault()}
+                    min={0}
+                    onBlur={(e) => {
+                      const value = parseFloat(e.target.value).toFixed(2);
+                      e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
+                    }}
+                   onFocus={(e) => {
+                      const value = e.target.value.replace(/,/g, "");
+                      e.target.value = value;
+                    }}
+                  />}
 
                   <span className="text-red-600 text-sm absolute w-full required top-[3px]">
                     {errors?.amount}
@@ -1413,10 +1474,11 @@ const InputRev = ({ item, onChangeValues, currency, errors }) => {
                   <div className="flex justify-center rounded-r-none w-1/4 input input-bordered border-black items-center">
                     {currency}
                   </div>
+                  {item.amount ?
                   <input
                     name="amount"
                     className="input w-full rounded-l-none border-slate-400"
-                    value={item.amount}
+                    defaultValue={(parseInt(item.amount).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, "$&,")}
                     onChange={(e) =>
                       onChangeInputValue(
                         "amount",
@@ -1433,7 +1495,28 @@ const InputRev = ({ item, onChangeValues, currency, errors }) => {
                       const value = e.target.value.replace(/,/g, "");
                       e.target.value = value;
                     }}
-                  />
+                  /> :
+                  <input
+                  name="amount"
+                  className="input w-full rounded-l-none border-slate-400"
+                  onChange={(e) =>
+                    onChangeInputValue(
+                      "amount",
+                      e.target.value.replace(/[^0-9]/g, "")
+                    )
+                  }
+                  onKeyDown={(evt) =>  (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab' || evt.key === 'Tab') || evt.preventDefault()}
+                  min={0}
+                  onBlur={(e) => {
+                    const value = parseFloat(e.target.value).toFixed(2);
+                    e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
+                  }}
+                  onFocus={(e) => {
+                    const value = e.target.value.replace(/,/g, "");
+                    e.target.value = value;
+                  }}
+                />
+                  }
                 </div>
                 <span className="text-red-600 text-sm absolute w-full required top-[21px]">
                   {errors?.amount}
@@ -1756,10 +1839,6 @@ function PersonalForm({ setData }) {
       setDependents(JSON.parse(storedValueDependents))
     }
   },[])
-
-
- 
-  
 
   useEffect(() => {
     const resetPersonalbtn = document.querySelector('.resetPersonal-btn');
@@ -2098,7 +2177,7 @@ function AssetsForm({ currency, setData, goBack }) {
       setAssetsData(JSON.parse(storedValueAssets))
     }
   },[])
-
+  {console.log(assetsData)}
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3 ">
@@ -3367,7 +3446,6 @@ function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
 
       pdfDoc.addImage(logo, 'PNG', 34, 34, 189, 37.77);
       pdfDoc.addImage(logo2, 'PNG', 414, 24, 149.59, 48);
-      pdfDoc.addImage(img, "PNG", 60, 493, 471, 240);
     
       pdfDoc.setFontSize(15);
       pdfDoc.setFont('helvetica', 'italic');
@@ -3402,7 +3480,7 @@ function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
       });
       
       pdfDoc.setFont('helvetica', 'bold');
-      pdfDoc.text('Total Liabilities Calculation', 40, 485);
+      pdfDoc.text('Total Liabilities Calculation', 40, 495);
       pdfDoc.autoTable({
         startY: 513,
         head: [tableData2[0]],
@@ -3414,10 +3492,10 @@ function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
       pdfDoc.addPage();
       pdfDoc.addImage(logo, 'PNG', 34, 34, 189, 37.77);
       pdfDoc.addImage(logo2, 'PNG', 414, 24, 149.59, 48);
-      pdfDoc.addImage(img, "PNG", 60, 473, 471, 240);
+      pdfDoc.addImage(img, "PNG", 60, 510, 471, 240);
       pdfDoc.setFontSize(14);
       pdfDoc.setFont('helvetica', 'bold');
-      pdfDoc.text('Graphical Representation', 45, 453);
+      pdfDoc.text('Graphical Representation', 45, 490);
       pdfDoc.autoTable({
         startY: 131,
         head: [tableData3[0]],
@@ -3425,7 +3503,7 @@ function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
         columnWidth: 106,
         styles: { cellPadding: 6, fontSize: 13.33, align: 'center', halign: 'center', rowPageHeight: 31, },
       });
-      pdfDoc.save('example.pdf');
+      pdfDoc.save('reuslts_' + name + '.pdf');
     }
 
     downloadBtn.addEventListener('click', handleDownloadClick);
