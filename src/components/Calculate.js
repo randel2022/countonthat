@@ -28,10 +28,9 @@ import { IoIosArrowBack } from "react-icons/io";
 
 import { Dropdown } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
-
 import Flag from "react-world-flags";
-
 import Searchable from "react-searchable-dropdown";
+import { useNavigate } from "react-router-dom";
 
 import {
   Avatar,
@@ -50,6 +49,7 @@ import Calculate from "../services/calculate";
 import { ErrorText } from "./ErrorText";
 
 import 'jspdf-autotable';
+import GetFromDB from "./GetFromDB";
 
 var data = [
   { full_name: "Savings" },
@@ -61,7 +61,7 @@ var assetsdata = [
   { full_name: "Home" },
   { full_name: "Investments" },
   { full_name: "Business Value" },
-  { full_name: "Cash"}
+  { full_name: "Cash" }
 ];
 
 var liabilitiesdata = [
@@ -71,43 +71,43 @@ var liabilitiesdata = [
 ];
 
 var assets = [''];
-  var year1asset=['1st Year'];
-  var year2asset=['2nd Year'];
-  var year3asset=['3rd Year'];
-  var year4asset=['4th Year'];
-  var year5asset=['5th Year'];
-  var year6asset=['6th Year'];
-  var year7asset=['7th Year'];
-  var year8asset=['8th Year'];
-  var year9asset=['9th Year'];
-  var year10asset=['10th Year'];
-  var i = 1;
+var year1asset = ['1st Year'];
+var year2asset = ['2nd Year'];
+var year3asset = ['3rd Year'];
+var year4asset = ['4th Year'];
+var year5asset = ['5th Year'];
+var year6asset = ['6th Year'];
+var year7asset = ['7th Year'];
+var year8asset = ['8th Year'];
+var year9asset = ['9th Year'];
+var year10asset = ['10th Year'];
+var i = 1;
 
-  var liabilities = [''];
-  var year1liability=['1st Year'];
-  var year2liability=['2nd Year'];
-  var year3liability=['3rd Year'];
-  var year4liability=['4th Year'];
-  var year5liability=['5th Year'];
-  var year6liability=['6th Year'];
-  var year7liability=['7th Year'];
-  var year8liability=['8th Year'];
-  var year9liability=['9th Year'];
-  var year10liability=['10th Year'];
-  var j = 1;
+var liabilities = [''];
+var year1liability = ['1st Year'];
+var year2liability = ['2nd Year'];
+var year3liability = ['3rd Year'];
+var year4liability = ['4th Year'];
+var year5liability = ['5th Year'];
+var year6liability = ['6th Year'];
+var year7liability = ['7th Year'];
+var year8liability = ['8th Year'];
+var year9liability = ['9th Year'];
+var year10liability = ['10th Year'];
+var j = 1;
 
-  var misc = [''];
-  var year1Misc=['1st Year'];
-  var year2Misc=['2nd Year'];
-  var year3Misc=['3rd Year'];
-  var year4Misc=['4th Year'];
-  var year5Misc=['5th Year'];
-  var year6Misc=['6th Year'];
-  var year7Misc=['7th Year'];
-  var year8Misc=['8th Year'];
-  var year9Misc=['9th Year'];
-  var year10Misc=['10th Year'];
-  var k = 1;
+var misc = [''];
+var year1Misc = ['1st Year'];
+var year2Misc = ['2nd Year'];
+var year3Misc = ['3rd Year'];
+var year4Misc = ['4th Year'];
+var year5Misc = ['5th Year'];
+var year6Misc = ['6th Year'];
+var year7Misc = ['7th Year'];
+var year8Misc = ['8th Year'];
+var year9Misc = ['9th Year'];
+var year10Misc = ['10th Year'];
+var k = 1;
 
 
 
@@ -122,8 +122,8 @@ function checkIsEmptyArrayObjects(array) {
     .every((x) => x === true);
 }
 function checkString(value, requiredMsg) {
-  const newVal = value.trim();
-  if (newVal === "") {
+  const newVal = value ? value.trim() : null;
+  if (newVal === null || newVal === "") {
     return requiredMsg;
   } else {
     return "";
@@ -142,7 +142,7 @@ function checkAmount(amount, name) {
 }
 
 function checkAge(age) {
-  if (age === "") {
+  if (age === ("" || null)) {
     return "Age is Required";
   } else if (age <= 0) return "Age is must be greater than 0";
   else if (age > 100) return "Age is must be lesser than 100";
@@ -159,14 +159,19 @@ function checkEmail(email) {
   else return "Email not valid ";
 }
 
-function CalculateComponent() {
+function CalculateComponent({ token }) {
   const [selectedTab, setselectedTab] = useState(0);
   const [goalData, setgoalData] = useState({});
   const [isLoading, setisLoading] = useState(false);
   const [pdfChart, setPdfChart] = useState();
+  const [personalDetails, setPersonalDetails] = useState('')
+  const [goals, setGoals] = useState([])
+  const [assets, setAssets] = useState([])
+  const [revenue, setRevenue] = useState('');
+  const [expenses, setExpenses] = useState('');
+  const [liabilities, setLiabilities] = useState([]);
   const goalDataRef = useRef();
-  const calculateService = new Calculate();
-
+  const calculateService = new Calculate({ auth: token });
   const {
     data: backendData,
     status,
@@ -178,7 +183,7 @@ function CalculateComponent() {
       enabled: false,
     }
   );
-
+    const history = useNavigate()
   useEffect(() => {
     if (selectedTab === 3) {
       setisLoading(true);
@@ -193,9 +198,8 @@ function CalculateComponent() {
   const liStyle = (curIdx) => {
     var style = "";
     style = curIdx === selectedTab ? "step step-dark-red" : "step";
-    style = `${style} ${
-      curIdx < selectedTab ? "step-dark-red step-success" : ""
-    }`;
+    style = `${style} ${curIdx < selectedTab ? "step-dark-red step-success" : ""
+      }`;
     return style;
   };
 
@@ -214,6 +218,15 @@ function CalculateComponent() {
         <></>
       )}
       <div className={`${selectedTab === 0 ? "flex w-full" : "hidden"}`}>
+        <GetFromDB
+          token={token} 
+          setPersonalDetails={setPersonalDetails} 
+          setGoals={setGoals} 
+          setAssets={setAssets} 
+          setRevenue={setRevenue}
+          setExpenses={setExpenses}
+          setLiabilities={setLiabilities}
+          />
         <PersonalForm
           setData={(value) => {
             if (value.names && value.goalsData) {
@@ -222,6 +235,9 @@ function CalculateComponent() {
               setgoalData({ ...value });
             }
           }}
+          storedPersonalDetails={personalDetails}
+          storedGoals={goals}
+          token={token}
         ></PersonalForm>
       </div>
       <div className={`${selectedTab === 1 ? "flex  w-full" : "hidden"}`}>
@@ -239,6 +255,8 @@ function CalculateComponent() {
               }));
             }
           }}
+          storedAssets={assets}
+          storedRevenue={revenue}
         ></AssetsForm>
       </div>
       <div className={`${selectedTab === 2 ? "flex  w-full" : "hidden"}`}>
@@ -258,6 +276,8 @@ function CalculateComponent() {
               setselectedTab(selectedTab + 1);
             }
           }}
+          storedLiabilities={liabilities}
+          storedExpenses={expenses}
         ></LiabilitiesForm>
       </div>
       <div className={`${selectedTab === 3 ? "flex  w-full" : "hidden"}`}>
@@ -323,19 +343,7 @@ const InputNames = ({
   inputHandler,
   ref
 }) => {
-
-  // const [inputValuesPersonal, setInputValuesPersonal] = useState([]);
-
-  // useEffect(() => {
-  //   const storedValuePersonal = localStorage.getItem('inputValuesPersonal');
-  //   if (storedValuePersonal) {
-  //     setInputValuesPersonal(JSON.parse(storedValuePersonal));
-  //     onChangeValues(JSON.parse(storedValuePersonal));
-  //   }
-  // }, []);
   const onChangeInputValue = (key, value) => {
-    // setInputValuesPersonal({ ...inputValuesPersonal, [key]: value });
-    // localStorage.setItem('inputValuesPersonal', JSON.stringify({ ...inputValuesPersonal, [key]: value }));
     item[key] = value;
     onChangeValues(item);
   };
@@ -380,7 +388,7 @@ const InputNames = ({
               type="text"
               value={item.firstname}
               onChange={(e) => onChangeInputValue("firstname", e.target.value)}
-              
+
             />
             {errors.firstname && (
               <span className="text-red-600 text-sm absolute w-full required">
@@ -467,14 +475,14 @@ const InputNames = ({
               placeholder="Contact Number"
               name="contact"
               type="number"
-              onKeyDown={(evt) =>  (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab') || evt.preventDefault()}
+              onKeyDown={(evt) => (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab') || evt.preventDefault()}
               value={item.contact}
               onChange={(e) =>
                 onChangeInputValue(
-                "contact",
-                e.target.value.replace(/[^0-9]/g, "")
-              )
-            }
+                  "contact",
+                  e.target.value.replace(/[^0-9]/g, "")
+                )
+              }
             />
             {errors.contact && (
               <span className="text-red-600 absolute w-full required text-sm">
@@ -503,13 +511,13 @@ const InputNames = ({
                 <option value="usd" className="currency" style={{ display: "none", height: 0, padding: 0 }}>
                   USD
                 </option>
-                <option value="USD"  className="currency">
+                <option value="USD" className="currency">
                   USD
                 </option>
                 <option value="PHP" className="currency">
                   PHP
                 </option>
-                
+
               </select>
             </div>
           </div>
@@ -584,7 +592,7 @@ const InputGoals = ({
   errors,
   currency,
 }) => {
-  const[editGoals, setEditGoals] = useState(true);
+  const [editGoals, setEditGoals] = useState(true);
 
   const onChangeInputValue = (key, value) => {
     item[key] = value;
@@ -593,40 +601,40 @@ const InputGoals = ({
 
   const onSearch = (searchTerm) => {
     onChangeInputValue("goal", searchTerm);
-    if (searchTerm===""){
+    if (searchTerm === "") {
       setEditGoals(false)
     }
-    if(searchTerm==="luxury car"){
+    if (searchTerm === "luxury car") {
       setEditGoals(true)
     }
-    if(searchTerm==="house"){
+    if (searchTerm === "house") {
       setEditGoals(true)
     }
-    if(searchTerm==="savings"){
+    if (searchTerm === "savings") {
       setEditGoals(true)
     }
   };
 
-  const[curSymbol, setCurSymbol]= useState();
-  var formatted = '' 
+  const [curSymbol, setCurSymbol] = useState();
+  var formatted = ''
   var amount = ''
 
   useEffect(() => {
-    if(item.currency == 'USD'){
+    if (item.currency == 'USD') {
       setCurSymbol('$')
-    }else{
+    } else {
       setCurSymbol('₱')
     }
-  },[currency])
+  }, [currency])
 
   useEffect(() => {
-    if(item.amount){
+    if (item.amount) {
       amount = parseFloat(amount)
       formatted = (amount.toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, "$&,");
     }
-  },[])
+  }, [])
 
-  
+
   return (
     <>
       <div className="flex flex-col justify-between w-full gap-4">
@@ -637,11 +645,11 @@ const InputGoals = ({
               <div className="search-inner relative input input-bordered border-slate-400 px-0">
                 <input
                   type="text"
-                  readOnly = {editGoals}
+                  readOnly={editGoals}
                   value={item.goal}
                   onChange={(e) => onSearch(e.target.value)}
-                  className={editGoals ? "absolute w-3/4 h-full ml-4 md:ml-4 border-slate-400 focus:outline-none capitalize mr-4 md:mr-2 cursor-default":
-                  "absolute w-3/4 h-full ml-4 md:ml-4 border-slate-400 focus:outline-none capitalize mr-4 md:mr-2"}
+                  className={editGoals ? "absolute w-3/4 h-full ml-4 md:ml-4 border-slate-400 focus:outline-none capitalize mr-4 md:mr-2 cursor-default" :
+                    "absolute w-3/4 h-full ml-4 md:ml-4 border-slate-400 focus:outline-none capitalize mr-4 md:mr-2"}
                   placeholder="Goal"
                 />
 
@@ -697,13 +705,14 @@ const InputGoals = ({
               </div>
             </div>
           </div>
-          
+
           <div className="w-full md:w-[33%] lg:w-[32%] pr-0 md:pr-8">
             <label>Amount</label>
             <div className="flex items-center border-slate-400 relative">
               <div className="flex justify-center rounded-r-none w-1/3 md:w-1/4 input input-bordered border-black items-center ">
                 <p className="text-center">{currency}</p>
               </div>
+              { item.amount ? 
               <input
                 name="amount"
                 className="input input-bordered w-full rounded-l-none border-slate-400 focus:outline-none"
@@ -711,18 +720,33 @@ const InputGoals = ({
                 onChange={(e) => {
                   onChangeInputValue("amount", e.target.value)
                 }}
-                
+
                 onKeyDown={(evt) => (/[0-9.]|\bBackspace\b|\bTab\b/.test(evt.key) || evt.preventDefault())}
-                  onBlur={(e) => {
-                    const value = parseFloat(e.target.value).toFixed(2);
-                    e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,");
-                  }}
-                  onFocus={(e) => {
-                    const value = e.target.value.replace(/,/g, "");
-                    e.target.value = value;
-                  }}
-                  
-              />
+                onBlur={(e) => {
+                  const value = parseFloat(e.target.value).toFixed(2);
+                  e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,");
+                }}
+                onFocus={(e) => {
+                  const value = e.target.value.replace(/,/g, "");
+                  e.target.value = value;
+                }}
+              /> : <input
+              name="amount"
+              className="input input-bordered w-full rounded-l-none border-slate-400 focus:outline-none"
+              onChange={(e) => {
+                onChangeInputValue("amount", e.target.value)
+              }}
+
+              onKeyDown={(evt) => (/[0-9.]|\bBackspace\b|\bTab\b/.test(evt.key) || evt.preventDefault())}
+              onBlur={(e) => {
+                const value = parseFloat(e.target.value).toFixed(2);
+                e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,");
+              }}
+              onFocus={(e) => {
+                const value = e.target.value.replace(/,/g, "");
+                e.target.value = value;
+              }}
+            />}
               {errors?.amount && (
                 <span className="text-red-600 text-sm absolute top-px w-full required">
                   {errors?.amount}
@@ -739,7 +763,7 @@ const InputGoals = ({
               )}
             </div>
           </div>
-          
+
           {isDeletedButtonVisible && (
             <span
               className="cursor-pointer -mt-6 md:mt-5 hidden md:block absolute delbutton  ml-10"
@@ -749,9 +773,9 @@ const InputGoals = ({
             </span>
           )}
         </div>
-           
-       {isLast && 
-          
+
+        {isLast &&
+
           <div
             className="flex flex-col gap-3 md:flex-row items-start md:items-center justify-between cursor-pointer mt-2 "
             onClick={addNewGoal}
@@ -764,15 +788,15 @@ const InputGoals = ({
             <div className="flex ">
               <p className="text-sm ">
                 Total Goal Amount:
-                {(currency == 'USD'? '$' : '₱') + 
-                goalSum
-                  .toFixed(2)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                {(currency == 'USD' ? '$' : '₱') +
+                  goalSum
+                    .toFixed(2)
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
               </p>
             </div>
           </div>
-       }
+        }
       </div>
     </>
   );
@@ -924,7 +948,7 @@ const InputAssets = ({
   currency,
 }) => {
 
-  const[editAssets, setEditAssets] = useState(true) 
+  const [editAssets, setEditAssets] = useState(true)
   const onChangeInputValue = (key, value) => {
     item[key] = value;
     onChangeValues(item);
@@ -932,16 +956,16 @@ const InputAssets = ({
 
   const onSearch = (searchTerm) => {
     onChangeInputValue("asset", searchTerm);
-    if (searchTerm===""){
+    if (searchTerm === "") {
       setEditAssets(false)
     }
-    if(searchTerm==="home"){
+    if (searchTerm === "home") {
       setEditAssets(true)
     }
-    if(searchTerm==="investments"){
+    if (searchTerm === "investments") {
       setEditAssets(true)
     }
-    if(searchTerm==="Business Value"){
+    if (searchTerm === "Business Value") {
       setEditAssets(true)
     }
   };
@@ -957,12 +981,12 @@ const InputAssets = ({
               <div className="search-inner relative">
                 <input
                   type="text"
-                  readOnly = {editAssets}
+                  readOnly={editAssets}
                   value={item.asset}
                   onChange={(e) => onSearch(e.target.value)}
-                  className= {editAssets ?
-                  "absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none cursor-default" :
-                  "absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
+                  className={editAssets ?
+                    "absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none cursor-default" :
+                    "absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"
                   }
                   style={{ borderColor: "#8A8A8E" }}
                   placeholder="Asset"
@@ -1055,48 +1079,48 @@ const InputAssets = ({
                   <p className="text-center">{currency}</p>
                 </div>
                 {item.amount ?
-                <input
-                  name="amount"
-                  className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
-                  defaultValue={(parseInt(item.amount).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, "$&,")}
-                  onChange={(e) =>
-                    onChangeInputValue(
-                      "amount",
-                      e.target.value.replace(/[^0-9.]/g, "")
-                    )
-                  }
-                  onKeyDown={(evt) =>  (evt.key.match(/^[0-9.]$/) || evt.key === 'Backspace' || evt.key === 'Tab') || evt.preventDefault()}
-                  min={0}
-                  onBlur={(e) => {
-                    const value = parseFloat(e.target.value).toFixed(2);
-                    e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
-                  }}
-                  onFocus={(e) => {
-                    const value = e.target.value.replace(/,/g, "");
-                    e.target.value = value;
-                  }}
-                /> :
+                  <input
+                    name="amount"
+                    className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
+                    defaultValue={(parseInt(item.amount).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, "$&,")}
+                    onChange={(e) =>
+                      onChangeInputValue(
+                        "amount",
+                        e.target.value.replace(/[^0-9.]/g, "")
+                      )
+                    }
+                    onKeyDown={(evt) => (evt.key.match(/^[0-9.]$/) || evt.key === 'Backspace' || evt.key === 'Tab') || evt.preventDefault()}
+                    min={0}
+                    onBlur={(e) => {
+                      const value = parseFloat(e.target.value).toFixed(2);
+                      e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
+                    }}
+                    onFocus={(e) => {
+                      const value = e.target.value.replace(/,/g, "");
+                      e.target.value = value;
+                    }}
+                  /> :
 
-                <input
-                  name="amount"
-                  className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
-                  onChange={(e) =>
-                    onChangeInputValue(
-                      "amount",
-                      e.target.value.replace(/[^0-9.]/g, "")
-                    )
-                  }
-                  onKeyDown={(evt) =>  (evt.key.match(/^[0-9.]$/) || evt.key === 'Backspace' || evt.key === 'Tab') || evt.preventDefault()}
-                  min={0}
-                  onBlur={(e) => {
-                    const value = parseFloat(e.target.value).toFixed(2);
-                    e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
-                  }}
-                  onFocus={(e) => {
-                    const value = e.target.value.replace(/,/g, "");
-                    e.target.value = value;
-                  }}
-                />
+                  <input
+                    name="amount"
+                    className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
+                    onChange={(e) =>
+                      onChangeInputValue(
+                        "amount",
+                        e.target.value.replace(/[^0-9.]/g, "")
+                      )
+                    }
+                    onKeyDown={(evt) => (evt.key.match(/^[0-9.]$/) || evt.key === 'Backspace' || evt.key === 'Tab') || evt.preventDefault()}
+                    min={0}
+                    onBlur={(e) => {
+                      const value = parseFloat(e.target.value).toFixed(2);
+                      e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
+                    }}
+                    onFocus={(e) => {
+                      const value = e.target.value.replace(/,/g, "");
+                      e.target.value = value;
+                    }}
+                  />
                 }
 
                 {isDeletedButtonVisible && (
@@ -1148,7 +1172,7 @@ const InputLiabilities = ({
   errors,
   currency,
 }) => {
-  const[editLiabilities, setEditLiabiliities] = useState(true);
+  const [editLiabilities, setEditLiabiliities] = useState(true);
   const onChangeInputValue = (key, value) => {
     item[key] = value;
     onChangeValues(item);
@@ -1156,16 +1180,16 @@ const InputLiabilities = ({
 
   const onSearch = (searchTerm) => {
     onChangeInputValue("liability", searchTerm);
-    if (searchTerm===""){
+    if (searchTerm === "") {
       setEditLiabiliities(false)
     }
-    if(searchTerm==="mortgage"){
+    if (searchTerm === "mortgage") {
       setEditLiabiliities(true)
     }
-    if(searchTerm==="credit card"){
+    if (searchTerm === "credit card") {
       setEditLiabiliities(true)
     }
-    if(searchTerm==="Student Debt"){
+    if (searchTerm === "Student Debt") {
       setEditLiabiliities(true)
     }
   };
@@ -1184,8 +1208,8 @@ const InputLiabilities = ({
                   value={item.liability}
                   readOnly={editLiabilities}
                   onChange={(e) => onSearch(e.target.value)}
-                  className={ editLiabilities ? "absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none cursor-default":
-                  "absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"}
+                  className={editLiabilities ? "absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none cursor-default" :
+                    "absolute w-3/4 input input-bordered w-full border-slate-400 input-goal rounded-r-none focus:outline-none"}
                   placeholder="Liability"
                   style={{ borderColor: "#8A8A8E" }}
                 />
@@ -1274,47 +1298,47 @@ const InputLiabilities = ({
                   <p className="text-center">{currency}</p>
                 </div>
                 {item.amount ?
-                <input
-                  name="amount"
-                  className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
-                  defaultValue={(parseInt(item.amount).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, "$&,")}
-                  onChange={(e) =>
-                    onChangeInputValue(
-                      "amount",
-                      e.target.value.replace(/[^0-9]/g, "")
-                    )
-                  }
-                  onKeyDown={(evt) =>  (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab' || evt.key === 'Tab') || evt.preventDefault()}
-                  min={0}
-                  onBlur={(e) => {
-                    const value = parseFloat(e.target.value).toFixed(2);
-                    e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
-                  }}
-                  onFocus={(e) => {
-                    const value = e.target.value.replace(/,/g, "");
-                    e.target.value = value;
-                  }}
-                />:
-                <input
-                  name="amount"
-                  className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
-                  onChange={(e) =>
-                    onChangeInputValue(
-                      "amount",
-                      e.target.value.replace(/[^0-9]/g, "")
-                    )
-                  }
-                  onKeyDown={(evt) =>  (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab' || evt.key === 'Tab') || evt.preventDefault()}
-                  min={0}
-                  onBlur={(e) => {
-                    const value = parseFloat(e.target.value).toFixed(2);
-                    e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
-                  }}
-                  onFocus={(e) => {
-                    const value = e.target.value.replace(/,/g, "");
-                    e.target.value = value;
-                  }}
-                /> }
+                  <input
+                    name="amount"
+                    className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
+                    defaultValue={(parseInt(item.amount).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, "$&,")}
+                    onChange={(e) =>
+                      onChangeInputValue(
+                        "amount",
+                        e.target.value.replace(/[^0-9]/g, "")
+                      )
+                    }
+                    onKeyDown={(evt) => (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab' || evt.key === 'Tab') || evt.preventDefault()}
+                    min={0}
+                    onBlur={(e) => {
+                      const value = parseFloat(e.target.value).toFixed(2);
+                      e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
+                    }}
+                    onFocus={(e) => {
+                      const value = e.target.value.replace(/,/g, "");
+                      e.target.value = value;
+                    }}
+                  /> :
+                  <input
+                    name="amount"
+                    className="input input-bordered w-full md:w-3/4 rounded-l-none border-slate-400"
+                    onChange={(e) =>
+                      onChangeInputValue(
+                        "amount",
+                        e.target.value.replace(/[^0-9]/g, "")
+                      )
+                    }
+                    onKeyDown={(evt) => (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab' || evt.key === 'Tab') || evt.preventDefault()}
+                    min={0}
+                    onBlur={(e) => {
+                      const value = parseFloat(e.target.value).toFixed(2);
+                      e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
+                    }}
+                    onFocus={(e) => {
+                      const value = e.target.value.replace(/,/g, "");
+                      e.target.value = value;
+                    }}
+                  />}
 
                 {isDeletedButtonVisible && (
                   <span
@@ -1375,47 +1399,47 @@ const InputExp = ({ item, onChangeValues, currency, errors }) => {
                     {currency}
                   </div>
                   {item.amount ?
-                  <input
-                    name="amount"
-                    className="input w-full rounded-l-none border-slate-400"
-                    defaultValue={(parseInt(item.amount).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, "$&,")}
-                    onChange={(e) =>
-                      onChangeInputValue(
-                        "amount",
-                        e.target.value.replace(/[^0-9]/g, "")
-                      )
-                    }
-                    onKeyDown={(evt) =>  (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab' || evt.key === '.') || evt.preventDefault()}
-                    min={0}
-                    onBlur={(e) => {
-                      const value = parseFloat(e.target.value).toFixed(2);
-                      e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
-                    }}
-                   onFocus={(e) => {
-                      const value = e.target.value.replace(/,/g, "");
-                      e.target.value = value;
-                    }}
-                  /> :
-                  <input
-                    name="amount"
-                    className="input w-full rounded-l-none border-slate-400"
-                    onChange={(e) =>
-                      onChangeInputValue(
-                        "amount",
-                        e.target.value.replace(/[^0-9]/g, "")
-                      )
-                    }
-                    onKeyDown={(evt) =>  (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab' || evt.key === '.') || evt.preventDefault()}
-                    min={0}
-                    onBlur={(e) => {
-                      const value = parseFloat(e.target.value).toFixed(2);
-                      e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
-                    }}
-                   onFocus={(e) => {
-                      const value = e.target.value.replace(/,/g, "");
-                      e.target.value = value;
-                    }}
-                  />}
+                    <input
+                      name="amount"
+                      className="input w-full rounded-l-none border-slate-400"
+                      defaultValue={(parseInt(item.amount).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, "$&,")}
+                      onChange={(e) =>
+                        onChangeInputValue(
+                          "amount",
+                          e.target.value.replace(/[^0-9]/g, "")
+                        )
+                      }
+                      onKeyDown={(evt) => (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab' || evt.key === '.') || evt.preventDefault()}
+                      min={0}
+                      onBlur={(e) => {
+                        const value = parseFloat(e.target.value).toFixed(2);
+                        e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
+                      }}
+                      onFocus={(e) => {
+                        const value = e.target.value.replace(/,/g, "");
+                        e.target.value = value;
+                      }}
+                    /> :
+                    <input
+                      name="amount"
+                      className="input w-full rounded-l-none border-slate-400"
+                      onChange={(e) =>
+                        onChangeInputValue(
+                          "amount",
+                          e.target.value.replace(/[^0-9]/g, "")
+                        )
+                      }
+                      onKeyDown={(evt) => (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab' || evt.key === '.') || evt.preventDefault()}
+                      min={0}
+                      onBlur={(e) => {
+                        const value = parseFloat(e.target.value).toFixed(2);
+                        e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
+                      }}
+                      onFocus={(e) => {
+                        const value = e.target.value.replace(/,/g, "");
+                        e.target.value = value;
+                      }}
+                    />}
 
                   <span className="text-red-600 text-sm absolute w-full required top-[3px]">
                     {errors?.amount}
@@ -1467,7 +1491,7 @@ const InputRev = ({ item, onChangeValues, currency, errors }) => {
         <div className="flex flex-col  w-full gap-2 md:gap-5 lg:gap-10 items-center mt-10">
           <div className="flex flex-col  w-full gap-2 pb-8 pr-0 md:pr-10">
             <div className="flex flex-col lg:flex-row w-full gap-5 md:gap-3 lg:gap-10">
-              
+
               <div className="w-full lg:w-1/2 relative">
                 <label >Monthly Revenue</label>
                 <div className="flex items-center border-slate-400">
@@ -1475,47 +1499,47 @@ const InputRev = ({ item, onChangeValues, currency, errors }) => {
                     {currency}
                   </div>
                   {item.amount ?
-                  <input
-                    name="amount"
-                    className="input w-full rounded-l-none border-slate-400"
-                    defaultValue={(parseInt(item.amount).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, "$&,")}
-                    onChange={(e) =>
-                      onChangeInputValue(
-                        "amount",
-                        e.target.value.replace(/[^0-9]/g, "")
-                      )
-                    }
-                    onKeyDown={(evt) =>  (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab' || evt.key === 'Tab') || evt.preventDefault()}
-                    min={0}
-                    onBlur={(e) => {
-                      const value = parseFloat(e.target.value).toFixed(2);
-                      e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
-                    }}
-                    onFocus={(e) => {
-                      const value = e.target.value.replace(/,/g, "");
-                      e.target.value = value;
-                    }}
-                  /> :
-                  <input
-                  name="amount"
-                  className="input w-full rounded-l-none border-slate-400"
-                  onChange={(e) =>
-                    onChangeInputValue(
-                      "amount",
-                      e.target.value.replace(/[^0-9]/g, "")
-                    )
-                  }
-                  onKeyDown={(evt) =>  (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab' || evt.key === 'Tab') || evt.preventDefault()}
-                  min={0}
-                  onBlur={(e) => {
-                    const value = parseFloat(e.target.value).toFixed(2);
-                    e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
-                  }}
-                  onFocus={(e) => {
-                    const value = e.target.value.replace(/,/g, "");
-                    e.target.value = value;
-                  }}
-                />
+                    <input
+                      name="amount"
+                      className="input w-full rounded-l-none border-slate-400"
+                      defaultValue={(parseInt(item.amount).toFixed(2)).replace(/\B(?=(\d{3})+(?!\d))/g, "$&,")}
+                      onChange={(e) =>
+                        onChangeInputValue(
+                          "amount",
+                          e.target.value.replace(/[^0-9]/g, "")
+                        )
+                      }
+                      onKeyDown={(evt) => (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab' || evt.key === 'Tab') || evt.preventDefault()}
+                      min={0}
+                      onBlur={(e) => {
+                        const value = parseFloat(e.target.value).toFixed(2);
+                        e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
+                      }}
+                      onFocus={(e) => {
+                        const value = e.target.value.replace(/,/g, "");
+                        e.target.value = value;
+                      }}
+                    /> :
+                    <input
+                      name="amount"
+                      className="input w-full rounded-l-none border-slate-400"
+                      onChange={(e) =>
+                        onChangeInputValue(
+                          "amount",
+                          e.target.value.replace(/[^0-9]/g, "")
+                        )
+                      }
+                      onKeyDown={(evt) => (evt.key.match(/^[0-9]$/) || evt.key === 'Backspace' || evt.key === 'Tab' || evt.key === 'Tab') || evt.preventDefault()}
+                      min={0}
+                      onBlur={(e) => {
+                        const value = parseFloat(e.target.value).toFixed(2);
+                        e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "$&,"); // Adds comma as thousand separator
+                      }}
+                      onFocus={(e) => {
+                        const value = e.target.value.replace(/,/g, "");
+                        e.target.value = value;
+                      }}
+                    />
                   }
                 </div>
                 <span className="text-red-600 text-sm absolute w-full required top-[21px]">
@@ -1650,10 +1674,10 @@ const InputOther = ({
   );
 };
 
-function PersonalForm({ setData }) {
+function PersonalForm({ token, setData, storedPersonalDetails, storedGoals }) {
+  const history = useNavigate();
   const handleSubmit = () => {
     try {
-      console.log(personalDetails);
       const tempErrors = {
         firstname: checkString(
           personalDetails.firstname,
@@ -1663,7 +1687,8 @@ function PersonalForm({ setData }) {
           personalDetails.lastname,
           "Last Name is required"
         ),
-        agenew: checkAge(personalDetails.agenew),
+  
+        agenew: checkAge(personalDetails.agenew, "Age is required"),
         email: checkEmail(personalDetails.email),
         contact: checkString(personalDetails.contact, "Contact is required"),
       };
@@ -1725,6 +1750,7 @@ function PersonalForm({ setData }) {
           dependents: dependents,
           goalsData: goals,
         });
+
       }
     } catch (error) {
       console.log(error);
@@ -1739,7 +1765,7 @@ function PersonalForm({ setData }) {
     contact: "",
     currency: "",
   });
-  
+
   const [goalsErrors, setGoalsErrors] = useState([
     {
       amount: "",
@@ -1766,7 +1792,7 @@ function PersonalForm({ setData }) {
     currency: "USD",
   });
 
-  
+
   const initialGoalState = {
     amount: 0.0,
     goal: "",
@@ -1776,7 +1802,7 @@ function PersonalForm({ setData }) {
   const [goals, setGoals] = useState([]);
   const [dependents, setDependents] = useState([]);
 
-  
+
   const goalSum = goals.reduce((accumulator, item) => {
     return accumulator + Number(item.amount);
   }, 0);
@@ -1824,25 +1850,33 @@ function PersonalForm({ setData }) {
     setGoals([...goals, initialGoalState]);
   };
 
-  const[testflag, setTestFlag] = useState()
+  const [testflag, setTestFlag] = useState()
+
+
   useEffect(() => {
-    const storedValuePersonal = localStorage.getItem('personalDetails');
-    if (storedValuePersonal) {
-      setpersonalDetails(JSON.parse(storedValuePersonal));
+    if (storedPersonalDetails != '') {
+      setpersonalDetails({
+        firstname: storedPersonalDetails.firstName,
+        lastname: storedPersonalDetails.lastName,
+        agenew: storedPersonalDetails.age,
+        email: storedPersonalDetails.email,
+        contact: storedPersonalDetails.contact,
+        currency: "USD",
+      });
       setTestFlag(true);
     }
-  }, []);
-  
-  useEffect(() => {
-    const storedValueDependents = localStorage.getItem('dependents');
-    if(storedValueDependents){
-      setDependents(JSON.parse(storedValueDependents))
-    }
-  },[])
+  }, [storedPersonalDetails]);
+
+  // useEffect(() => {
+  //   const storedValueDependents = localStorage.getItem('dependents');
+  //   if (storedValueDependents) {
+  //     setDependents(JSON.parse(storedValueDependents))
+  //   }
+  // }, [])
 
   useEffect(() => {
     const resetPersonalbtn = document.querySelector('.resetPersonal-btn');
-    
+
     function handleResetClick() {
       setpersonalDetails({
         firstname: "",
@@ -1855,11 +1889,9 @@ function PersonalForm({ setData }) {
       setGoals([{
         amount: 0.0,
         goal: "",
-        currency: personalDetails.currency?.toUpperCase()}]);
+        currency: personalDetails.currency?.toUpperCase()
+      }]);
       setDependents([]);
-      localStorage.removeItem('personalDetails');
-      localStorage.removeItem('goals');
-      localStorage.removeItem('dependents');
     }
 
     resetPersonalbtn.addEventListener('click', handleResetClick);
@@ -1889,9 +1921,10 @@ function PersonalForm({ setData }) {
           cancelable: true,
           key: 'tab',
         });
-      console.log(document.activeElement);
-      event.target.dispatchEvent(tabEvent);
-    }};
+        console.log(document.activeElement);
+        event.target.dispatchEvent(tabEvent);
+      }
+    };
 
     document.addEventListener("keydown", keyDownHandler);
 
@@ -1901,16 +1934,12 @@ function PersonalForm({ setData }) {
   }, [errors]);
 
   useEffect(() => {
-    const storedValueGoals = localStorage.getItem('goals');
-    console.log(storedValueGoals);
-    if(storedValueGoals){
-      const parsedGoals = JSON.parse(storedValueGoals);
-      setGoals(parsedGoals);
-      console.log(goals) ;
-    }else{
+    if (storedGoals != '') {
+      setGoals(storedGoals);
+    } else {
       setGoals([initialGoalState]);
     }
-  },[])
+  }, [storedGoals])
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3 px-16">
@@ -1944,7 +1973,7 @@ function PersonalForm({ setData }) {
                   var goalsTemporary = [...goals];
                   goalsTemporary[index] = data;
                   setGoals(goalsTemporary);
-                  
+
                   const tempGoalsErrorsArray = [];
                   goalsTemporary.map((e) =>
                     tempGoalsErrorsArray.push({
@@ -1955,7 +1984,7 @@ function PersonalForm({ setData }) {
                   );
                   localStorage.setItem('goals', JSON.stringify(goals))
                   setGoalsErrors(tempGoalsErrorsArray);
-                  
+
                 }}
                 addNewGoal={addNewGoal}
                 handleRemoveGoal={() => handleRemoveGoal(index)}
@@ -1986,7 +2015,7 @@ function PersonalForm({ setData }) {
                         lastnamedependent: "",
                         agedependent: "",
                         relationship: "",
-                      }) 
+                      })
                     );
                     localStorage.setItem('dependents', JSON.stringify(dependents))
                     console.log(dependents)
@@ -2029,10 +2058,10 @@ function PersonalForm({ setData }) {
       <div className="grid grid-cols-3 gap-4 md:w-11/12 lg:w-8/12">
         <div className="col-span-1"></div>
         <div className="col-span-1 flex justify-center">
-          <a href="/calculate" className="flex justify-center text-center items-center  gap-2">
+          <div onClick={() => history('/')} className="flex justify-center text-center items-center gap-2">
             <img src={refresh} className="w-4 h-4"></img>
-            <p className="text-[#8A8A8E]">Back to start</p>
-          </a>
+            <p className="text-[#8A8A8E] cursor-pointer">Back to start</p>
+          </div>
         </div>
         <div className="col-span-1 flex justify-content-end">
           <input
@@ -2046,7 +2075,8 @@ function PersonalForm({ setData }) {
   );
 }
 
-function AssetsForm({ currency, setData, goBack }) {
+function AssetsForm({ currency, setData, goBack, storedAssets, storedRevenue }) {
+  const history = useNavigate();
   const initialAssetData = {
     asset: "",
     amount: 0.0,
@@ -2074,23 +2104,10 @@ function AssetsForm({ currency, setData, goBack }) {
     },
   });
 
-  // Structure will be this
-  // {
-  //   assets : [],
-  //   rev: {
-  //     revmultiplier: 0 ,
-  //     revamount: 0
-  //  }
-  // }
-
   const handleSubmit = () => {
-    /// loop first
     var tempAssetsErrorsObject = {};
-    /// set asset error object
-    /// validating and setting error message for assets array
     var tempAssetsErrorsArray = [];
     for (const asset of assetsData.assets) {
-      /// set asset error object
       const tempAssetsErrors = {
         asset:
           asset.asset === "" && (!asset.amount === "" || asset.amount > 0)
@@ -2099,7 +2116,6 @@ function AssetsForm({ currency, setData, goBack }) {
         amount: checkAmount(asset.amount, asset.asset),
         assetmultiplier: asset.assetmultiplier === "" ? "Amount required" : "",
       };
-      /// and push on temporary array
       tempAssetsErrorsArray.push(tempAssetsErrors);
     }
     tempAssetsErrorsObject = {
@@ -2150,12 +2166,14 @@ function AssetsForm({ currency, setData, goBack }) {
 
   useEffect(() => {
     const resetAssetsbtn = document.querySelector('.resetAssets-btn');
-    
+
     function handleResetClick() {
       setAssetsData({
-        assets: [{asset: "",
-        amount: 0.0,
-        assetmultiplier: 1,}],
+        assets: [{
+          asset: "",
+          amount: 0.0,
+          assetmultiplier: 1,
+        }],
         rev: {
           multiplier: 1,
           amount: 0,
@@ -2172,12 +2190,19 @@ function AssetsForm({ currency, setData, goBack }) {
   }, []);
 
   useEffect(() => {
-    const storedValueAssets = localStorage.getItem('assets');
-    if(storedValueAssets){
-      setAssetsData(JSON.parse(storedValueAssets))
+    if (storedAssets != '') {
+      setAssetsData((prevAssets) => ({ ...prevAssets, assets: storedAssets, }))
     }
-  },[])
-  {console.log(assetsData)}
+  }, [storedAssets])
+
+  useEffect(() => {
+    if (storedRevenue != '') {
+      setAssetsData((prevAssets) => ({ ...prevAssets,rev: {
+        multiplier: storedRevenue[0].multiplier,
+        amount: storedRevenue[0].value
+      } }))
+    }
+  }, [storedRevenue])
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3 ">
@@ -2229,7 +2254,7 @@ function AssetsForm({ currency, setData, goBack }) {
               isDeletedButtonVisible={assetsData.assets.length - 1 > 0}
               errors={assetsDataErrors.assets[index]}
               currency={currency}
-              
+
             />
           </div>
         ))}
@@ -2266,10 +2291,10 @@ function AssetsForm({ currency, setData, goBack }) {
       <div className="grid grid-cols-3 gap-4 md:w-11/12 lg:w-8/12">
         <div className="col-span-1"></div>
         <div className="col-span-1 flex justify-center">
-          <a href="/calculate" className="flex justify-center text-center items-center  gap-2">
+        <div onClick={() => history('/')} className="flex justify-center text-center items-center gap-2">
             <img src={refresh} className="w-4 h-4"></img>
-            <p className="text-[#8A8A8E]">Back to start</p>
-          </a>
+            <p className="text-[#8A8A8E] cursor-pointer">Back to start</p>
+          </div>
         </div>
         <div className="col-span-1 flex justify-content-end">
           <input
@@ -2283,7 +2308,8 @@ function AssetsForm({ currency, setData, goBack }) {
   );
 }
 
-function LiabilitiesForm({ currency, setData, goBack }) {
+function LiabilitiesForm({ currency, setData, goBack, storedExpenses, storedLiabilities }) {
+  const history = useNavigate();
   const initialLiabilityData = {
     liability: "",
     amount: 0.0,
@@ -2311,14 +2337,9 @@ function LiabilitiesForm({ currency, setData, goBack }) {
     },
   });
 
-  // Structure will be this
-  // {
-  //   liabilities : [],
-  //   revexp: {
-  //     multiplier: 0 ,
-  //     amount: 0
-  //  }
-  // }
+
+
+
 
   const handleSubmit = () => {
     /// loop first
@@ -2331,7 +2352,7 @@ function LiabilitiesForm({ currency, setData, goBack }) {
       const tempLiabilitiesErrors = {
         liability:
           liabilities.liability === "" &&
-          (!liabilities.amount === "" || liabilities.amount > 0)
+            (!liabilities.amount === "" || liabilities.amount > 0)
             ? "Liability is required"
             : "",
         amount: checkAmount(liabilities.amount, liabilities.liability),
@@ -2391,7 +2412,7 @@ function LiabilitiesForm({ currency, setData, goBack }) {
   };
   useEffect(() => {
     const resetLiabilitiesbtn = document.querySelector('.resetLiabilities-btn');
-    
+
     function handleResetClick() {
       setLiabilitiesData({
         liabilities: [{
@@ -2413,13 +2434,20 @@ function LiabilitiesForm({ currency, setData, goBack }) {
       resetLiabilitiesbtn.removeEventListener('click', handleResetClick);
     }
   }, []);
+  useEffect(() => {
+    if (storedLiabilities != '') {
+      setLiabilitiesData((prevLiabilities) => ({ ...prevLiabilities, liabilities: storedLiabilities, }))
+    }
+  }, [storedLiabilities])
 
   useEffect(() => {
-    const storedValueLiabilities= localStorage.getItem('liabilities');
-    if(storedValueLiabilities){
-      setLiabilitiesData(JSON.parse(storedValueLiabilities))
+    if (storedExpenses != '') {
+      setLiabilitiesData((prevLiabilities) => ({ ...prevLiabilities, revexp: {
+        multiplier: storedExpenses[0].multiplier,
+        amount: storedExpenses[0].value
+      } }))
     }
-  },[])
+  }, [storedExpenses])
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3 ">
@@ -2512,10 +2540,10 @@ function LiabilitiesForm({ currency, setData, goBack }) {
       <div className="grid grid-cols-3 gap-4 md:w-11/12 lg:w-8/12">
         <div className="col-span-1"></div>
         <div className="col-span-1 flex justify-center">
-          <a href="/calculate" className="flex justify-center text-center items-center  gap-2">
+        <div onClick={() => history('/')} className="flex justify-center text-center items-center gap-2">
             <img src={refresh} className="w-4 h-4"></img>
-            <p className="text-[#8A8A8E]">Back to start</p>
-          </a>
+            <p className="text-[#8A8A8E] cursor-pointer">Back to start</p>
+          </div>
         </div>
         <div className="col-span-1 flex justify-content-end">
           <input
@@ -2529,159 +2557,8 @@ function LiabilitiesForm({ currency, setData, goBack }) {
   );
 }
 
-// function LiabilitiesForm({ currency, setData, goBack }) {
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     setData({
-//       liabilities: liabilities,
-//       revexp: revexp,
-//     });
-//   };
-
-//   const initialRevenueData = {
-//     expenses: 0.0,
-//     multiplierexp: 1,
-//     currency: currency?.toUpperCase(),
-//   };
-
-//   const [revexp, setRevexp] = useState([initialRevenueData]);
-
-//   const initialLiabilitiesData = {
-//     liability: "",
-//     amount: 0.0,
-//     liabilitymultiplier: 1,
-//     currencyliability: currency?.toUpperCase(),
-//   };
-
-//   const [liabilities, setLiability] = useState([initialLiabilitiesData]);
-
-//   useEffect(() => {
-//     setLiability((prevLiability) => {
-//       const tempLiability = [...prevLiability];
-//       tempLiability.map((e) => (e.currencyliability = currency?.toUpperCase()));
-//       return tempLiability;
-//     });
-//     setRevexp((prevRev) => {
-//       const tempRev = [...prevRev];
-//       tempRev.map((e) => (e.currency = currency?.toUpperCase()));
-//       return tempRev;
-//     });
-//   }, [currency]);
-
-//   const addNewLiability = () => {
-//     setLiability([...liabilities, initialLiabilitiesData]);
-//   };
-
-//   const handleRemoveLiability = (index) => {
-//     if (liabilities.length !== 1) {
-//       const values = [...liabilities];
-//       values.splice(index, 1);
-//       setLiability(values);
-//     }
-//   };
-
-//   return (
-//     <div className="w-full justify-center items-center flex flex-col gap-3">
-//       <div className="w-full md:w-11/12 lg:w-8/12 justify-center items-center flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-none lg:shadow-md">
-//         <div className="w-full flex justify-between">
-//           <p className="font-bold text-center md:text-left">
-//             Liability Management
-//           </p>
-//           <label htmlFor="liability" className="">
-//             <IoMdInformationCircle className="text-2xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
-//           </label>
-//         </div>
-
-//         <input type="checkbox" id="liability" className="modal-toggle" />
-//         <div className="modal">
-//           <div className="modal-box relative">
-//             <label
-//               htmlFor="liability"
-//               className="btn btn-sm btn-circle absolute right-2 top-2"
-//             >
-//               ✕
-//             </label>
-//             <h3 className="text-lg font-bold text-center">
-//               Lorem ipsum dolor sit amet
-//             </h3>
-//             <p className="py-4 text-center">
-//               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-//               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-//               enim ad minim veniam, quis nostrud exercitation ullamco laboris
-//               nisi ut aliquip ex ea commodo consequat.
-//             </p>
-//           </div>
-//         </div>
-
-//         <form
-//           onSubmit={(e) => {
-//             handleSubmit(e);
-//           }}
-//           className="flex flex-col w-5/6 md:w-full gap-10"
-//         >
-//           <div className="w-full border-b-g">
-//             {liabilities.map((item, index) => (
-//               <div key={index} className="px-0 w-full">
-//                 <InputLiabilities
-//                   item={item}
-//                   onChangeValues={(data) => {
-//                     var liabilityTemporary = [...liabilities];
-//                     liabilityTemporary[index] = data;
-//                     setLiability(liabilityTemporary);
-//                   }}
-//                   addNewLiability={addNewLiability}
-//                   handleRemoveLiability={() => handleRemoveLiability(index)}
-//                   isLast={liabilities.length - 1 === index}
-//                   isDeletedButtonVisible={liabilities.length - 1 > 0}
-//                 />
-//               </div>
-//             ))}
-//           </div>
-
-//           {revexp.map((item, index) => (
-//             <div key={index} className="px-0 w-full">
-//               <InputExp
-//                 item={item}
-//                 onChangeValues={(data) => {
-//                   var namesTemporary = [...revexp];
-//                   namesTemporary[index] = data;
-//                   setRevexp(namesTemporary);
-//                 }}
-//                 // addNewRevExp={addNewRevExp}
-//                 // handleRemoveRevExp={handleRemoveRevExp}
-//                 isLast={revexp.length - 1 === index}
-//               />
-//             </div>
-//           ))}
-
-//           <div className="flex flex-col lg:flex-row justify-end gap-3 md:gap-7">
-//             <div
-//               className="flex items-center justify-center cursor-pointer gap-2"
-//               onClick={goBack}
-//             >
-//               <IoIosArrowBack className="text-[#A0161B] font-bold"></IoIosArrowBack>
-//               <p className="text-[#A0161B] font-bold">Go Back</p>
-//             </div>
-
-//             <input
-//               type="submit"
-//               className="py-3 w-full lg:w-52 rounded-md bg-[#A0161B] text-white cursor-pointer self-end"
-//               value="Next Step"
-//               onKeyDown={(e) => (e.key === "Enter" ? handleSubmit : "")}
-//             />
-//           </div>
-//         </form>
-//       </div>
-
-//       <a href="/calculate" className="flex items-center gap-2 mt-4">
-//         <img src={refresh} className="w-4 h-4"></img>
-//         <p className="text-[#8A8A8E]">Back to start</p>
-//       </a>
-//     </div>
-//   );
-// }
-
 function OtherForm({ currency, setData, goBack }) {
+  const history = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
     setData({
@@ -2788,15 +2665,15 @@ function OtherForm({ currency, setData, goBack }) {
         </form>
       </div>
 
-      <a href="/calculate" className="flex items-center gap-2 mt-4">
-        <img src={refresh} className="w-4 h-4"></img>
-        <p className="text-[#8A8A8E]">Back to start</p>
-      </a>
+      <div onClick={() => history('/')} className="flex justify-center text-center items-center gap-2">
+            <img src={refresh} className="w-4 h-4"></img>
+            <p className="text-[#8A8A8E] cursor-pointer">Back to start</p>
+      </div>
     </div>
   );
 }
 
-function Output({ data, currency, nextTab, goBack, setPdfChart}) {
+function Output({ data, currency, nextTab, goBack, setPdfChart }) {
   const {
     annualNet,
     assets,
@@ -2807,18 +2684,12 @@ function Output({ data, currency, nextTab, goBack, setPdfChart}) {
     monthlyRevenue,
     netWorth,
   } = data?.initial ? data.initial : {};
-  console.log(data);
+  const history = useNavigate();
 
   const handleCapture = () => {
     html2canvas(canvasRef.current).then(canvas => {
-      // Do something with the captured image
       setPdfChart(canvas.toDataURL());
     });
-    // const canvas = await html2canvas(canvasRef.current);
-    // const imgData = canvas.toDataURL("image/png");
-    // const pdf = new jsPDF();
-    // pdf.addImage(imgData, "PNG", 10, 10);
-    // pdf.save("progress.pdf");
   };
 
   const handleSubmit = (e) => {
@@ -2829,7 +2700,6 @@ function Output({ data, currency, nextTab, goBack, setPdfChart}) {
   };
   const canvasRef = useRef(null);
   const percentage = 60;
-  console.log(data)
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3">
@@ -3020,13 +2890,13 @@ function Output({ data, currency, nextTab, goBack, setPdfChart}) {
         </div>
 
         <div className="flex justify-center mt-2">
-          <a href="/calculate" className="flex text-center items-center gap-2">
+        <div onClick={() => history('/')} className="flex justify-center text-center items-center gap-2">
             <img src={refresh} className="w-4 h-4"></img>
-            <p className="text-[#8A8A8E]">Back to start</p>
-          </a>
+            <p className="text-[#8A8A8E] cursor-pointer">Back to start</p>
+        </div>
         </div>
       </div>
-      
+
       <div className="flex flex-col gap-5 w-3/5" ref={canvasRef} style={{ width: "785px", height: "400px", position: 'absolute', left: '-99999px' }}>
         <div className="flex flex-row gap-10">
           <div className="px-0 flex flex-col w-2/5 shadow-gray-400 px-7 py-7 rounded-lg shadow-md justify-center" style={{ height: "400px" }}>
@@ -3041,7 +2911,7 @@ function Output({ data, currency, nextTab, goBack, setPdfChart}) {
             </div>
           </div>
 
-          <div className="flex flex-col gap-7 w-3/5" style={{height: "400px" }}>
+          <div className="flex flex-col gap-7 w-3/5" style={{ height: "400px" }}>
             <div className="flex flex-col gap-3 shadow-gray-400 px-7 py-7 rounded-lg shadow-md">
               <div className="flex flex-row gap-2 item-center justify-between">
                 <p className="font-bold my-0">Financially Towards Dream {financiallyTowardsDream}%</p>
@@ -3110,18 +2980,18 @@ function Output({ data, currency, nextTab, goBack, setPdfChart}) {
         </div>
         <div>
         </div>
-      </div> 
+      </div>
     </div>
-    
+
   );
 }
 
 function CalculateForm({ goalData, currency }) {
   const newGoalData = { ...goalData };
   var curSymbol = ""
-  if( currency == 'USD'){
+  if (currency == 'USD') {
     curSymbol = '$'
-  }else{
+  } else {
     curSymbol = '₱'
   }
   return (
@@ -3144,7 +3014,7 @@ function CalculateForm({ goalData, currency }) {
           Object.keys(newGoalData?.initial?.assets).map((e) => (
             <>
               <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1 capitalize ">
-              {e == 'totalAssets' ? 'Total Assets': e}
+                {e == 'totalAssets' ? 'Total Assets' : e}
               </div>
               <div className="py-3">{curSymbol + newGoalData.yearOne.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
               <div className="py-3">{curSymbol + newGoalData.yearTwo.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
@@ -3166,12 +3036,12 @@ function CalculateForm({ goalData, currency }) {
   );
 }
 
-function CalculateLiabilityForm({ goalData, currency}) {
+function CalculateLiabilityForm({ goalData, currency }) {
   const newGoalData = { ...goalData };
   var curSymbol = ""
-  if( currency == 'USD'){
+  if (currency == 'USD') {
     curSymbol = '$'
-  }else{
+  } else {
     curSymbol = '₱'
   }
   return (
@@ -3194,7 +3064,7 @@ function CalculateLiabilityForm({ goalData, currency}) {
           Object.keys(newGoalData?.initial?.liabilities).map((e) => (
             <>
               <div className="text-left pl-3 md:pl-7 py-3 pr-5 col-span-2 md:col-span-1 capitalize ">
-                {e == 'totalLiabilities' ? 'Total Liabilities': e}
+                {e == 'totalLiabilities' ? 'Total Liabilities' : e}
               </div>
               <div className="py-3">{curSymbol + newGoalData.yearOne.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
               <div className="py-3">{curSymbol + newGoalData.yearTwo.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
@@ -3216,9 +3086,10 @@ function CalculateLiabilityForm({ goalData, currency}) {
   );
 }
 
-function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
+function AnnualForm({ goalData, currency, personalDetails, pdfChart }) {
+  const history = useNavigate();
   const newGoalData = { ...goalData };
-  const personalData = {...personalDetails};
+  const personalData = { ...personalDetails };
   const img = pdfChart;
   var symbol = "";
   const [name, setName] = useState('');
@@ -3226,167 +3097,169 @@ function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
   const [contact, setConact] = useState('');
   const [goalAchieve, setGoalAchieve] = useState('');
   const currentYear = new Date().getFullYear();
-  if(currency == 'USD'){
+  if (currency == 'USD') {
     symbol = 'USD '
-  }else{
+  } else {
     symbol = 'PHP '
   }
   jsPDF.autoTableSetDefaults({
-    headStyles: { 
+    headStyles: {
       fillColor: '#fff',
-      textColor: '#000' },
+      textColor: '#000'
+    },
   })
   useEffect(() => {
-    if(newGoalData?.initial){
+    if (newGoalData?.initial) {
       misc = ["", "Monthly Expenses", "Monthly Revenue", "Monthly Net", "Annual Net", "Net Worth"];
       year1Misc = [
         "1st Year",
-        symbol + newGoalData.yearOne.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearOne.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearOne.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearOne.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearOne.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearOne.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearOne.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearOne.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         symbol + newGoalData.yearOne.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       ];
       year2Misc = [
         "2nd Year",
-        symbol + newGoalData.yearTwo.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearTwo.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearTwo.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearTwo.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearTwo.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearTwo.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearTwo.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearTwo.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         symbol + newGoalData.yearTwo.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       ];
       year3Misc = [
         "3rd Year",
-        symbol + newGoalData.yearThree.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearThree.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearThree.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearThree.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearThree.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearThree.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearThree.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearThree.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         symbol + newGoalData.yearThree.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       ];
       year4Misc = [
         "4th Year",
-        symbol + newGoalData.yearFour.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearFour.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearFour.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearFour.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearFour.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearFour.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearFour.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearFour.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         symbol + newGoalData.yearFour.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       ];
       year5Misc = [
         "5th Year",
-        symbol + newGoalData.yearFive.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearFive.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearFive.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearFive.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearFive.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearFive.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearFive.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearFive.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         symbol + newGoalData.yearFive.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       ];
       year6Misc = [
         "6th Year",
-        symbol + newGoalData.yearSix.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearSix.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearSix.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearSix.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearSix.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearSix.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearSix.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearSix.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         symbol + newGoalData.yearSix.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       ];
       year7Misc = [
         "7th Year",
-        symbol + newGoalData.yearSeven.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearSeven.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearSeven.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearSeven.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearSeven.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearSeven.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearSeven.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearSeven.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         symbol + newGoalData.yearSeven.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       ];
       year8Misc = [
         "8th Year",
-        symbol + newGoalData.yearEight.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearEight.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearEight.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearEight.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearEight.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearEight.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearEight.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearEight.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         symbol + newGoalData.yearEight.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       ];
       year9Misc = [
         "9th Year",
-        symbol + newGoalData.yearNine.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearNine.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearNine.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearNine.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearNine.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearNine.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearNine.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearNine.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         symbol + newGoalData.yearNine.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       ];
       year10Misc = [
         "10th Year",
-        symbol + newGoalData.yearTen.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearTen.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearTen.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
-        symbol + newGoalData.yearTen.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), 
+        symbol + newGoalData.yearTen.monthlyExpense.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearTen.monthlyRevenue.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearTen.monthlyNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        symbol + newGoalData.yearTen.annualNet.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         symbol + newGoalData.yearTen.netWorth.toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       ];
     }
 
 
-    if(newGoalData?.initial?.liabilities){
+    if (newGoalData?.initial?.liabilities) {
       Object.keys(newGoalData?.initial?.liabilities).map((e) => (
-        liabilities[j]=(e == 'totalLiabilities' ? 'Total Liabilities' :e.charAt(0).toUpperCase() + e.slice(1)),
-        year1liability[j]=symbol + newGoalData.yearOne.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year2liability[j]=symbol + newGoalData.yearTwo.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year3liability[j]=symbol + newGoalData.yearThree.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year4liability[j]=symbol + newGoalData.yearFour.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year5liability[j]=symbol + newGoalData.yearFive.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year6liability[j]=symbol + newGoalData.yearSix.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year7liability[j]=symbol + newGoalData.yearSeven.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year8liability[j]=symbol + newGoalData.yearEight.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year9liability[j]=symbol + newGoalData.yearNine.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year10liability[j]=symbol + newGoalData.yearTen.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        liabilities[j] = (e == 'totalLiabilities' ? 'Total Liabilities' : e.charAt(0).toUpperCase() + e.slice(1)),
+        year1liability[j] = symbol + newGoalData.yearOne.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year2liability[j] = symbol + newGoalData.yearTwo.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year3liability[j] = symbol + newGoalData.yearThree.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year4liability[j] = symbol + newGoalData.yearFour.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year5liability[j] = symbol + newGoalData.yearFive.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year6liability[j] = symbol + newGoalData.yearSix.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year7liability[j] = symbol + newGoalData.yearSeven.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year8liability[j] = symbol + newGoalData.yearEight.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year9liability[j] = symbol + newGoalData.yearNine.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year10liability[j] = symbol + newGoalData.yearTen.liabilities[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         j++
-      ))}
-  
-      newGoalData?.initial?.assets && (
+      ))
+    }
+
+    newGoalData?.initial?.assets && (
       Object.keys(newGoalData?.initial?.assets).map((e) => (
-        assets[i]=(e == 'totalAssets' ? 'Total Assets' : e.charAt(0).toUpperCase() + e.slice(1)),
-        year1asset[i]=symbol + newGoalData.yearOne.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year2asset[i]=symbol + newGoalData.yearTwo.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year3asset[i]=symbol + newGoalData.yearThree.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year4asset[i]=symbol + newGoalData.yearFour.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year5asset[i]=symbol + newGoalData.yearFive.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year6asset[i]=symbol + newGoalData.yearSix.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year7asset[i]=symbol + newGoalData.yearSeven.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year8asset[i]=symbol + newGoalData.yearEight.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year9asset[i]=symbol + newGoalData.yearNine.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-        year10asset[i]=symbol + newGoalData.yearTen.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        assets[i] = (e == 'totalAssets' ? 'Total Assets' : e.charAt(0).toUpperCase() + e.slice(1)),
+        year1asset[i] = symbol + newGoalData.yearOne.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year2asset[i] = symbol + newGoalData.yearTwo.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year3asset[i] = symbol + newGoalData.yearThree.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year4asset[i] = symbol + newGoalData.yearFour.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year5asset[i] = symbol + newGoalData.yearFive.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year6asset[i] = symbol + newGoalData.yearSix.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year7asset[i] = symbol + newGoalData.yearSeven.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year8asset[i] = symbol + newGoalData.yearEight.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year9asset[i] = symbol + newGoalData.yearNine.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        year10asset[i] = symbol + newGoalData.yearTen.assets[e].toLocaleString('en-us', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         i++
-      ))) 
+      )))
 
-      if(newGoalData?.initial){
-        if(newGoalData.initial.financiallyTowardsDream >= 100){
-          setGoalAchieve("It appears that you could already achieve your dream!");
-        }else if(newGoalData.yearOne.financiallyTowardsDream >= 100){
-          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 1) + ".");
-        }else if(newGoalData.yearTwo.financiallyTowardsDream >= 100){
-          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 2) + ".");
-        }else if(newGoalData.yearThree.financiallyTowardsDream >= 100){
-          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 3) + ".");
-        }else if(newGoalData.yearFour.financiallyTowardsDream >= 100){
-          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 4) + ".");
-        }else if(newGoalData.yearFive.financiallyTowardsDream >= 100){
-          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 5) + ".");
-        }else if(newGoalData.yearSix.financiallyTowardsDream >= 100){
-          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 6) + ".");
-        }else if(newGoalData.yearSeven.financiallyTowardsDream >= 100){
-          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 7) + ".");
-        }else if(newGoalData.yearEight.financiallyTowardsDream >= 100){
-          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 8) + "." );
-        }else if(newGoalData.yearNine.financiallyTowardsDream >= 100){
-          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 9) + ".");
-        }else if(newGoalData.yearTen.financiallyTowardsDream >= 100){
-          setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 10)  + ".");
-        }else{
-          setGoalAchieve("It appears that 10 years is not enough to achieve your dream.")
-        }
+    if (newGoalData?.initial) {
+      if (newGoalData.initial.financiallyTowardsDream >= 100) {
+        setGoalAchieve("It appears that you could already achieve your dream!");
+      } else if (newGoalData.yearOne.financiallyTowardsDream >= 100) {
+        setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 1) + ".");
+      } else if (newGoalData.yearTwo.financiallyTowardsDream >= 100) {
+        setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 2) + ".");
+      } else if (newGoalData.yearThree.financiallyTowardsDream >= 100) {
+        setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 3) + ".");
+      } else if (newGoalData.yearFour.financiallyTowardsDream >= 100) {
+        setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 4) + ".");
+      } else if (newGoalData.yearFive.financiallyTowardsDream >= 100) {
+        setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 5) + ".");
+      } else if (newGoalData.yearSix.financiallyTowardsDream >= 100) {
+        setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 6) + ".");
+      } else if (newGoalData.yearSeven.financiallyTowardsDream >= 100) {
+        setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 7) + ".");
+      } else if (newGoalData.yearEight.financiallyTowardsDream >= 100) {
+        setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 8) + ".");
+      } else if (newGoalData.yearNine.financiallyTowardsDream >= 100) {
+        setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 9) + ".");
+      } else if (newGoalData.yearTen.financiallyTowardsDream >= 100) {
+        setGoalAchieve("You can achieve your dreams in the year " + (parseInt(currentYear) + 10) + ".");
+      } else {
+        setGoalAchieve("It appears that 10 years is not enough to achieve your dream.")
       }
-      i=1;
-      j=1;
+    }
+    i = 1;
+    j = 1;
 
-  },[newGoalData])
+  }, [newGoalData])
 
-  
+
 
 
 
@@ -3446,7 +3319,7 @@ function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
 
       pdfDoc.addImage(logo, 'PNG', 34, 34, 189, 37.77);
       pdfDoc.addImage(logo2, 'PNG', 414, 24, 149.59, 48);
-    
+
       pdfDoc.setFontSize(15);
       pdfDoc.setFont('helvetica', 'italic');
       pdfDoc.text(goalAchieve, 40, 150);
@@ -3468,17 +3341,18 @@ function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
         body: tableData.slice(1),
         tableWidth: 533,
         columnWidth: 106,
-        styles: { cellPadding: 6, fontSize: 13.33, align: 'center', halign: 'center', rowPageHeight: 31, 
-        didParseCell: function(data) {
-          // Check if current cell is last cell in row
-          if (data.row.index === data.table.body.length - 1 && data.column.index === data.row.cells.length - 1) {
-            // Set font style to bold
-            data.cell.styles.fontStyle = 'bold';
+        styles: {
+          cellPadding: 6, fontSize: 13.33, align: 'center', halign: 'center', rowPageHeight: 31,
+          didParseCell: function (data) {
+            // Check if current cell is last cell in row
+            if (data.row.index === data.table.body.length - 1 && data.column.index === data.row.cells.length - 1) {
+              // Set font style to bold
+              data.cell.styles.fontStyle = 'bold';
+            }
           }
-        }
-      },
+        },
       });
-      
+
       pdfDoc.setFont('helvetica', 'bold');
       pdfDoc.text('Total Liabilities Calculation', 40, 495);
       pdfDoc.autoTable({
@@ -3503,7 +3377,7 @@ function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
         columnWidth: 106,
         styles: { cellPadding: 6, fontSize: 13.33, align: 'center', halign: 'center', rowPageHeight: 31, },
       });
-      pdfDoc.save('reuslts_' + name + '.pdf');
+      pdfDoc.save('results_' + name + '.pdf');
     }
 
     downloadBtn.addEventListener('click', handleDownloadClick);
@@ -3526,7 +3400,7 @@ function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
               <IoMdInformationCircle className="text-2xl md:text-4xl cursor-pointer hidden md:block text-[#011013]"></IoMdInformationCircle>
             </label>
           </div>
-        
+
           <input type="checkbox" id="assets" className="modal-toggle" />
           <div className="modal">
             <div className="modal-box relative">
@@ -3598,53 +3472,48 @@ function AnnualForm({ goalData, currency, personalDetails, pdfChart}) {
       </div>
 
       <input type="checkbox" id="bts" className="modal-toggle" />
-          <div className="modal">
-            <div className="modal-box relative">
-              <label
-                htmlFor="bts"
-                className="btn btn-sm btn-circle absolute right-2 top-2"
-              >
-                ✕
-              </label>
-              <h1 className="text-lg font-bold text-center">Do you want to erase all the input?</h1>
-              <p className="py-4 text-center">
-                Choosing yes will erase all the input.
-              </p>
-              <div className="flex justify-center">
-              <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    localStorage.removeItem('personalDetails');
-                    localStorage.removeItem('goals');
-                    localStorage.removeItem('dependents');
-                    localStorage.removeItem('liabilities');
-                    localStorage.removeItem('assets');
-                    window.location.href = "/calculate";
-                  }}
-                  className="flex w-1/2 gap-10 items-center justify-center"
-                >
-                  <input
-                    type="submit"
-                    className="py-3 w-10/12 rounded-md bg-[#A0161B] text-white cursor-pointer"
-                    value="Yes"
-                  />
-                </form>
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    window.location.href = "/calculate";
-                  }}
-                  className="flex w-1/2 gap-10 items-center justify-center"
-                >
-                  <input
-                    type="submit"
-                    className="py-3 w-10/12 rounded-md bg-[#A0161B] text-white cursor-pointer"
-                    value="No"
-                  />
-                </form>
-                </div>
-            </div>
+      <div className="modal">
+        <div className="modal-box relative">
+          <label
+            htmlFor="bts"
+            className="btn btn-sm btn-circle absolute right-2 top-2"
+          >
+            ✕
+          </label>
+          <h1 className="text-lg font-bold text-center">Do you want to erase all the input?</h1>
+          <p className="py-4 text-center">
+            Choosing yes will erase all the input.
+          </p>
+          <div className="flex justify-center">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                history("/");
+              }}
+              className="flex w-1/2 gap-10 items-center justify-center"
+            >
+              <input
+                type="submit"
+                className="py-3 w-10/12 rounded-md bg-[#A0161B] text-white cursor-pointer"
+                value="Yes"
+              />
+            </form>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                history("/");
+              }}
+              className="flex w-1/2 gap-10 items-center justify-center"
+            >
+              <input
+                type="submit"
+                className="py-3 w-10/12 rounded-md bg-[#A0161B] text-white cursor-pointer"
+                value="No"
+              />
+            </form>
           </div>
+        </div>
+      </div>
 
       <div className="grid grid-cols-3 gap-4 w-10/12">
         <div className="col-span-1"></div>
