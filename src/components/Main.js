@@ -17,6 +17,8 @@ import personal from "../assets/personal.png";
 import asset from "../assets/asset.png";
 
 import { IoMdInformationCircle } from "react-icons/io";
+import { Button } from "react-daisyui";
+import { useNavigate } from "react-router-dom"; 
 
 const InputRow = ({
   index,
@@ -143,7 +145,7 @@ const InputNames = ({
   );
 };
 
-function Main() {
+function Main({ token }) {
   /*For names input*/
   const [name, setName] = useState("");
   const [story, setStory] = useState({});
@@ -152,6 +154,7 @@ function Main() {
       InputNames,
     },
   ]);
+  const history = useNavigate();
 
   const handleAddName = () => {
     setNamefields([
@@ -226,6 +229,14 @@ function Main() {
     console.log("Calculate");
   };
 
+  const handleCalculateClick = () => {
+    if (token) {
+      history('/calculate');
+    } else {
+      history('/signin');
+    }
+  };
+
   return (
     <div className="flex-col h-auto w-full flex justify-center items-center gap-14 py-5 md:py-32 px-8">
       <div className="flex flex-wrap flex-col justify-center items-center px:10 md:px-24 gap-3">
@@ -240,12 +251,12 @@ function Main() {
           quantify them and walk them back to today so you know how far away
           your dream is to help you better plan for them.
         </p>
-        <a
-          href="/calculate"
+        <Button
+          onClick={handleCalculateClick}
           className="py-3 px-3 md:px-7 text-xs md:text-lg rounded-lg bg-[#A0161B] text-white font-bold hover:text-gray-400 delay-150"
         >
           Calculate Your Dream
-        </a>
+        </Button>
       </div>
 
       <div className="bg-[#A0161B] rounded-md lg:mx-24">
