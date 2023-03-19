@@ -1,0 +1,48 @@
+.signin {
+    font-family: "Roboto", sans-serif !important;
+  }
+
+.font-size-lg {
+    font-size: 3rem;
+}
+
+.custom-color {
+    text-decoration-color: #A0161B;
+  }
+
+.modal-open,
+.modal:target,
+.modal-toggle:checked + .modal {
+  z-index: 999999 !important;
+}
+
+/* Set the modal background to be translucent black */
+.fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Center the modal on the page */
+.items-center-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Set the maximum width of the modal */
+.max-w-md {
+  max-width: 28rem;
+}
+
+/* Give the modal a border-radius and a drop shadow */
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.shadow-lg {
+  box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
+}
