@@ -1,9 +1,12 @@
 export default class Calculate {
+  constructor(props) {
+    this.auth = props.auth;
+  }
   async totalGoal(data) {
     console.log("log on total goal function", data);
     if (data) {
       const goals = [];
-      data.goalsData.forEach((goal) => {
+      data.goalsData.forEach((goal) => {  
         goals.push({
           name: goal.goal,
           value: parseFloat(goal.amount)
@@ -40,7 +43,8 @@ export default class Calculate {
 
       const requestOptions = {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",
+        "Authorization": `Bearer ${this.auth}`},
         body: JSON.stringify({
           goals: goals,
           assets: assets,
@@ -51,7 +55,7 @@ export default class Calculate {
       };
 
       const response = await fetch(
-        "http://137.184.16.76:81/api/calculator",
+        "http://137.184.16.76:81/api/user/calculator",
         requestOptions
       );
       return response.json();
