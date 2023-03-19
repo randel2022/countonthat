@@ -10,10 +10,17 @@ import Liabilities from "./components/Liabilities";
 import CalculateComponent from "./components/Calculate";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
+import SignIn from "./components/SignIn";
+import SignUp from "./components/SignUp";
+import React, { useState } from 'react'
+import ForgotPassword from "./components/ForgotPassword";
+import ResetPassword from "./components/ResetPassword";
+import PasswordUpdate from "./components/PasswordUpdate";
 
 const queryClient = new QueryClient();
 
 function App() {
+  const [token, setToken] = useState('');
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
@@ -23,8 +30,9 @@ function App() {
               path="/"
               element={
                 <>
-                  <Header />
-                  <Main />
+                  <Header token={token} />
+                  <Main token={token} />
+                  <Footer />
                   {/* <Calculate /> */}
                 </>
               }
@@ -35,16 +43,60 @@ function App() {
                 <>
                   {/* <Main /> */}
                   <Headercalc />
-                  <CalculateComponent />
+                  <CalculateComponent token={token} />
+                  <Footer />
                 </>
               }
             ></Route>
+            <Route
+              path='/signin'
+              element={
+                <>
+                  <Headercalc />
+                  <SignIn setToken={setToken} />
+                </>
+              } />
+            <Route
+              path='/recover'
+              element={
+                <>
+                  <Headercalc />
+                  <ForgotPassword />
+                </>
+              } />
+
+            <Route
+              path='/reset/:token'
+              element={
+                <>
+                  <Headercalc />
+                  <ResetPassword />
+                </>
+              } />
+
+            <Route
+              path='/updated'
+              element={
+                <>
+                  <Headercalc />
+                  <PasswordUpdate />
+                </>
+              } />
+            <Route
+              path='/signup'
+              element={
+                <>
+                  <Headercalc />
+                  <SignUp />
+                </>
+              } />
             <Route
               path="/assets"
               element={
                 <>
                   <Headercalc />
                   <Assets />
+                  <Footer />
                 </>
               }
             ></Route>
@@ -54,6 +106,7 @@ function App() {
                 <>
                   <Headercalc />
                   <Liabilities />
+                  <Footer />
                 </>
               }
             ></Route>
@@ -63,12 +116,13 @@ function App() {
                 <>
                   <Headercalc />
                   <Output />
+                  <Footer />
                 </>
               }
             ></Route>
           </Routes>
         </div>
-        <Footer />
+
       </Router>
     </QueryClientProvider>
   );
