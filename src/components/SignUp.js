@@ -165,7 +165,7 @@ function SignUp() {
                                         message
                                     :Object.entries(message.error).map(([key, value]) => (
                                         <li key={key} className="mb-2">
-                                            <span className="font-medium">{key}:</span> {value}
+                                            {value}
                                         </li>
                                     ))}
 
