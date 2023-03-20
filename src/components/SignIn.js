@@ -50,7 +50,9 @@ function SignIn({ setToken }) {
             setApiResponse(data.message)
         } else {
             setToken(token);
-            history('/');
+            history('/calculate');
+            localStorage.setItem('token', JSON.stringify(token))
+            console.log(localStorage.getItem('token'))
         }
 
     };
@@ -103,7 +105,6 @@ function SignIn({ setToken }) {
                     </a>
                 </label>
                 <label className='text-center text-[#A0161B]'>
-                    Don’t have an account?&nbsp;
                     <a className='text-[#3F505D] font-bold' href='/recover'>
                         Forgot Password
                     </a>
