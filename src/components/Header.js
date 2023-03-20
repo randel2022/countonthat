@@ -12,7 +12,7 @@ function Header({token}) {
         href={token ? "/calculate" : '/signin'}
         className="py-3 px-3 md:px-7 md:text-lg rounded-lg font-bold text-white text-xs md:block delay-150 rounded-3xl bg-[#A0161B] hover:text-gray-400"
       >
-        Calculate Your Dream
+        {token ? "Calculate Your Dream" : "Sign In"}
       </a>
     </div>
   );
