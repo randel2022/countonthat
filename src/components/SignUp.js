@@ -3,7 +3,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 function SignUp() {
-    const [showPassword, setShowPassword] = useState(true);
+    const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -12,6 +12,7 @@ function SignUp() {
     const [message, setMessage] = useState();
     const [modal, setModal] = useState(false);
     const [success, setSucess] = useState(false)
+    const [error, setError] = useState([])
     const history = useNavigate();
 
     const handleSubmit = () => {
@@ -67,14 +68,32 @@ function SignUp() {
                 <input
                     className='input input-bordered rounded-md border-slate-400'
                     placeholder='Enter your first name'
-                    onChange={(e) => setFirstname(e.target.value)}
+                    onChange={(e) => {
+                        const regex = /^[a-zA-Z]+$/; // regular expression to match alphabetic characters
+                        if (regex.test(e.target.value)) {
+                            setFirstname(e.target.value);
+                            setError(prevState => ({ ...prevState, firstname: '' }));
+                        } else {
+                            setError(prevState => ({ ...prevState, firstname: 'First name should only contain letters' }));
+                        }
+                    }}
                 />
+                {error.firstname && <p className='text-red-500'>{error.firstname}</p>}
                 <label className='pt-5 pb-2 font-bold'>Last Name:</label>
                 <input
                     className='input input-bordered rounded-md border-slate-400'
                     placeholder='Enter your last name'
-                    onChange={(e) => setLastname(e.target.value)}
+                    onChange={(e) =>{
+                        const regex = /^[a-zA-Z]+$/; // regular expression to match alphabetic characters
+                        if (regex.test(e.target.value)) {
+                            setLastname(e.target.value);
+                            setError(prevState => ({ ...prevState, lastname: '' }));
+                        } else {
+                            setError(prevState => ({ ...prevState, lastname: 'Last name should only contain letters' }));
+                        }
+                    }}
                 />
+                {error.lastname && <p className='text-red-500'>{error.lastname}</p>}
                 <label className='pt-5 pb-2 font-bold'>Email:</label>
                 <input
                     className='input input-bordered rounded-md border-slate-400'
