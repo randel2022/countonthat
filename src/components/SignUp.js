@@ -59,6 +59,10 @@ function SignUp() {
         }
     };
 
+    useEffect(() => {
+        document.cookie = "";
+      }, []);
+
     return (
         <div className='flex justify-center signin h-full py-20'>
             <div className='flex flex-col lg:w-1/3 md:w-full'>
@@ -99,6 +103,7 @@ function SignUp() {
                     className='input input-bordered rounded-md border-slate-400'
                     placeholder='Enter your email'
                     onChange={(e) => setEmail(e.target.value)}
+                    autocomplete="new-password"
                 />
                 <label className='pt-5 pb-2 font-bold'>Password:</label>
                 <div className='flex justify-between input input-bordered rounded-md border-slate-400'>
@@ -107,6 +112,7 @@ function SignUp() {
                         type={showPassword ? 'text' : 'password'}
                         placeholder='Enter your password'
                         onChange={(e) => setPassword(e.target.value)}
+                        autocomplete="new-password"
                     />
                     <div className='flex items-center'>
                         {showPassword ? (
@@ -123,6 +129,7 @@ function SignUp() {
                         type={showPassword ? 'text' : 'password'}
                         placeholder='Enter your password'
                         onChange={(e) => setConfirmPassword(e.target.value)}
+                        autocomplete="new-password"
                     />
                     <div className='flex items-center'>
                         {showPassword ? (
