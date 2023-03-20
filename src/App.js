@@ -40,12 +40,19 @@ function App() {
             <Route
               path="/calculate"
               element={
-                <>
-                  {/* <Main /> */}
+                 token ?
+                <>                
                   <Headercalc />
                   <CalculateComponent token={token} />
                   <Footer />
-                </>
+                </> :
+                <>
+                <Header token={token} />
+                <Main token={token} />
+                <Footer />
+                {/* <Calculate /> */}
+              </>
+                
               }
             ></Route>
             <Route
