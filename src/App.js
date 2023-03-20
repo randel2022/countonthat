@@ -12,15 +12,23 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import PasswordUpdate from "./components/PasswordUpdate";
+import HeaderAcc from "./components/HeaderAcc";
 
 const queryClient = new QueryClient();
 
 function App() {
   const [token, setToken] = useState('');
+  const storedToken = JSON.parse(localStorage.getItem('token'));
+//   useEffect(() => {
+//   if(storedToken){
+//     setToken(storedToken);
+//   }
+// },[])
+
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
@@ -42,7 +50,7 @@ function App() {
               element={
                  token ?
                 <>                
-                  <Headercalc />
+                  <Headercalc setToken={setToken} token={token}/>
                   <CalculateComponent token={token} />
                   <Footer />
                 </> :
@@ -59,7 +67,7 @@ function App() {
               path='/signin'
               element={
                 <>
-                  <Headercalc />
+                  <HeaderAcc />
                   <SignIn setToken={setToken} />
                 </>
               } />
@@ -67,7 +75,7 @@ function App() {
               path='/recover'
               element={
                 <>
-                  <Headercalc />
+                  <HeaderAcc />
                   <ForgotPassword />
                 </>
               } />
@@ -76,7 +84,7 @@ function App() {
               path='/reset/:token'
               element={
                 <>
-                  <Headercalc />
+                  <HeaderAcc />
                   <ResetPassword />
                 </>
               } />
@@ -85,7 +93,7 @@ function App() {
               path='/updated'
               element={
                 <>
-                  <Headercalc />
+                  <HeaderAcc />
                   <PasswordUpdate />
                 </>
               } />
@@ -93,7 +101,7 @@ function App() {
               path='/signup'
               element={
                 <>
-                  <Headercalc />
+                  <HeaderAcc />
                   <SignUp />
                 </>
               } />
