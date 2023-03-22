@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react';
 
-function GetFromDB({ token, setPersonalDetails, setGoals, goals, setDependent, setAssets, setLiabilities, setRevenue, setExpenses }) {
+function GetFromDB({ token, setPersonalDetails, setGoals, goals, setDependents, setAssets, setLiabilities, setRevenue, setExpenses }) {
     const [rawGoal, setRawGoal] = useState([]);
     const [rawAssets, setRawAssets] = useState([]);
     const [rawLiabilities, setRawLiabilities] = useState([]);
+    const [rawDependents, setRawDependents] = useState([]);
     useEffect(() => {
         fetch("http://137.184.16.76:81/api/user/details", {
             method: "GET",
@@ -14,7 +15,7 @@ function GetFromDB({ token, setPersonalDetails, setGoals, goals, setDependent, s
             }
         })
             .then(response => response.json())
-            .then(data => { setPersonalDetails(data); console.log(data) })
+            .then(data => { setPersonalDetails(data);})
             .catch(error => console.error(error));
         fetch("http://137.184.16.76:81/api/user/goals", {
             method: "GET",
@@ -79,6 +80,18 @@ function GetFromDB({ token, setPersonalDetails, setGoals, goals, setDependent, s
                     setExpenses(data);
                 })
                 .catch(error => console.error(error));
+                fetch("http://137.184.16.76:81/api/user/dependents", {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    setRawDependents(data);
+                })
+                .catch(error => console.error(error));
             
     }, []);
     useEffect(() => {
@@ -108,6 +121,17 @@ function GetFromDB({ token, setPersonalDetails, setGoals, goals, setDependent, s
                 liabilitymultiplier: rawLiabilities[e].multiplier
             }));
             setLiabilities(newLiabilities);
+        }
+    }, [rawLiabilities]);
+    useEffect(() => {
+        if (rawDependents) {
+            const newDependents = Object.keys(rawDependents).map((e) => ({
+                firstnamedependent: rawDependents[e].firstName,
+                lastnamedependent: rawDependents[e].lastName,
+                agedependent: rawDependents[e].age,
+                relationship: rawDependents[e].relationship
+            }));
+            setDependents(newDependents);
         }
     }, [rawLiabilities]);
 

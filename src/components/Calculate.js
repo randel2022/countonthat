@@ -170,6 +170,7 @@ function CalculateComponent({ token }) {
   const [revenue, setRevenue] = useState('');
   const [expenses, setExpenses] = useState('');
   const [liabilities, setLiabilities] = useState([]);
+  const [dependents, setDependents] = useState([]);
   const goalDataRef = useRef();
   const calculateService = new Calculate({ auth: token });
   const {
@@ -226,6 +227,7 @@ function CalculateComponent({ token }) {
           setRevenue={setRevenue}
           setExpenses={setExpenses}
           setLiabilities={setLiabilities}
+          setDependents={setDependents}
           />
         <PersonalForm
           setData={(value) => {
@@ -237,6 +239,7 @@ function CalculateComponent({ token }) {
           }}
           storedPersonalDetails={personalDetails}
           storedGoals={goals}
+          storedDependents={dependents}
           token={token}
         ></PersonalForm>
       </div>
@@ -1674,7 +1677,7 @@ const InputOther = ({
   );
 };
 
-function PersonalForm({ token, setData, storedPersonalDetails, storedGoals }) {
+function PersonalForm({ token, setData, storedPersonalDetails, storedGoals, storedDependents }) {
   const history = useNavigate();
   const handleSubmit = () => {
     try {
@@ -1940,6 +1943,13 @@ function PersonalForm({ token, setData, storedPersonalDetails, storedGoals }) {
       setGoals([initialGoalState]);
     }
   }, [storedGoals])
+  useEffect(() => {
+    if (storedDependents != '') {
+      setDependents(storedDependents);
+    } else {
+      setGoals([]);
+    }
+  }, [storedDependents])
 
   return (
     <div className="w-full justify-center items-center flex flex-col gap-3 px-16">

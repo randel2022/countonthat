@@ -67,7 +67,7 @@ function SignUp() {
         <div className='flex justify-center signin h-full py-20'>
             <div className='flex flex-col lg:w-1/3 md:w-full'>
                 <label className='font-size-lg text-center text-[#A0161B] font-bold py-4'>Create an Account</label>
-                <label className='text-center'>Please Enter your details</label>
+                <label className='text-center'>Please enter your details</label>
                 <label className='pt-10 pb-2 font-bold'>First Name:</label>
                 <input
                     className='input input-bordered rounded-md border-slate-400'
@@ -98,13 +98,22 @@ function SignUp() {
                     }}
                 />
                 {error.lastname && <p className='text-red-500'>{error.lastname}</p>}
-                <label className='pt-5 pb-2 font-bold'>Email:</label>
+                <label className='pt-5 pb-2 font-bold'>Email address:</label>
                 <input
                     className='input input-bordered rounded-md border-slate-400'
                     placeholder='Enter your email'
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                        const regex =/^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/; 
+                        if (regex.test(e.target.value)) {
+                            setEmail(e.target.value);
+                            setError(prevState => ({ ...prevState, email: '' }));
+                        } else {
+                            setError(prevState => ({ ...prevState, email: 'Must be a valid email' }));
+                        }
+                    }}
                     autocomplete="new-password"
                 />
+                {error.email && <p className='text-red-500'>{error.email}</p>}
                 <label className='pt-5 pb-2 font-bold'>Password:</label>
                 <div className='flex justify-between input input-bordered rounded-md border-slate-400'>
                     <input
@@ -148,7 +157,7 @@ function SignUp() {
                 <label className='text-center text-[#A0161B]'>
                     Already have an account?&nbsp;
                     <a className='text-[#3F505D] font-bold' href='/signin'>
-                        Log In
+                        Sign In
                     </a>
                 </label>
             </div>

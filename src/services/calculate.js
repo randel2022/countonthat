@@ -5,6 +5,16 @@ export default class Calculate {
   async totalGoal(data) {
     console.log("log on total goal function", data);
     if (data) {
+      const dependents = [];
+      data.dependents.forEach((dependent) => {  
+        dependents.push({
+          firstName: dependent.firstnamedependent,
+          lastName: dependent.lastnamedependent,
+          age: dependent.agedependent,
+          relationship: dependent.relationship
+        });
+      });
+      console.log(dependents);
       const goals = [];
       data.goalsData.forEach((goal) => {  
         goals.push({
@@ -46,6 +56,7 @@ export default class Calculate {
         headers: { "Content-Type": "application/json",
         "Authorization": `Bearer ${this.auth}`},
         body: JSON.stringify({
+          dependents: dependents,
           goals: goals,
           assets: assets,
           liabilities: liabilities,
